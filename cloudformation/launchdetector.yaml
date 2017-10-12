@@ -1,0 +1,38 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Description: "Update Pluto with published information from CAPI"
+Parameters:
+  CapiStreamArn:
+    Type: String
+    Description: Arn of the Crier kinesis stream to attach to
+  App:
+    Type: String
+    Description: Application identifier for RiffRaff
+    Default: launchdetector
+  Stack:
+    Type: String
+    Description: Stack identifier for RiffRaff
+    Default: multimedia
+  Stage:
+    Type: String
+    AllowedValues:
+      - CODE
+      - DEV
+      - PROD
+    Description: Deployment stage
+  VPCID:
+    Description: Virtual Private Cloud to deploy into
+    Type: AWS::EC2::VPC::Id
+  DeploySubnets:
+    Description: Subnets to deploy into.  These should be the same as where the database lives.
+    Type: List<AWS::EC2::Subnet::Id>
+Resources:
+  InstanceRole:
+    Type: AWS:IAM::Role
+    Properties:
+      PolicyName: CrierDynamo
+      PolicyDocument:
+        Statement:
+        - Effect: Allow
+          Action: "dynamodb:*"
+          Resource: !Sub arn:aws:dynamodb:${AWS::Region}:${AWS::AccountId}:table/content-api-firehose-v2-${Stack}_${App}-${Mode}-${Stage}
+Outputs:
