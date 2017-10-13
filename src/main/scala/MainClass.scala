@@ -8,6 +8,7 @@ import com.amazonaws.auth.{AWSCredentialsProviderChain, InstanceProfileCredentia
 import com.amazonaws.auth.profile.ProfileCredentialsProvider
 import com.gu.contentapi.firehose.ContentApiFirehoseConsumer
 import com.gu.contentapi.firehose.kinesis.KinesisStreamReaderConfig
+import com.softwaremill.sttp.akkahttp.AkkaHttpBackend
 import com.typesafe.config._
 import sun.misc.Signal
 
@@ -15,12 +16,12 @@ import scala.util.Try
 
 object MainClass extends Logging {
   def main(args:Array[String]):Unit = {
-    logger.info("Starting up")
-
     implicit val system = ActorSystem("my-system")
     implicit val materializer = ActorMaterializer()
     // needed for the future flatMap/onComplete in the end
     implicit val executionContext = system.dispatcher
+
+    logger.info("Starting up")
 
     val route =
       path("is-online") {
@@ -37,8 +38,12 @@ object MainClass extends Logging {
 
     val bindingFuture = Http().bindAndHandle(route, bindIpAddress, 9000)
 
+<<<<<<< HEAD
     logger.info(s"Healthcheck online at http://$bindIpAddress:9000/")
 
+=======
+    val config = ConfigFactory.defaultApplication()
+>>>>>>> decoding for logging output at present
     logger.info(s"Connecting to ${config.getString("capi_stream_name")} with role ${config.getString("capi_role_name")}")
 
     val kinesisCredsProvider = new AWSCredentialsProviderChain(
@@ -62,7 +67,10 @@ object MainClass extends Logging {
       awsRegion = config.getString("region")
     )
 
-    val listener = new LaunchdetectorStreamListener
+    val updater = new PlutoUpdater(config, system)
+
+    val listener = new LaunchdetectorStreamListener(updater)
+
     val contentApiFirehoseConsumer: ContentApiFirehoseConsumer = new ContentApiFirehoseConsumer(
       kinesisStreamReaderConfig, listener
     )
