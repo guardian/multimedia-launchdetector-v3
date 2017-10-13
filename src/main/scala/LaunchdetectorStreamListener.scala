@@ -1,8 +1,10 @@
 import com.gu.contentapi.client.model.v1.Content
 import com.gu.contentapi.firehose.client.StreamListener
+import com.gu.contentatom.thrift.Atom
 import com.gu.crier.model.event.v1.RetrievableContent
+import org.apache.logging.log4j.scala.Logging
 
-class LaunchdetectorStreamListener extends StreamListener {
+class LaunchdetectorStreamListener extends StreamListener with Logging {
   /**
     * When content is updated or created on the Guardian an `update` event will be sent to the events stream. This
     * update event contains the entire payload.
@@ -10,7 +12,7 @@ class LaunchdetectorStreamListener extends StreamListener {
     * @param content
     */
   override def contentUpdate(content: Content): Unit = {
-
+    logger.info(s"Got content update: ${content.toString()}")
   }
 
   /**
@@ -21,7 +23,7 @@ class LaunchdetectorStreamListener extends StreamListener {
     * @param content
     */
   override def contentRetrievableUpdate(content: RetrievableContent): Unit = {
-
+    logger.info(s"Got retrievable update: ${content.toString()}")
   }
 
   /**
@@ -32,6 +34,9 @@ class LaunchdetectorStreamListener extends StreamListener {
     * @param contentId
     */
   override def contentTakedown(contentId: String): Unit = {
+    logger.info(s"Got takedown for $contentId")
+  }
 
+  def atomUpdate(atom: Atom): Unit = {
   }
 }

@@ -47,12 +47,12 @@ object MainClass extends Logging {
     val kinesisStreamReaderConfig = KinesisStreamReaderConfig(
       streamName = config.getString("capi_stream_name"),
       app = config.getString("app_name"), // must match the table name in CrierDynamoDBPolicy
-      stage = "PROD",
-      mode = "live",
+      stage = config.getString("app_stage"),
+      mode = config.getString("capi_mode"),
       suffix = None,
       kinesisCredentialsProvider = kinesisCredsProvider,
       dynamoCredentialsProvider = dynamoCredsProvider,
-      awsRegion = "eu-west-1"
+      awsRegion = config.getString("region")
     )
 
     val listener = new LaunchdetectorStreamListener

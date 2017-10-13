@@ -4,6 +4,15 @@ Parameters:
   CapiStreamArn:
     Type: String
     Description: Arn of the Crier kinesis stream to attach to
+  CapiStreamName:
+    Type: String
+    Description: Name of the Crier kinesis stream to attach to
+  Mode:
+    Type: String
+    AllowedValues:
+      - preview
+      - live
+    Description: Which CAPI mode to listen to
   App:
     Type: String
     Description: Application identifier for RiffRaff
@@ -19,6 +28,23 @@ Parameters:
       - DEV
       - PROD
     Description: Deployment stage
+  AmiId:
+    Type: String
+    Description: ID of the base image to build instances from.  Build this with Amigo.
+  OfficeIpRange:
+    Type: String
+    Description: CIDR block of ip addresses to be allowed SSH access
+  InstanceType:
+    Type: String
+    Description: What type of instance to launch
+    AllowedValues:
+    - t2.nano
+    - t2.micro
+    - t2.small
+    Default: t2.nano
+  KeyPair:
+    Type: AWS::EC2::KeyPair::KeyName
+    Description: Root access keypair
   VPCID:
     Description: Virtual Private Cloud to deploy into
     Type: AWS::EC2::VPC::Id
@@ -26,13 +52,129 @@ Parameters:
     Description: Subnets to deploy into.  These should be the same as where the database lives.
     Type: List<AWS::EC2::Subnet::Id>
 Resources:
-  InstanceRole:
-    Type: AWS:IAM::Role
+  LoadBalancerSG:
+    Type: AWS::EC2::SecurityGroup
     Properties:
-      PolicyName: CrierDynamo
-      PolicyDocument:
+      GroupDescription: Load-balancer security group for launchdetector
+      SecurityGroupIngress:
+        - CidrIp: !Ref OfficeIpRange
+          FromPort: 9000
+          ToPort: 9000
+          IpProtocol: tcp
+      VpcId: !Ref VPCID
+  LoadBalancer:
+    Type: AWS::ElasticLoadBalancing::LoadBalancer
+    Properties:
+      CrossZone: true
+      HealthCheck:
+        HealthyThreshold: "3"
+        Interval: "10"
+        Target: "HTTP:9000/is-online"
+        Timeout: "3"
+        UnhealthyThreshold: "2"
+      Listeners:
+        - InstancePort: "9000"
+          InstanceProtocol: "http"
+          LoadBalancerPort: "80"
+          Protocol: "http"
+      Scheme: internal
+      SecurityGroups:
+      - !GetAtt LoadBalancerSG.GroupId
+      Subnets: !Ref DeploySubnets
+      Tags:
+      - Key: App
+        Value: !Ref App
+      - Key: Stack
+        Value: !Ref Stack
+      - Key: Stage
+        Value: !Ref Stage
+  InstanceRole:
+    Type: AWS::IAM::Role
+    Properties:
+      AssumeRolePolicyDocument:
+        Version: 2012-10-17
         Statement:
         - Effect: Allow
-          Action: "dynamodb:*"
-          Resource: !Sub arn:aws:dynamodb:${AWS::Region}:${AWS::AccountId}:table/content-api-firehose-v2-${Stack}_${App}-${Mode}-${Stage}
+          Principal:
+            Service: ec2.amazonaws.com
+          Action: sts:AssumeRole
+      Path: "/"
+      Policies:
+      - PolicyName: CrierDynamo
+        PolicyDocument:
+          Version: 2012-10-17
+          Statement:
+            Effect: Allow
+            Action: "dynamodb:*"
+            Resource: !Sub arn:aws:dynamodb:${AWS::Region}:${AWS::AccountId}:table/${CapiStreamName}_${App}-${Mode}-${Stage}
+      - PolicyName: DeployablesAccess
+        PolicyDocument:
+          Version: 2012-10-17
+          Statement:
+            Effect: Allow
+            Action:
+             - s3:ListBucket
+             - s3:GetObject
+            Resource:
+            - arn:aws:s3:::gnm-multimedia-rr-deployables
+            - arn:aws:s3:::gnm-multimedia-rr-deployables/*
+  InstanceProfile:
+    Type: AWS::IAM::InstanceProfile
+    Properties:
+      Roles:
+      - !Ref InstanceRole
+  InstanceSecurityGroup:
+    Type: AWS::EC2::SecurityGroup
+    Properties:
+      GroupDescription: Instance security group for launchdetector
+      VpcId: !Ref VPCID
+      SecurityGroupIngress:
+        - SourceSecurityGroupId: !GetAtt LoadBalancerSG.GroupId
+          FromPort: 9000
+          ToPort: 9000
+          IpProtocol: tcp
+        - CidrIp: !Ref OfficeIpRange
+          FromPort: 22
+          ToPort: 22
+          IpProtocol: tcp
+  LaunchConfig:
+    Type: AWS::AutoScaling::LaunchConfiguration
+    Properties:
+      IamInstanceProfile: !Ref InstanceProfile
+      ImageId: !Ref AmiId
+      InstanceType: !Ref InstanceType
+      KeyName: !Ref KeyPair
+      SecurityGroups:
+      - !Ref InstanceSecurityGroup
+      UserData: !Base64
+        "Fn::Sub": |
+          #!/bin/bash -e
+
+          sudo apt-get install awscli
+          aws s3 cp s3://gnm-multimedia-deployables/${Stack}/${Stage}/${App}/launchdetector.deb /tmp
+          dpkg -i /tmp/launchdetector.deb
+  AutoScaleGroup:
+    Type: AWS::AutoScaling::AutoScalingGroup
+    Properties:
+      DesiredCapacity: "2"
+      HealthCheckGracePeriod: 300
+      HealthCheckType: ELB
+      LaunchConfigurationName: !Ref LaunchConfig
+      LoadBalancerNames:
+      - !Ref LoadBalancer
+      MaxSize: "8"
+      MinSize: "2"
+      Tags:
+      - Key: App
+        Value: !Ref App
+        PropagateAtLaunch: true
+      - Key: Stack
+        Value: !Ref Stack
+        PropagateAtLaunch: true
+      - Key: Stage
+        Value: !Ref Stage
+        PropagateAtLaunch: true
+      VPCZoneIdentifier: !Ref DeploySubnets
 Outputs:
+  LoadBalancerAddress:
+    Value: !GetAtt LoadBalancer.DNSName
