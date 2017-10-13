@@ -9,6 +9,7 @@ import com.amazonaws.auth.profile.ProfileCredentialsProvider
 import com.gu.contentapi.firehose.ContentApiFirehoseConsumer
 import com.gu.contentapi.firehose.kinesis.KinesisStreamReaderConfig
 import com.typesafe.config._
+import sun.misc.Signal
 
 object MainClass extends Logging {
   def main(args:Array[String]):Unit = {
@@ -60,8 +61,13 @@ object MainClass extends Logging {
       kinesisStreamReaderConfig, listener
     )
 
+    var shutdownHandler = new ShutdownHandler(contentApiFirehoseConsumer)
+    Signal.handle(new Signal("INT"), shutdownHandler)
+    Signal.handle(new Signal("TERM"), shutdownHandler)
+
     contentApiFirehoseConsumer.start()
 
+    logger.info("Removing healthcheck handler")
     bindingFuture
       .flatMap(_.unbind()) // trigger unbinding from the port
       .onComplete(_ => system.terminate()) // and shutdown when done
