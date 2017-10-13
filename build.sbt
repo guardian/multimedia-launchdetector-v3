@@ -1,3 +1,5 @@
+enablePlugins(RiffRaffArtifact, UniversalPlugin, JDebPackaging, DebianPlugin, JavaServerAppPackaging, SystemdPlugin)
+
 name := "multimedia-launchdetector-v3"
 
 version := "0.1"
@@ -28,3 +30,18 @@ libraryDependencies += "org.scalatest" %% "scalatest" % "3.0.4" % "test"
 libraryDependencies += "com.gu" %% "content-api-firehose-client" % "0.9"
 
 libraryDependencies += "com.typesafe" % "config" % "1.3.1"
+
+debianPackageDependencies := Seq("openjdk-8-jre-headless")
+serverLoading in Debian := Some(ServerLoader.Systemd)
+maintainer := "Andy Gallagher <andy.gallagher@theguardian.com>"
+packageSummary := "Launch Detector that updates asset management with published data from CAPI"
+packageDescription := """Launch Detector that updates asset management with published data from CAPI"""
+riffRaffPackageType := (packageBin in Debian).value
+riffRaffUploadArtifactBucket := Option("riffraff-artifact")
+riffRaffUploadManifestBucket := Option("riffraff-builds")
+riffRaffManifestBranch := sys.env.getOrElse("CIRCLE_BRANCH","unknown")
+riffRaffManifestRevision := sys.env.getOrElse("CIRCLE_BUILD_NUM","SNAPSHOT")
+riffRaffManifestVcsUrl := sys.env.getOrElse("CIRCLE_BUILD_URL", "")
+riffRaffBuildIdentifier := sys.env.getOrElse("CIRCLE_BUILD_NUM", "SNAPSHOT")
+
+riffRaffManifestProjectName := "multimedia:launchdetector-v3"

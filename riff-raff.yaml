@@ -1,0 +1,11 @@
+stacks: [multimedia]
+regions: [eu-west-1]
+
+deployments:
+  launchdetector:
+    type: autoscaling
+    app: launchdetector-v3
+    parameters:
+      bucket: gnm-multimedia-rr-deployables
+      healthcheckGrace: 20
+      secondsToWait: 300
