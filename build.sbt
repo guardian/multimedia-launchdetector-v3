@@ -46,6 +46,7 @@ libraryDependencies += "org.mockito" % "mockito-all" % "2.0.2-beta" % "test"
 
 debianPackageDependencies := Seq("openjdk-8-jre-headless")
 serverLoading in Debian := Some(ServerLoader.Systemd)
+serviceAutostart in Debian := false
 version in Debian := s"${version.value}-${sys.env.getOrElse("CIRCLE_BUILD_NUM","SNAPSHOT")}"
 name in Debian := "launchdetector"
 

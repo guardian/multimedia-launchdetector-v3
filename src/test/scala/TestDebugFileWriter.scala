@@ -4,7 +4,6 @@ import com.gu.contentatom.thrift.atom.media.{Category, MediaAtom}
 import com.gu.contentatom.thrift._
 import com.gu.contentatom.thrift.atom.media.MediaAtom
 import org.scalatest.{FunSuite, MustMatchers, PrivateMethodTester}
-import scala.util
 import scala.util.{Failure, Success}
 
 class TestDebugFileWriter extends FunSuite with MustMatchers {
