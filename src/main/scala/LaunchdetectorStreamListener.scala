@@ -12,7 +12,7 @@ class LaunchdetectorStreamListener extends StreamListener with Logging {
     * @param content
     */
   override def contentUpdate(content: Content): Unit = {
-    logger.info(s"Got content update: ${content.toString()}")
+    logger.info(s"Got content update")
   }
 
   /**
@@ -23,7 +23,7 @@ class LaunchdetectorStreamListener extends StreamListener with Logging {
     * @param content
     */
   override def contentRetrievableUpdate(content: RetrievableContent): Unit = {
-    logger.info(s"Got retrievable update: ${content.toString()}")
+    logger.info(s"Got retrievable update")
   }
 
   /**
@@ -34,7 +34,7 @@ class LaunchdetectorStreamListener extends StreamListener with Logging {
     * @param contentId
     */
   override def contentTakedown(contentId: String): Unit = {
-    logger.info(s"Got takedown for $contentId")
+    logger.info(s"Got takedown")
   }
 
   def atomUpdate(atom: Atom): Unit = {
@@ -42,6 +42,7 @@ class LaunchdetectorStreamListener extends StreamListener with Logging {
     val homedir = sys.env.getOrElse("HOME","/tmp")
     val filepath = Seq(homedir, atom.id).mkString("/")
 
+    logger.info(s"Got atom update, writing to $filepath")
     DebugFileWriter.writeToFile(filepath, atom)
   }
 }

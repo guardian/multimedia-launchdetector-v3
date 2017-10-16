@@ -121,6 +121,14 @@ Resources:
             Resource:
             - arn:aws:s3:::gnm-multimedia-rr-deployables
             - arn:aws:s3:::gnm-multimedia-rr-deployables/*
+      - PolicyName: RoleAccess
+        PolicyDocument:
+          Version: 2012-10-17
+          Statement:
+            Effect: Allow
+            Action:
+            - sts:AssumeRole
+            Resource: !Ref CapiRole
   InstanceProfile:
     Type: AWS::IAM::InstanceProfile
     Properties:
@@ -163,6 +171,7 @@ Resources:
             dpkg -i $x
           done
 
+          mkdir -p /usr/share/multimedia-launchdetector-v3/conf
           cat > /usr/share/multimedia-launchdetector-v3/conf/application.conf << EOF
           capi_stream_name = "${CapiStreamName}"
           capi_role_name = "${CapiRole}"
@@ -183,14 +192,14 @@ Resources:
   AutoScaleGroup:
     Type: AWS::AutoScaling::AutoScalingGroup
     Properties:
-      DesiredCapacity: "2"
+      DesiredCapacity: "1"
       HealthCheckGracePeriod: 300
       HealthCheckType: ELB
       LaunchConfigurationName: !Ref LaunchConfig
       LoadBalancerNames:
       - !Ref LoadBalancer
       MaxSize: "8"
-      MinSize: "2"
+      MinSize: "1"
       Tags:
       - Key: App
         Value: !Ref App

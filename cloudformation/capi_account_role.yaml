@@ -1,0 +1,32 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Description: "Update Pluto with published information from CAPI"
+Parameters:
+  AccountNumber:
+    Type: Number
+    Description: Account number of the Multimedia account to be given access to Crier
+Resources:
+  LaunchDetectorCrossAccountRole:
+    Type: AWS::IAM::Role
+    Properties:
+      AssumeRolePolicyDocument:
+        Version: 2012-10-17
+        Statement:
+          Effect: Allow
+          Principal:
+            AWS: !Sub arn:aws:iam::${AccountNumber}:root
+          Action: sts:AssumeRole
+      Policies:
+      - PolicyName: CrierKinesisRead
+        PolicyDocument:
+          Version: 2012-10-17
+          Statement:
+            Effect: Allow
+            Action:
+            - kinesis:Get*
+            - kinesis:List*
+            - kinesis:Describe*
+            Resource: !Sub arn:aws:kinesis:*:${AWS::AccountId}:stream/content-api-firehose-v2-*
+Outputs:
+  RoleArn:
+    Value: !GetAtt LaunchDetectorCrossAccountRole.Arn
+    Description: ARN to assume the created role

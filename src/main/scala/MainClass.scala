@@ -65,7 +65,8 @@ object MainClass extends Logging {
     Signal.handle(new Signal("INT"), shutdownHandler)
     Signal.handle(new Signal("TERM"), shutdownHandler)
 
-    contentApiFirehoseConsumer.start()
+    val thread = contentApiFirehoseConsumer.start()
+    thread.join() //block while contentApiFirehoseConsumer is running
 
     logger.info("Removing healthcheck handler")
     bindingFuture
