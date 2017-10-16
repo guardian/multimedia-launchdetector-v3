@@ -150,9 +150,9 @@ Resources:
         "Fn::Sub": |
           #!/bin/bash -e
 
-          sudo apt-get install awscli
-          aws s3 cp s3://gnm-multimedia-deployables/${Stack}/${Stage}/${App}/launchdetector.deb /tmp
-          dpkg -i /tmp/launchdetector.deb
+          apt-get -y install awscli
+          aws s3 cp s3://gnm-multimedia-rr-deployables/${Stack}/${Stage}/${App}/multimedia-launchdetector-v3_0.1_all.deb /tmp
+          dpkg -i /tmp/multimedia-launchdetector-v3_0.1_all.deb
   AutoScaleGroup:
     Type: AWS::AutoScaling::AutoScalingGroup
     Properties:

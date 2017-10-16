@@ -2,7 +2,7 @@ enablePlugins(RiffRaffArtifact, UniversalPlugin, JDebPackaging, DebianPlugin, Ja
 
 name := "multimedia-launchdetector-v3"
 
-version := "0.1"
+version := "3.0"
 
 scalaVersion := "2.12.3"
 
@@ -27,12 +27,28 @@ libraryDependencies ++= Seq(
 // https://mvnrepository.com/artifact/org.scalatest/scalatest_2.12
 libraryDependencies += "org.scalatest" %% "scalatest" % "3.0.4" % "test"
 
-libraryDependencies += "com.gu" %% "content-api-firehose-client" % "0.9"
+libraryDependencies += "com.gu" %% "content-api-firehose-client" % "0.10"
 
 libraryDependencies += "com.typesafe" % "config" % "1.3.1"
 
+// http
+libraryDependencies ++= Seq(
+  "com.softwaremill.sttp" %% "core" % "0.0.20",
+  "com.softwaremill.sttp" %% "async-http-client-backend-future" % "0.0.20",
+  "org.asynchttpclient" % "async-http-client" % "2.0.37",
+  "com.softwaremill.sttp" %% "akka-http-backend" % "0.0.20",
+  "org.scala-lang.modules" %% "scala-xml" % "1.0.5"
+)
+
+// testing
+// https://mvnrepository.com/artifact/org.mockito/mockito-all
+libraryDependencies += "org.mockito" % "mockito-all" % "2.0.2-beta" % "test"
+
 debianPackageDependencies := Seq("openjdk-8-jre-headless")
 serverLoading in Debian := Some(ServerLoader.Systemd)
+version in Debian := s"${version.value}-${sys.env.getOrElse("CIRCLE_BUILD_NUM","SNAPSHOT")}"
+name in Debian := "launchdetector"
+
 maintainer := "Andy Gallagher <andy.gallagher@theguardian.com>"
 packageSummary := "Launch Detector that updates asset management with published data from CAPI"
 packageDescription := """Launch Detector that updates asset management with published data from CAPI"""
@@ -43,5 +59,5 @@ riffRaffManifestBranch := sys.env.getOrElse("CIRCLE_BRANCH","unknown")
 riffRaffManifestRevision := sys.env.getOrElse("CIRCLE_BUILD_NUM","SNAPSHOT")
 riffRaffManifestVcsUrl := sys.env.getOrElse("CIRCLE_BUILD_URL", "")
 riffRaffBuildIdentifier := sys.env.getOrElse("CIRCLE_BUILD_NUM", "SNAPSHOT")
-
+riffRaffPackageName := "launchdetector"
 riffRaffManifestProjectName := "multimedia:launchdetector-v3"

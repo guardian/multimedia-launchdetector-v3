@@ -38,5 +38,10 @@ class LaunchdetectorStreamListener extends StreamListener with Logging {
   }
 
   def atomUpdate(atom: Atom): Unit = {
+    //output to a file for testing
+    val homedir = sys.env.getOrElse("HOME","/tmp")
+    val filepath = Seq(homedir, atom.id).mkString("/")
+
+    DebugFileWriter.writeToFile(filepath, atom)
   }
 }
