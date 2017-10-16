@@ -4,6 +4,8 @@ import com.gu.contentatom.thrift.Atom
 import com.gu.crier.model.event.v1.RetrievableContent
 import org.apache.logging.log4j.scala.Logging
 
+import scala.util.{Failure, Success}
+
 class LaunchdetectorStreamListener extends StreamListener with Logging {
   /**
     * When content is updated or created on the Guardian an `update` event will be sent to the events stream. This
@@ -43,6 +45,17 @@ class LaunchdetectorStreamListener extends StreamListener with Logging {
     val filepath = Seq(homedir, atom.id).mkString("/")
 
     logger.info(s"Got atom update, writing to $filepath")
-    DebugFileWriter.writeToFile(filepath, atom)
+    DebugFileWriter.writeToFile(filepath, atom) match {
+      case Failure(except)=>
+        val newFilePath = s"/tmp/${atom.id}"
+        logger.error(s"Could not write to $filepath, trying $newFilePath. (${except.getMessage}")
+        DebugFileWriter.writeToFile(newFilePath, atom) match {
+          case Failure(newExcept)=>
+            logger.error(s"Still could not write to $newFilePath: ${newExcept.getMessage}")
+          case Success(result)=>Success(result)
+        }
+      case Success(result)=>
+        Success(result)
+    }
   }
 }
