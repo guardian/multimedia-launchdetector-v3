@@ -167,8 +167,9 @@ Resources:
           mkdir -p /tmp/install
           aws s3 sync s3://gnm-multimedia-rr-deployables/${Stack}/${Stage}/${App} /tmp/install
 
-          MOST_RECENT_PACKAGE=`ls -Frt /tmp/install/*.deb | grep "[^/]$" | tail -n 1`
-          dpkg -i "$MOST_RECENT_PACAKAGE"
+          declare -x MOST_RECENT_PACKAGE=`ls -Frt /tmp/install/*.deb | grep "[^/]$" | tail -n 1`
+          echo Going to install $MOST_RECENT_PACKAGE
+          dpkg --install "${!MOST_RECENT_PACKAGE}"
 
           mkdir -p /usr/share/multimedia-launchdetector-v3/conf
           cat > /usr/share/multimedia-launchdetector-v3/conf/application.conf << EOF
