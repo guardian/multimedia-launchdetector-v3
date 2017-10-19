@@ -6,6 +6,7 @@ import com.gu.contentatom.thrift.{Atom, AtomData, AtomType, ContentChangeDetails
 import com.gu.contentatom.thrift.atom.media._
 import com.typesafe.config.ConfigFactory
 import org.scalatest.{BeforeAndAfterAll, Matchers, WordSpecLike}
+import akka.http.scaladsl.model._
 
 import scala.concurrent.duration._
 
@@ -16,16 +17,6 @@ class TestPlutoUpdaterActor extends WordSpecLike with BeforeAndAfterAll with Mat
   private val config = ConfigFactory.defaultApplication()
   override def afterAll(): Unit = TestKit.shutdownActorSystem(system)
 
-  "An Echo actor" must {
-    "send back messages unchanged" in {
-      val sender = TestProbe()
-      implicit val senderRef = sender.ref
-      val echo = system.actorOf(TestActors.echoActorProps)
-      echo ! "hello world"
-      sender.expectMsg("hello world")
-    }
-  }
-
   "PlutoUpdaterActor" must {
     "make an update request" in {
       val atomMetadata: Metadata = Metadata(tags = Some(Seq("tom","dick","harry")),
@@ -35,7 +26,7 @@ class TestPlutoUpdaterActor extends WordSpecLike with BeforeAndAfterAll with Mat
         channelId = Some("xxxChannelIdxxx"),
         privacyStatus = Some(PrivacyStatus.Public),
         expiryDate = Some(1508252652),
-        pluto = Some(PlutoData(commissionId = Some("VX-123"), projectId = Some("VX-456"), masterId = Some("VX-6")))
+        pluto = Some(PlutoData(commissionId = Some("VX-123"), projectId = Some("VX-456"), masterId = Some("VX-789")))
       )
 
       val ytAsset: Asset = Asset(assetType = AssetType.Video,
@@ -55,10 +46,11 @@ class TestPlutoUpdaterActor extends WordSpecLike with BeforeAndAfterAll with Mat
       val testAtom = Atom("fakeAtomId", AtomType.Media, Seq("no-label"), "<p>default html</p>", ad,
         changeDetails, title = Some("atom title"))
 
+      MockServer.handleRequest(HttpResponse(StatusCodes.OK),HttpRequest(method = HttpMethods.PUT,uri="http://localhost:8089/API/item/VX-789/metadata"))
       val sender = TestProbe("ProbeNoId")
       implicit val senderRef = sender.ref
 
-      val updateractor = system.actorOf(Props(new PlutoUpdater(config)), "UpdaterWithId")
+      val updateractor = system.actorOf(Props(new PlutoUpdaterActor(config)), "UpdaterWithId")
       updateractor ! DoUpdate(testAtom)
 
       sender.expectMsg(30 seconds, SuccessfulSend)
@@ -93,7 +85,7 @@ class TestPlutoUpdaterActor extends WordSpecLike with BeforeAndAfterAll with Mat
         changeDetails, title = Some("atom title"))
 
       val sender = TestProbe("ProbeNoId")
-      val updateractor = system.actorOf(Props(new PlutoUpdater(config)), "UpdaterNoId")
+      val updateractor = system.actorOf(Props(new PlutoUpdaterActor(config)), "UpdaterNoId")
 
       updateractor tell(DoUpdate(testAtom), sender.ref)
       sender.expectMsg(ErrorSend("No Item ID in atom data"))

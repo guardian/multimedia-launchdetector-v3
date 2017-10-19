@@ -67,7 +67,7 @@ object MainClass extends Logging {
       awsRegion = config.getString("region")
     )
 
-    val updater = new PlutoUpdater(config)
+    val updater = new PlutoUpdaterActor(config)
 
     val listener = new LaunchdetectorStreamListener(updater)
 

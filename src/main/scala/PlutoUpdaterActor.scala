@@ -24,7 +24,7 @@ case class ErrorSend(error:String) extends Throwable {
   override def getMessage: String = error
 }
 
-class PlutoUpdater(config:Config) extends Actor{
+class PlutoUpdaterActor(config:Config) extends Actor{
   implicit val sttpBackend:SttpBackend[Future,Source[ByteString, Any]] = AkkaHttpBackend.usingActorSystem(context.system)
   import context.dispatcher
   implicit val materializer = ActorMaterializer()
@@ -105,7 +105,6 @@ class PlutoUpdater(config:Config) extends Actor{
           logger.warning(vsError.toString)
           Failure(ErrorSend(vsError.toString))
       }
-
   }})
 
   def getMasterId(atom:Atom):Option[String] = atom.data.asInstanceOf[AtomData.Media].media.metadata.flatMap(_.pluto.flatMap(_.masterId))

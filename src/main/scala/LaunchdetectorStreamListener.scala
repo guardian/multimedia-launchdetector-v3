@@ -3,14 +3,9 @@ import com.gu.contentapi.firehose.client.StreamListener
 import com.gu.contentatom.thrift.{Atom, AtomData, AtomType}
 import com.gu.crier.model.event.v1.RetrievableContent
 import org.apache.logging.log4j.scala.Logging
-
-<<<<<<< HEAD
 import scala.util.{Failure, Success}
 
-class LaunchdetectorStreamListener extends StreamListener with Logging {
-=======
-class LaunchdetectorStreamListener(updater:PlutoUpdater) extends StreamListener with Logging {
->>>>>>> decoding for logging output at present
+class LaunchdetectorStreamListener(updater:PlutoUpdaterActor) extends StreamListener with Logging {
   /**
     * When content is updated or created on the Guardian an `update` event will be sent to the events stream. This
     * update event contains the entire payload.
@@ -18,11 +13,7 @@ class LaunchdetectorStreamListener(updater:PlutoUpdater) extends StreamListener 
     * @param content
     */
   override def contentUpdate(content: Content): Unit = {
-<<<<<<< HEAD
-    logger.info(s"Got content update")
-=======
     //logger.info(s"Got content update: ${content.toString()}")
->>>>>>> decoding for logging output at present
   }
 
   /**
@@ -33,11 +24,7 @@ class LaunchdetectorStreamListener(updater:PlutoUpdater) extends StreamListener 
     * @param content
     */
   override def contentRetrievableUpdate(content: RetrievableContent): Unit = {
-<<<<<<< HEAD
-    logger.info(s"Got retrievable update")
-=======
     //logger.info(s"Got retrievable update: ${content.toString()}")
->>>>>>> decoding for logging output at present
   }
 
   /**
@@ -48,29 +35,6 @@ class LaunchdetectorStreamListener(updater:PlutoUpdater) extends StreamListener 
     * @param contentId
     */
   override def contentTakedown(contentId: String): Unit = {
-<<<<<<< HEAD
-    logger.info(s"Got takedown")
-  }
-
-  def atomUpdate(atom: Atom): Unit = {
-    //output to a file for testing
-    val homedir = sys.env.getOrElse("HOME","/tmp")
-    val filepath = Seq(homedir, atom.id).mkString("/")
-
-    logger.info(s"Got atom update, writing to $filepath")
-    DebugFileWriter.writeToFile(filepath, atom) match {
-      case Failure(except)=>
-        val newFilePath = s"/tmp/${atom.id}"
-        logger.error(s"Could not write to $filepath, trying $newFilePath. (${except.getMessage}")
-        DebugFileWriter.writeToFile(newFilePath, atom) match {
-          case Failure(newExcept)=>
-            logger.error(s"Still could not write to $newFilePath: ${newExcept.getMessage}")
-          case Success(result)=>Success(result)
-        }
-      case Success(result)=>
-        Success(result)
-    }
-=======
     //logger.info(s"Got takedown for $contentId")
   }
 
@@ -114,6 +78,5 @@ class LaunchdetectorStreamListener(updater:PlutoUpdater) extends StreamListener 
 
   override def atomUpdate(atom: Atom): Unit = {
     logger.info(atomUpdateInfo(atom))
->>>>>>> decoding for logging output at present
   }
 }
