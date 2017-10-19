@@ -6,6 +6,12 @@ version := "3.0"
 
 scalaVersion := "2.12.3"
 
+
+// https://mvnrepository.com/artifact/com.typesafe.akka/akka-testkit_2.11
+libraryDependencies += "com.typesafe.akka" %% "akka-testkit" % "2.5.6" % "test"
+libraryDependencies += "com.typesafe.akka" %% "akka-actor" % "2.5.6"
+libraryDependencies += "com.typesafe.akka" %% "akka-stream" % "2.5.6"
+libraryDependencies += "com.typesafe.akka" %% "akka-slf4j" % "2.5.6"
 // https://mvnrepository.com/artifact/com.typesafe.akka/akka-http_2.12
 libraryDependencies += "com.typesafe.akka" %% "akka-http" % "10.0.10"
 

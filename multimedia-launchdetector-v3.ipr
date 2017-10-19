@@ -425,13 +425,13 @@
         <root url="jar://$USER_HOME$/.ivy2/cache/com.twitter/util-function_2.12/srcs/util-function_2.12-6.45.0-sources.jar!/" />
       </SOURCES>
     </library>
-    <library name="SBT: com.typesafe.akka:akka-actor_2.12:2.4.19:jar">
+    <library name="SBT: com.typesafe.akka:akka-actor_2.12:2.5.6:jar">
       <CLASSES>
-        <root url="jar://$USER_HOME$/.ivy2/cache/com.typesafe.akka/akka-actor_2.12/jars/akka-actor_2.12-2.4.19.jar!/" />
+        <root url="jar://$USER_HOME$/.ivy2/cache/com.typesafe.akka/akka-actor_2.12/jars/akka-actor_2.12-2.5.6.jar!/" />
       </CLASSES>
       <JAVADOC />
       <SOURCES>
-        <root url="jar://$USER_HOME$/.ivy2/cache/com.typesafe.akka/akka-actor_2.12/srcs/akka-actor_2.12-2.4.19-sources.jar!/" />
+        <root url="jar://$USER_HOME$/.ivy2/cache/com.typesafe.akka/akka-actor_2.12/srcs/akka-actor_2.12-2.5.6-sources.jar!/" />
       </SOURCES>
     </library>
     <library name="SBT: com.typesafe.akka:akka-http-core_2.12:10.0.10:jar">
@@ -461,13 +461,22 @@
         <root url="jar://$USER_HOME$/.ivy2/cache/com.typesafe.akka/akka-parsing_2.12/srcs/akka-parsing_2.12-10.0.10-sources.jar!/" />
       </SOURCES>
     </library>
-    <library name="SBT: com.typesafe.akka:akka-stream_2.12:2.4.19:jar">
+    <library name="SBT: com.typesafe.akka:akka-stream_2.12:2.5.6:jar">
       <CLASSES>
-        <root url="jar://$USER_HOME$/.ivy2/cache/com.typesafe.akka/akka-stream_2.12/jars/akka-stream_2.12-2.4.19.jar!/" />
+        <root url="jar://$USER_HOME$/.ivy2/cache/com.typesafe.akka/akka-stream_2.12/jars/akka-stream_2.12-2.5.6.jar!/" />
       </CLASSES>
       <JAVADOC />
       <SOURCES>
-        <root url="jar://$USER_HOME$/.ivy2/cache/com.typesafe.akka/akka-stream_2.12/srcs/akka-stream_2.12-2.4.19-sources.jar!/" />
+        <root url="jar://$USER_HOME$/.ivy2/cache/com.typesafe.akka/akka-stream_2.12/srcs/akka-stream_2.12-2.5.6-sources.jar!/" />
+      </SOURCES>
+    </library>
+    <library name="SBT: com.typesafe.akka:akka-testkit_2.12:2.5.6:jar">
+      <CLASSES>
+        <root url="jar://$USER_HOME$/.ivy2/cache/com.typesafe.akka/akka-testkit_2.12/jars/akka-testkit_2.12-2.5.6.jar!/" />
+      </CLASSES>
+      <JAVADOC />
+      <SOURCES>
+        <root url="jar://$USER_HOME$/.ivy2/cache/com.typesafe.akka/akka-testkit_2.12/srcs/akka-testkit_2.12-2.5.6-sources.jar!/" />
       </SOURCES>
     </library>
     <library name="SBT: com.typesafe.netty:netty-reactive-streams:1.0.8:jar">
@@ -497,13 +506,13 @@
         <root url="jar://$USER_HOME$/.ivy2/cache/com.typesafe/config/srcs/config-1.3.1-sources.jar!/" />
       </SOURCES>
     </library>
-    <library name="SBT: com.typesafe:ssl-config-core_2.12:0.2.1:jar">
+    <library name="SBT: com.typesafe:ssl-config-core_2.12:0.2.2:jar">
       <CLASSES>
-        <root url="jar://$USER_HOME$/.ivy2/cache/com.typesafe/ssl-config-core_2.12/bundles/ssl-config-core_2.12-0.2.1.jar!/" />
+        <root url="jar://$USER_HOME$/.ivy2/cache/com.typesafe/ssl-config-core_2.12/bundles/ssl-config-core_2.12-0.2.2.jar!/" />
       </CLASSES>
       <JAVADOC />
       <SOURCES>
-        <root url="jar://$USER_HOME$/.ivy2/cache/com.typesafe/ssl-config-core_2.12/srcs/ssl-config-core_2.12-0.2.1-sources.jar!/" />
+        <root url="jar://$USER_HOME$/.ivy2/cache/com.typesafe/ssl-config-core_2.12/srcs/ssl-config-core_2.12-0.2.2-sources.jar!/" />
       </SOURCES>
     </library>
     <library name="SBT: commons-codec:commons-codec:1.9:jar">
@@ -718,13 +727,13 @@
         <root url="jar://$USER_HOME$/.ivy2/cache/org.mockito/mockito-all/srcs/mockito-all-2.0.2-beta-sources.jar!/" />
       </SOURCES>
     </library>
-    <library name="SBT: org.reactivestreams:reactive-streams:1.0.0:jar">
+    <library name="SBT: org.reactivestreams:reactive-streams:1.0.1:jar">
       <CLASSES>
-        <root url="jar://$USER_HOME$/.ivy2/cache/org.reactivestreams/reactive-streams/jars/reactive-streams-1.0.0.jar!/" />
+        <root url="jar://$USER_HOME$/.ivy2/cache/org.reactivestreams/reactive-streams/jars/reactive-streams-1.0.1.jar!/" />
       </CLASSES>
       <JAVADOC />
       <SOURCES>
-        <root url="jar://$USER_HOME$/.ivy2/cache/org.reactivestreams/reactive-streams/srcs/reactive-streams-1.0.0-sources.jar!/" />
+        <root url="jar://$USER_HOME$/.ivy2/cache/org.reactivestreams/reactive-streams/srcs/reactive-streams-1.0.1-sources.jar!/" />
       </SOURCES>
     </library>
     <library name="SBT: org.scala-lang.modules:scala-java8-compat_2.12:0.8.0:jar">
