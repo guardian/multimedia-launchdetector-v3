@@ -27,7 +27,8 @@ libraryDependencies ++= Seq(
   "org.apache.logging.log4j" % "log4j-core" % "2.9.1",
   "org.apache.logging.log4j" %% "log4j-api-scala" % "11.0",
   "com.fasterxml.jackson.dataformat" % "jackson-dataformat-yaml" % "2.7.3",
-  "com.fasterxml.jackson.core" % "jackson-databind" % "2.5.4"
+  "com.fasterxml.jackson.core" % "jackson-databind" % "2.5.4",
+  "org.apache.logging.log4j" % "log4j-slf4j-impl" % "2.9.1"
 )
 
 // https://mvnrepository.com/artifact/org.scalatest/scalatest_2.12

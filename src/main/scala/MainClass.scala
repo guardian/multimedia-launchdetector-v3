@@ -1,5 +1,5 @@
 import org.apache.logging.log4j.scala.Logging
-import akka.actor.ActorSystem
+import akka.actor.{ActorSystem, Props}
 import akka.http.scaladsl.Http
 import akka.http.scaladsl.model._
 import akka.http.scaladsl.server.Directives._
@@ -23,27 +23,9 @@ object MainClass extends Logging {
 
     logger.info("Starting up")
 
-    val route =
-      path("is-online") {
-        get {
-          complete(HttpEntity(ContentTypes.`text/html(UTF-8)`, "<h1>Say hello to akka-http</h1>"))
-        }
-      }
 
     val config = ConfigFactory.defaultApplication()
-
-    val bindIpAddress = Try {
-      config.getString("bind_ip_address")
-    }.getOrElse("0.0.0.0")
-
-    val bindingFuture = Http().bindAndHandle(route, bindIpAddress, 9000)
-
-<<<<<<< HEAD
-    logger.info(s"Healthcheck online at http://$bindIpAddress:9000/")
-
-=======
-    val config = ConfigFactory.defaultApplication()
->>>>>>> decoding for logging output at present
+    val bindingFuture = Healthcheck.setup(config)
     logger.info(s"Connecting to ${config.getString("capi_stream_name")} with role ${config.getString("capi_role_name")}")
 
     val kinesisCredsProvider = new AWSCredentialsProviderChain(
@@ -67,7 +49,7 @@ object MainClass extends Logging {
       awsRegion = config.getString("region")
     )
 
-    val updater = new PlutoUpdaterActor(config)
+    val updater = system.actorOf(Props(new PlutoUpdaterActor(config)))
 
     val listener = new LaunchdetectorStreamListener(updater)
 
@@ -82,10 +64,8 @@ object MainClass extends Logging {
     val thread = contentApiFirehoseConsumer.start()
     thread.join() //block while contentApiFirehoseConsumer is running
 
-    logger.info("Removing healthcheck handler")
-    bindingFuture
-      .flatMap(_.unbind()) // trigger unbinding from the port
-      .onComplete(_ => system.terminate()) // and shutdown when done
+    Healthcheck.remove(bindingFuture)(_ => system.terminate())
+
   }
 
 }
