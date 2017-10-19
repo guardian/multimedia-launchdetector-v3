@@ -42,7 +42,7 @@ object UpdateXmlGenerator {
       <field><name>gnm_master_youtube_status</name> <value>Published</value></field>
       <field><name>gnm_master_youtube_holdingimage</name><value/></field>
       <field><name>gnm_master_youtube_youtubeurl</name>{ytAssets.flatMap({ asset:Asset => <value>https://www.youtube.com/watch?v={asset.id}</value>})}</field>
-      <field><name>gnm_master_youtube_publication_date_and_time</name> <value>{currentTime.toString}</value></field>
+      <field><name>gnm_master_youtube_publish</name> <value>{currentTime.toString}</value></field>
     </list>
     )
   }
@@ -75,12 +75,12 @@ object UpdateXmlGenerator {
     //logger.warn(youtubePortion(atom,currentTime).map({content=>content \ "field"}).getOrElse(NodeSeq))
 
     <MetadataDocument xmlns="http://xml.vidispine.com/schema/vidispine">
+      <group>Asset</group>
       <timespan start="-INF" end="+INF">
-        <group>Asset</group>
           {fieldOption("title",atom.title).getOrElse("")}
           <field><name>gnm_master_website_headline</name><value>{mediaContent.title}</value></field>
           {fieldOption("gnm_master_generic_source",mediaContent.source).getOrElse("")}
-          {fieldOption("gnm_master_website_description",mediaContent.description).getOrElse("")}
+          {fieldOption("gnm_master_website_standfirst",mediaContent.description).getOrElse("")}
           {fieldOptionIterable("gnm_asset_keywords",mediaContent.keywords).getOrElse("")}
 
           {youtubePortion(atom,currentTime).map(_ \ "field").getOrElse(NodeSeq)}

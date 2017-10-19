@@ -27,7 +27,7 @@ class TestPlutoUpdaterActor extends WordSpecLike with BeforeAndAfterAll with Mat
   }
 
   "PlutoUpdaterActor" must {
-/*    "make an update request" in {
+    "make an update request" in {
       val atomMetadata: Metadata = Metadata(tags = Some(Seq("tom","dick","harry")),
         categoryId = Some("xxxCategoryIdxxxx"),
         license = Some("Ridiculously restrictive"),
@@ -35,7 +35,7 @@ class TestPlutoUpdaterActor extends WordSpecLike with BeforeAndAfterAll with Mat
         channelId = Some("xxxChannelIdxxx"),
         privacyStatus = Some(PrivacyStatus.Public),
         expiryDate = Some(1508252652),
-        pluto = Some(PlutoData(commissionId = Some("VX-123"), projectId = Some("VX-456"), masterId = Some("VX-789")))
+        pluto = Some(PlutoData(commissionId = Some("VX-123"), projectId = Some("VX-456"), masterId = Some("VX-6")))
       )
 
       val ytAsset: Asset = Asset(assetType = AssetType.Video,
@@ -55,12 +55,14 @@ class TestPlutoUpdaterActor extends WordSpecLike with BeforeAndAfterAll with Mat
       val testAtom = Atom("fakeAtomId", AtomType.Media, Seq("no-label"), "<p>default html</p>", ad,
         changeDetails, title = Some("atom title"))
 
-      val updateractor = system.actorOf(Props(new PlutoUpdater(config)), "Updater")
+      val sender = TestProbe("ProbeNoId")
+      implicit val senderRef = sender.ref
 
+      val updateractor = system.actorOf(Props(new PlutoUpdater(config)), "UpdaterWithId")
       updateractor ! DoUpdate(testAtom)
 
-      expectMsg(120 seconds, SuccessfulSend)
-    }*/
+      sender.expectMsg(30 seconds, SuccessfulSend)
+    }
 
     "not make a request if there is no ID in the data" in {
       val atomMetadata: Metadata = Metadata(tags = Some(Seq("tom","dick","harry")),
@@ -91,11 +93,9 @@ class TestPlutoUpdaterActor extends WordSpecLike with BeforeAndAfterAll with Mat
         changeDetails, title = Some("atom title"))
 
       val sender = TestProbe("ProbeNoId")
-      //implicit val senderRef = sender.ref
       val updateractor = system.actorOf(Props(new PlutoUpdater(config)), "UpdaterNoId")
 
       updateractor tell(DoUpdate(testAtom), sender.ref)
-      //sender.expectMsgClass(30 seconds,ErrorSend.getClass)
       sender.expectMsg(ErrorSend("No Item ID in atom data"))
     }
   }
