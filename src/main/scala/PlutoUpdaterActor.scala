@@ -1,6 +1,7 @@
 import java.util.Base64
 
 import akka.actor.ActorSystem
+import akka.pattern.ask
 import akka.stream.scaladsl.{Keep, Sink, Source}
 import akka.util.ByteString
 import akka.actor.Actor
@@ -16,8 +17,11 @@ import akka.stream.ActorMaterializer
 
 import scala.concurrent.Future
 import scala.util.{Failure, Success, Try}
+import scala.concurrent.duration._
 
 case class DoUpdate(atom:Atom)
+case class LookupPlutoId(atomId:String)
+case class GotPlutoId(plutoId:String)
 case class SuccessfulSend()
 case class NoResponseBody()
 case class ErrorSend(error:String) extends Throwable {
@@ -55,13 +59,25 @@ class PlutoUpdaterActor(config:Config) extends Actor{
         logger.error(error,s"Unable to update Vidispine: ${error.getMessage}")
         origSender ! error
     })
+    case LookupPlutoId(atomId)=>
+      logger.info(s"Received lookup request from ${sender()}")
+      val origSender = sender() //need to make a copy of this so when it's called from another thread in map() below it is passed correctly.
+      doLookup(atomId).onComplete({
+        case Success(plutoId)=>
+          logger.info(s"Got plutoId $plutoId")
+          origSender ! GotPlutoId(plutoId)
+        case Failure(error)=>
+          logger.error(s"Unable to lookup $atomId in Vidispine: $error")
+          logger.error(error.getStackTraceString)
+          origSender ! ErrorSend(error.getMessage)
+      })
     case _=>logger.error(s"Received an unknown message")
   }
 
 
   private def authString:String = Base64.getEncoder.encodeToString(s"$plutoUser:$plutoPass".getBytes)
 
-  private def send(itemId:String, xmlString:String):Future[Response[Source[ByteString, Any]]] = {
+  private def sendPut(uri:Uri, xmlString:String, headers:Map[String,String]):Future[Response[Source[ByteString, Any]]] = {
     val bs = ByteString(xmlString,"UTF-8")
 
     logger.info("Got xml body")
@@ -70,10 +86,9 @@ class PlutoUpdaterActor(config:Config) extends Actor{
       "Accept"->"application/xml",
       "Authorization"->s"Basic $authString",
       "Content-Type"->"application/xml"
-    )
+    ) ++ headers
 
     logger.info(hdr.toString())
-    val uri=uri"$proto://$plutoHost:$plutoPort/API/item/$itemId/metadata"
     logger.info(s"Got headers, initiating send to $uri")
     sttp
       .put(uri)
@@ -90,7 +105,7 @@ class PlutoUpdaterActor(config:Config) extends Actor{
     runnable.run().map(_.utf8String)
   }
 
-  def request(itemId:String, xmlString:String):Future[Try[Future[String]]] = send(itemId, xmlString).map({response=>
+  def request(uri:Uri,xmlString:String,headers:Map[String,String]):Future[Try[Future[String]]] = sendPut(uri, xmlString, headers).map({ response=>
     response.body match {
     case Right(source)=>
       logger.info("Send succeeded")
@@ -115,8 +130,37 @@ class PlutoUpdaterActor(config:Config) extends Actor{
 
     val maybeItemId = mediaContent.metadata.flatMap(_.pluto.flatMap(_.masterId))
     maybeItemId match {
-      case Some(itemId)=>request(itemId,xmlDoc.toString())
-      case None=>Future(Failure(ErrorSend("No Item ID in atom data")))
+      case Some(itemId)=>request(uri"$proto://$plutoHost:$plutoPort/API/item/$itemId/metadata",xmlDoc.toString(),Map())
+      case None=>
+        implicit val timeout:akka.util.Timeout = 60 seconds
+        val itemIdFuture:Future[String] = (self ? LookupPlutoId(atom.id)).mapTo[String]
+        itemIdFuture.flatMap({ itemId=>
+          request(uri"$proto://$plutoHost:$plutoPort/API/item/$itemId/metadata",xmlDoc.toString(),Map())
+        })
     }
+  }
+
+  def doLookup(atomId:String):Future[String] = {
+    val xmlDoc = UpdateXmlGenerator.makeSearchXml(atomId)
+    val resultFuture = request(uri"$proto://$plutoHost:$plutoPort/API/item", xmlDoc.toString(),Map())
+
+    resultFuture.flatMap({
+      case Success(futureString)=>
+        futureString.map({ returnedXml =>
+          logger.info("Got returned search xml")
+          val searchResult = VSSearchResponse(returnedXml)
+          logger.info(searchResult.toString)
+          if(searchResult.hits>1) logger.warning(s"Multiple results returned for atom ID $atomId: ${searchResult.itemIds}")
+
+          if(searchResult.hits==0){
+            val errorString=s"No items found for atom ID $atomId"
+            logger.warning(errorString)
+            throw new RuntimeException(errorString)
+          } else {
+            searchResult.itemIds.head
+          }
+        })
+      case Failure(error)=>Future.failed(error)
+    })
   }
 }

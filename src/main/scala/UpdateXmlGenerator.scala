@@ -82,4 +82,12 @@ object UpdateXmlGenerator {
     </MetadataDocument>
   }
 
+  def makeSearchXml(atomId:String):Elem = {
+    <ItemSearchDocument xmlns="http://xml.vidispine.com/schema/vidispine">
+      <field>
+        <name>gnm_master_mediaatom_atomid</name>
+        <value>{atomId}</value>
+      </field>
+    </ItemSearchDocument>
+  }
 }
