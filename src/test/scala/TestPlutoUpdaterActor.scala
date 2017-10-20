@@ -3,7 +3,7 @@ import java.time.LocalDateTime
 
 import actors._
 import actors.messages._
-import akka.actor.{ActorSystem, Props}
+import akka.actor.{ActorRef, ActorSystem, Props}
 import akka.testkit.{ImplicitSender, TestActors, TestKit, TestProbe}
 import com.gu.contentatom.thrift.{Atom, AtomData, AtomType, ContentChangeDetails}
 import com.gu.contentatom.thrift.atom.media._
@@ -60,7 +60,7 @@ class TestPlutoUpdaterActor extends WordSpecLike with BeforeAndAfterAll with Mat
       sender.expectMsg(30 seconds, SuccessfulSend)
     }
 
-    "not make a request if there is no ID in the data" in {
+    "ask for the item ID from the atom ID if there is no ID in the data" in {
       val atomMetadata: Metadata = Metadata(tags = Some(Seq("tom","dick","harry")),
         categoryId = Some("xxxCategoryIdxxxx"),
         license = Some("Ridiculously restrictive"),
@@ -89,10 +89,13 @@ class TestPlutoUpdaterActor extends WordSpecLike with BeforeAndAfterAll with Mat
         changeDetails, title = Some("atom title"))
 
       val sender = TestProbe("ProbeNoId")
-      val updateractor = system.actorOf(Props(new PlutoUpdaterActor(config)), "UpdaterNoId")
+      val mockLookup = TestProbe("MockLookup")
+      val updateractor = system.actorOf(Props(new PlutoUpdaterActor(config){
+        override protected val lookupActor:ActorRef=mockLookup.ref
+      }), "UpdaterNoId")
 
       updateractor tell(DoUpdate(testAtom), sender.ref)
-      sender.expectMsg(30 seconds, ErrorSend("No Item ID in atom data"))
+      mockLookup.expectMsg(LookupPlutoId("fakeAtomId"))
     }
   }
 
@@ -114,7 +117,7 @@ class TestPlutoUpdaterActor extends WordSpecLike with BeforeAndAfterAll with Mat
     )
 
     val sender = TestProbe("ProbeInternalId")
-    val updateractor = system.actorOf(Props(new PlutoUpdaterActor(tempConfig)), "UpdaterLookup")
+    val updateractor = system.actorOf(Props(new PlutoLookupActor(tempConfig)), "UpdaterLookup")
     updateractor tell(LookupPlutoId("xxxx"), sender.ref)
 
     sender.expectMsg(30 seconds, GotPlutoId("KP-2788261"))
@@ -135,7 +138,7 @@ class TestPlutoUpdaterActor extends WordSpecLike with BeforeAndAfterAll with Mat
     )
 
     val sender = TestProbe("ProbeInternalIdNoResult")
-    val updateractor = system.actorOf(Props(new PlutoUpdaterActor(tempConfig)), "UpdaterLookupNoResult")
+    val updateractor = system.actorOf(Props(new PlutoLookupActor(tempConfig)), "UpdaterLookupNoResult")
     updateractor tell(LookupPlutoId("xxxx"), sender.ref)
 
     sender.expectMsg(30 seconds, ErrorSend("No items found for atom ID xxxx"))
