@@ -1,3 +1,5 @@
+package vidispine
+
 import scala.xml._
 
 /*

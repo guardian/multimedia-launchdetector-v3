@@ -1,3 +1,4 @@
+import actors.messages.DoUpdate
 import akka.actor.ActorRef
 import com.gu.contentapi.client.model.v1.Content
 import com.gu.contentapi.firehose.client.StreamListener

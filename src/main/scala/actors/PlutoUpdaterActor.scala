@@ -1,32 +1,22 @@
-import java.util.Base64
+package actors
 
-import akka.actor.ActorSystem
+import java.time.LocalDateTime
+import java.util.Base64
+import actors.messages._
+import akka.actor.Actor
+import akka.event.{DiagnosticLoggingAdapter, Logging}
 import akka.pattern.ask
+import akka.stream.ActorMaterializer
 import akka.stream.scaladsl.{Keep, Sink, Source}
 import akka.util.ByteString
-import akka.actor.Actor
-import akka.actor.Props
-import akka.event.{DiagnosticLoggingAdapter, Logging}
 import com.gu.contentatom.thrift.{Atom, AtomData}
+import com.softwaremill.sttp.akkahttp.AkkaHttpBackend
 import com.softwaremill.sttp._
-import com.softwaremill.sttp.akkahttp._
 import com.typesafe.config.Config
-import java.time.{Instant, LocalDateTime, ZoneOffset, ZonedDateTime}
-
-import akka.stream.ActorMaterializer
-
 import scala.concurrent.Future
-import scala.util.{Failure, Success, Try}
 import scala.concurrent.duration._
-
-case class DoUpdate(atom:Atom)
-case class LookupPlutoId(atomId:String)
-case class GotPlutoId(plutoId:String)
-case class SuccessfulSend()
-case class NoResponseBody()
-case class ErrorSend(error:String) extends Throwable {
-  override def getMessage: String = error
-}
+import scala.util.{Failure, Success, Try}
+import vidispine.{VSError,UpdateXmlGenerator, VSSearchResponse}
 
 class PlutoUpdaterActor(config:Config) extends Actor{
   implicit val sttpBackend:SttpBackend[Future,Source[ByteString, Any]] = AkkaHttpBackend.usingActorSystem(context.system)

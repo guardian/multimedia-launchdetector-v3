@@ -1,5 +1,7 @@
-import org.scalatest.{FunSuite, MustMatchers, PrivateMethodTester}
-import akka.event.{DiagnosticLoggingAdapter, Logging}
+package vidispine
+
+import akka.event.DiagnosticLoggingAdapter
+import org.scalatest.{FunSuite, MustMatchers}
 
 class TestVsError extends FunSuite with MustMatchers {
   private implicit val myLogger:DiagnosticLoggingAdapter = new DiagnosticLoggingAdapter {

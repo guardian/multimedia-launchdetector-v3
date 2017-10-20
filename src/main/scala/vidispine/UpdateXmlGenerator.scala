@@ -1,7 +1,9 @@
+package vidispine
+
 import java.time.{Instant, LocalDateTime, ZoneOffset, ZonedDateTime}
 
-import com.gu.contentatom.thrift.{Atom, AtomData}
 import com.gu.contentatom.thrift.atom.media.{Asset, Platform}
+import com.gu.contentatom.thrift.{Atom, AtomData}
 
 import scala.xml.{Elem, NodeSeq}
 

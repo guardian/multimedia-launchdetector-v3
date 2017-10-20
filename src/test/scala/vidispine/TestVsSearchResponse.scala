@@ -1,8 +1,8 @@
-import org.scalatest.{FunSuite, MustMatchers, PrivateMethodTester}
-import akka.event.{DiagnosticLoggingAdapter, Logging}
+package vidispine
+import org.scalatest.{FunSuite, MustMatchers}
 
 class TestVsSearchResponse extends FunSuite with MustMatchers{
-  test("VSSearchResponse should parse a search xml"){
+  test("vidispine.VSSearchResponse should parse a search xml"){
     val xmlText = """<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
                     |<ItemListDocument xmlns="http://xml.vidispine.com/schema/vidispine">
                     |    <hits>2</hits>

@@ -1,6 +1,8 @@
 import java.time.LocalDateTime
 import java.time.LocalDateTime
 
+import actors._
+import actors.messages._
 import akka.actor.{ActorSystem, Props}
 import akka.testkit.{ImplicitSender, TestActors, TestKit, TestProbe}
 import com.gu.contentatom.thrift.{Atom, AtomData, AtomType, ContentChangeDetails}
@@ -19,7 +21,7 @@ class TestPlutoUpdaterActor extends WordSpecLike with BeforeAndAfterAll with Mat
   private val config = ConfigFactory.defaultApplication()
   override def afterAll(): Unit = TestKit.shutdownActorSystem(system)
 
-  "PlutoUpdaterActor" must {
+  "actors.PlutoUpdaterActor" must {
     "make an update request" in {
       val atomMetadata: Metadata = Metadata(tags = Some(Seq("tom","dick","harry")),
         categoryId = Some("xxxCategoryIdxxxx"),
