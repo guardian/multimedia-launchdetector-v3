@@ -49,20 +49,21 @@ trait VSCommunicator {
   }
 
   def request(uri:Uri,xmlString:String,headers:Map[String,String])
-             (implicit logger:DiagnosticLoggingAdapter, materializer: akka.stream.Materializer,ec: ExecutionContext):Future[Try[Future[String]]] = sendPut(uri, xmlString, headers).map({ response=>
+             (implicit logger:DiagnosticLoggingAdapter, materializer: akka.stream.Materializer,ec: ExecutionContext):
+  Future[String] = sendPut(uri, xmlString, headers).flatMap({ response=>
     response.body match {
       case Right(source)=>
         logger.info("Send succeeded")
-        Success(consumeSource(source))
+        consumeSource(source)
       case Left(errorString)=>
         VSError.fromXml(errorString) match {
           case Left(unparseableError)=>
             val errMsg = s"Send failed: ${response.code} - $errorString"
             logger.warning(errMsg)
-            Failure(ErrorSend(errMsg))
+            throw ErrorSend(errMsg)
           case Right(vsError)=>
             logger.warning(vsError.toString)
-            Failure(ErrorSend(vsError.toString))
+            throw ErrorSend(vsError.toString)
         }
     }})
 }

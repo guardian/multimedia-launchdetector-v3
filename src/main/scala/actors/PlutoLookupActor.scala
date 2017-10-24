@@ -48,23 +48,20 @@ class PlutoLookupActor(config:Config) extends Actor with VSCommunicator{
     val xmlDoc = UpdateXmlGenerator.makeSearchXml(atomId)
     val resultFuture = request(uri"$proto://$plutoHost:$plutoPort/API/item", xmlDoc.toString(),Map())
 
-    resultFuture.flatMap({
-      case Success(futureString)=>
-        futureString.map({ returnedXml =>
-          logger.info("Got returned search xml")
-          val searchResult = VSSearchResponse(returnedXml)
-          logger.info(searchResult.toString)
-          if(searchResult.hits>1) logger.warning(s"Multiple results returned for atom ID $atomId: ${searchResult.itemIds}")
+    resultFuture.map({ returnedXml=>
+      logger.info("Got returned XML")
+      val searchResult = VSSearchResponse(returnedXml)
+      logger.info(searchResult.toString)
+      if(searchResult.hits>1) logger.warning(s"Multiple results returned for atom ID $atomId: ${searchResult.itemIds}")
 
-          if(searchResult.hits==0){
-            val errorString=s"No items found for atom ID $atomId"
-            logger.warning(errorString)
-            throw new RuntimeException(errorString)
-          } else {
-            searchResult.itemIds.head
-          }
-        })
-      case Failure(error)=>Future.failed(error)
+      if(searchResult.hits==0){
+        val errorString=s"No items found for atom ID $atomId"
+        logger.warning(errorString)
+        throw new RuntimeException(errorString)
+      } else {
+        searchResult.itemIds.head
+      }
     })
+
   }
 }

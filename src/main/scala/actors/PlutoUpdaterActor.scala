@@ -38,26 +38,19 @@ class PlutoUpdaterActor(config:Config) extends Actor with VSCommunicator{
     case DoUpdate(atom)=>
       logger.info(s"Received update request from ${sender()}")
       val origSender = sender() //need to make a copy of this so when it's called from another thread in map() below it is passed correctly.
-      doUpdate(atom).map({
-      case Success(futureString)=>
-        futureString.onComplete({
-          case Success(serverResponse)=>
-            logger.info(s"Successfully updated vidispine: $serverResponse")
-            origSender ! SuccessfulSend
-          case Failure(error)=>
-            logger.warning(s"Updated vidispine but not able to read any response back")
-            origSender ! NoResponseBody
-        })
-      case Failure(error)=>
-        logger.error(error,s"Unable to update Vidispine: ${error.getMessage}")
-        origSender ! error
-    })
+      doUpdate(atom).map({ serverResponse:String=>
+          logger.info(s"Successfully updated vidispine: $serverResponse")
+          origSender ! SuccessfulSend
+      }).onComplete({
+        case Success(result)=>result
+        case Failure(error)=>logger.error("Unable to update vidispine: $error")
+      })
     case _=>logger.error(s"Received an unknown message")
   }
 
   def getMasterId(atom:Atom):Option[String] = atom.data.asInstanceOf[AtomData.Media].media.metadata.flatMap(_.pluto.flatMap(_.masterId))
 
-  def doUpdate(atom:Atom):Future[Try[Future[String]]] = {
+  def doUpdate(atom:Atom):Future[String] = {
     val xmlDoc = UpdateXmlGenerator.makeContentXml(atom,LocalDateTime.now())
     val mediaContent = atom.data.asInstanceOf[AtomData.Media].media
 
