@@ -43,7 +43,7 @@ class PlutoUpdaterActor(config:Config) extends Actor with VSCommunicator{
           origSender ! SuccessfulSend
       }).onComplete({
         case Success(result)=>result
-        case Failure(error)=>logger.error("Unable to update vidispine: $error")
+        case Failure(error)=>logger.error(s"Unable to update vidispine: $error")
       })
     case _=>logger.error(s"Received an unknown message")
   }
