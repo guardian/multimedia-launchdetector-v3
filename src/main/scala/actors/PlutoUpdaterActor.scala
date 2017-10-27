@@ -38,11 +38,10 @@ class PlutoUpdaterActor(config:Config) extends Actor with VSCommunicator{
     case DoUpdate(atom)=>
       logger.info(s"Received update request from ${sender()}")
       val origSender = sender() //need to make a copy of this so when it's called from another thread in map() below it is passed correctly.
-      doUpdate(atom).map({ serverResponse:String=>
+      doUpdate(atom).onComplete({
+        case Success(serverResponse)=>
           logger.info(s"Successfully updated vidispine: $serverResponse")
           origSender ! SuccessfulSend
-      }).onComplete({
-        case Success(result)=>result
         case Failure(error)=>logger.error(s"Unable to update vidispine: $error")
       })
     case _=>logger.error(s"Received an unknown message")
@@ -57,8 +56,9 @@ class PlutoUpdaterActor(config:Config) extends Actor with VSCommunicator{
       case Some(itemId)=>request(uri"$proto://$plutoHost:$plutoPort/API/item/$itemId/metadata",xmlDoc.toString(),Map())
       case None=>
         implicit val timeout:akka.util.Timeout = 60 seconds
-        val itemIdFuture:Future[String] = (lookupActor ? LookupPlutoId(atom.id)).mapTo[String]
-        itemIdFuture.flatMap({ itemId=>
+        val itemIdFuture:Future[GotPlutoId] = (lookupActor ? LookupPlutoId(atom.id)).mapTo[GotPlutoId]
+        itemIdFuture.flatMap({ replyMessage=>
+          val itemId = replyMessage.plutoId
           request(uri"$proto://$plutoHost:$plutoPort/API/item/$itemId/metadata",xmlDoc.toString(),Map())
         })
     }
