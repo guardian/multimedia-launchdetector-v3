@@ -1,3 +1,3 @@
 package actors.messages
 
-case class SuccessfulSend()
+case class SuccessfulSend() extends ActorMessage

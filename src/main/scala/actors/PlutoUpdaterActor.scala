@@ -53,13 +53,16 @@ class PlutoUpdaterActor(config:Config) extends Actor with VSCommunicator{
 
     val maybeItemId = mediaContent.metadata.flatMap(_.pluto.flatMap(_.masterId))
     maybeItemId match {
-      case Some(itemId)=>request(uri"$proto://$plutoHost:$plutoPort/API/item/$itemId/metadata",xmlDoc.toString(),Map())
-      case None=>
+      case Some(itemId)=> //the record already has an item id, so we don't need to look up
+        request(uri"$proto://$plutoHost:$plutoPort/API/item/$itemId/metadata",xmlDoc.toString(),Map())
+      case None=> //the record does not have an item id, so we must perform a search in the asset management to find it.
         implicit val timeout:akka.util.Timeout = 60 seconds
-        val itemIdFuture:Future[GotPlutoId] = (lookupActor ? LookupPlutoId(atom.id)).mapTo[GotPlutoId]
-        itemIdFuture.flatMap({ replyMessage=>
-          val itemId = replyMessage.plutoId
-          request(uri"$proto://$plutoHost:$plutoPort/API/item/$itemId/metadata",xmlDoc.toString(),Map())
+        val itemIdFuture:Future[ActorMessage] = (lookupActor ? LookupPlutoId(atom.id)).mapTo[ActorMessage]
+        itemIdFuture.flatMap({
+          case GotPlutoId(itemId)=>
+            request(uri"$proto://$plutoHost:$plutoPort/API/item/$itemId/metadata",xmlDoc.toString(),Map())
+          case ErrorSend(message)=>
+            throw ErrorSend(message) //return a Future.failed, which will output the error from the main actor receive
         })
     }
   }
