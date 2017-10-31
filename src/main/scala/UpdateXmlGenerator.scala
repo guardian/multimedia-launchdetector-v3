@@ -16,8 +16,8 @@ object UpdateXmlGenerator {
 
   def asIsoTimeString(epochTime:Long):String = ZonedDateTime.ofInstant(Instant.ofEpochSecond(epochTime),ZoneOffset.UTC).toString
 
-  private def youtubePortion(atom:Atom, currentTime: LocalDateTime):Option[Elem] = {
-    val mediaContent = atom.data.asInstanceOf[AtomData.Media].media
+  private def youtubePortion(atomData:AtomData.Media, currentTime: LocalDateTime):Option[Elem] = {
+    val mediaContent = atomData.media
 
     val ytAssets=mediaContent.assets.filter(_.platform==Platform.Youtube)
 
@@ -47,8 +47,7 @@ object UpdateXmlGenerator {
     )
   }
 
-  def makeContentXml(atom:Atom, currentTime: LocalDateTime):Elem = {
-    val mediaContent = atom.data.asInstanceOf[AtomData.Media].media
+  /* For reference: fields
     mediaContent.posterImage.map(_.master.map(_.file))
     mediaContent.posterUrl  //deprecated
     mediaContent.byline
@@ -58,21 +57,16 @@ object UpdateXmlGenerator {
 
     mediaContent.metadata.flatMap(_.license)
     mediaContent.metadata.flatMap(_.privacyStatus)
+   */
+
+  def makeContentXml(atom:Atom, currentTime: LocalDateTime):Elem = {
+    val mediaContent = atom.data.asInstanceOf[AtomData.Media].media
 
     mediaContent.metadata.flatMap(_.pluto.flatMap(_.masterId))
 
     val contentChangeDetails = atom.contentChangeDetails
 
-//    val lastModUser = for {
-//      lastMod <- contentChangeDetails.lastModified
-//      user <- lastMod.user
-//      email <- user.email
-//    } yield email.toString
-
     contentChangeDetails.lastModified.flatMap(_.user).map(_.email)
-    //logger.debug(youtubePortion(atom,currentTime).getOrElse(""))
-
-    //logger.warn(youtubePortion(atom,currentTime).map({content=>content \ "field"}).getOrElse(NodeSeq))
 
     <MetadataDocument xmlns="http://xml.vidispine.com/schema/vidispine">
       <group>Asset</group>
@@ -83,7 +77,7 @@ object UpdateXmlGenerator {
           {fieldOption("gnm_master_website_standfirst",mediaContent.description).getOrElse("")}
           {fieldOptionIterable("gnm_asset_keywords",mediaContent.keywords).getOrElse("")}
 
-          {youtubePortion(atom,currentTime).map(_ \ "field").getOrElse(NodeSeq)}
+          {youtubePortion(atom.data.asInstanceOf[AtomData.Media],currentTime).map(_ \ "field").getOrElse(NodeSeq)}
       </timespan>
     </MetadataDocument>
   }
