@@ -175,10 +175,6 @@ Resources:
         "Fn::Sub": |
           #!/bin/bash -e
 
-          #this should be installed on the base box
-          #apt-get -y update
-          #apt-get -y install awscli openjdk-8-jre-headless
-
           mkdir -p /tmp/install
           aws s3 sync s3://gnm-multimedia-rr-deployables/${Stack}/${Stage}/${App} /tmp/install
 

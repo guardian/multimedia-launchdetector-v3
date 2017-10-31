@@ -4,10 +4,9 @@ import com.gu.contentatom.thrift._
 import com.gu.contentatom.thrift.atom.media.MediaAtom
 import com.typesafe.config.Config
 import org.apache.logging.log4j.scala.Logging
-import org.scalamock.scalatest.MockFactory
 import org.scalatest.{FunSuite, MustMatchers}
 
-class TestStreamListener extends FunSuite with MustMatchers with MockFactory {
+class TestStreamListener extends FunSuite with MustMatchers {
   test("should decode an incoming atom event") {
     val data: MediaAtom = MediaAtom(title = "media title", category = Category.News, description = Some("this is a test"),
       source = Some("my fridge"), duration = Some(543), activeVersion = Some(1), keywords = Some(Seq("this", "that", "other")))
