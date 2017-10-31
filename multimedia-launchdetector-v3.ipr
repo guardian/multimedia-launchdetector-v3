@@ -307,13 +307,13 @@
         <root url="jar://$USER_HOME$/.ivy2/cache/com.google.protobuf/protobuf-java/srcs/protobuf-java-2.6.1-sources.jar!/" />
       </SOURCES>
     </library>
-    <library name="SBT: com.gu:content-api-firehose-client_2.12:0.9:jar">
+    <library name="SBT: com.gu:content-api-firehose-client_2.12:0.10:jar">
       <CLASSES>
-        <root url="jar://$USER_HOME$/.ivy2/cache/com.gu/content-api-firehose-client_2.12/jars/content-api-firehose-client_2.12-0.9.jar!/" />
+        <root url="jar://$USER_HOME$/.ivy2/cache/com.gu/content-api-firehose-client_2.12/jars/content-api-firehose-client_2.12-0.10.jar!/" />
       </CLASSES>
       <JAVADOC />
       <SOURCES>
-        <root url="jar://$USER_HOME$/.ivy2/cache/com.gu/content-api-firehose-client_2.12/srcs/content-api-firehose-client_2.12-0.9-sources.jar!/" />
+        <root url="jar://$USER_HOME$/.ivy2/cache/com.gu/content-api-firehose-client_2.12/srcs/content-api-firehose-client_2.12-0.10-sources.jar!/" />
       </SOURCES>
     </library>
     <library name="SBT: com.gu:content-api-models-scala_2.12:11.25:jar">
@@ -361,6 +361,42 @@
       </CLASSES>
       <JAVADOC />
       <SOURCES />
+    </library>
+    <library name="SBT: com.softwaremill.sttp:akka-http-backend_2.12:0.0.20:jar">
+      <CLASSES>
+        <root url="jar://$USER_HOME$/.ivy2/cache/com.softwaremill.sttp/akka-http-backend_2.12/jars/akka-http-backend_2.12-0.0.20.jar!/" />
+      </CLASSES>
+      <JAVADOC />
+      <SOURCES>
+        <root url="jar://$USER_HOME$/.ivy2/cache/com.softwaremill.sttp/akka-http-backend_2.12/srcs/akka-http-backend_2.12-0.0.20-sources.jar!/" />
+      </SOURCES>
+    </library>
+    <library name="SBT: com.softwaremill.sttp:async-http-client-backend-future_2.12:0.0.20:jar">
+      <CLASSES>
+        <root url="jar://$USER_HOME$/.ivy2/cache/com.softwaremill.sttp/async-http-client-backend-future_2.12/jars/async-http-client-backend-future_2.12-0.0.20.jar!/" />
+      </CLASSES>
+      <JAVADOC />
+      <SOURCES>
+        <root url="jar://$USER_HOME$/.ivy2/cache/com.softwaremill.sttp/async-http-client-backend-future_2.12/srcs/async-http-client-backend-future_2.12-0.0.20-sources.jar!/" />
+      </SOURCES>
+    </library>
+    <library name="SBT: com.softwaremill.sttp:async-http-client-backend_2.12:0.0.20:jar">
+      <CLASSES>
+        <root url="jar://$USER_HOME$/.ivy2/cache/com.softwaremill.sttp/async-http-client-backend_2.12/jars/async-http-client-backend_2.12-0.0.20.jar!/" />
+      </CLASSES>
+      <JAVADOC />
+      <SOURCES>
+        <root url="jar://$USER_HOME$/.ivy2/cache/com.softwaremill.sttp/async-http-client-backend_2.12/srcs/async-http-client-backend_2.12-0.0.20-sources.jar!/" />
+      </SOURCES>
+    </library>
+    <library name="SBT: com.softwaremill.sttp:core_2.12:0.0.20:jar">
+      <CLASSES>
+        <root url="jar://$USER_HOME$/.ivy2/cache/com.softwaremill.sttp/core_2.12/jars/core_2.12-0.0.20.jar!/" />
+      </CLASSES>
+      <JAVADOC />
+      <SOURCES>
+        <root url="jar://$USER_HOME$/.ivy2/cache/com.softwaremill.sttp/core_2.12/srcs/core_2.12-0.0.20-sources.jar!/" />
+      </SOURCES>
     </library>
     <library name="SBT: com.twitter:scrooge-core_2.12:4.18.0:jar">
       <CLASSES>
@@ -434,6 +470,15 @@
         <root url="jar://$USER_HOME$/.ivy2/cache/com.typesafe.akka/akka-stream_2.12/srcs/akka-stream_2.12-2.4.19-sources.jar!/" />
       </SOURCES>
     </library>
+    <library name="SBT: com.typesafe.netty:netty-reactive-streams:1.0.8:jar">
+      <CLASSES>
+        <root url="jar://$USER_HOME$/.ivy2/cache/com.typesafe.netty/netty-reactive-streams/jars/netty-reactive-streams-1.0.8.jar!/" />
+      </CLASSES>
+      <JAVADOC />
+      <SOURCES>
+        <root url="jar://$USER_HOME$/.ivy2/cache/com.typesafe.netty/netty-reactive-streams/srcs/netty-reactive-streams-1.0.8-sources.jar!/" />
+      </SOURCES>
+    </library>
     <library name="SBT: com.typesafe.scala-logging:scala-logging_2.12:3.7.2:jar">
       <CLASSES>
         <root url="jar://$USER_HOME$/.ivy2/cache/com.typesafe.scala-logging/scala-logging_2.12/bundles/scala-logging_2.12-3.7.2.jar!/" />
@@ -486,6 +531,67 @@
       <JAVADOC />
       <SOURCES>
         <root url="jar://$USER_HOME$/.ivy2/cache/commons-logging/commons-logging/srcs/commons-logging-1.1.3-sources.jar!/" />
+      </SOURCES>
+    </library>
+    <library name="SBT: io.netty:netty-buffer:4.0.52.Final:jar">
+      <CLASSES>
+        <root url="jar://$USER_HOME$/.ivy2/cache/io.netty/netty-buffer/jars/netty-buffer-4.0.52.Final.jar!/" />
+      </CLASSES>
+      <JAVADOC />
+      <SOURCES>
+        <root url="jar://$USER_HOME$/.ivy2/cache/io.netty/netty-buffer/srcs/netty-buffer-4.0.52.Final-sources.jar!/" />
+      </SOURCES>
+    </library>
+    <library name="SBT: io.netty:netty-codec-http:4.0.52.Final:jar">
+      <CLASSES>
+        <root url="jar://$USER_HOME$/.ivy2/cache/io.netty/netty-codec-http/jars/netty-codec-http-4.0.52.Final.jar!/" />
+      </CLASSES>
+      <JAVADOC />
+      <SOURCES>
+        <root url="jar://$USER_HOME$/.ivy2/cache/io.netty/netty-codec-http/srcs/netty-codec-http-4.0.52.Final-sources.jar!/" />
+      </SOURCES>
+    </library>
+    <library name="SBT: io.netty:netty-codec:4.0.52.Final:jar">
+      <CLASSES>
+        <root url="jar://$USER_HOME$/.ivy2/cache/io.netty/netty-codec/jars/netty-codec-4.0.52.Final.jar!/" />
+      </CLASSES>
+      <JAVADOC />
+      <SOURCES>
+        <root url="jar://$USER_HOME$/.ivy2/cache/io.netty/netty-codec/srcs/netty-codec-4.0.52.Final-sources.jar!/" />
+      </SOURCES>
+    </library>
+    <library name="SBT: io.netty:netty-common:4.0.52.Final:jar">
+      <CLASSES>
+        <root url="jar://$USER_HOME$/.ivy2/cache/io.netty/netty-common/jars/netty-common-4.0.52.Final.jar!/" />
+      </CLASSES>
+      <JAVADOC />
+      <SOURCES>
+        <root url="jar://$USER_HOME$/.ivy2/cache/io.netty/netty-common/srcs/netty-common-4.0.52.Final-sources.jar!/" />
+      </SOURCES>
+    </library>
+    <library name="SBT: io.netty:netty-handler:4.0.52.Final:jar">
+      <CLASSES>
+        <root url="jar://$USER_HOME$/.ivy2/cache/io.netty/netty-handler/jars/netty-handler-4.0.52.Final.jar!/" />
+      </CLASSES>
+      <JAVADOC />
+      <SOURCES>
+        <root url="jar://$USER_HOME$/.ivy2/cache/io.netty/netty-handler/srcs/netty-handler-4.0.52.Final-sources.jar!/" />
+      </SOURCES>
+    </library>
+    <library name="SBT: io.netty:netty-transport-native-epoll:4.0.52.Final:linux-x86_64:jar">
+      <CLASSES>
+        <root url="jar://$USER_HOME$/.ivy2/cache/io.netty/netty-transport-native-epoll/jars/netty-transport-native-epoll-4.0.52.Final-linux-x86_64.jar!/" />
+      </CLASSES>
+      <JAVADOC />
+      <SOURCES />
+    </library>
+    <library name="SBT: io.netty:netty-transport:4.0.52.Final:jar">
+      <CLASSES>
+        <root url="jar://$USER_HOME$/.ivy2/cache/io.netty/netty-transport/jars/netty-transport-4.0.52.Final.jar!/" />
+      </CLASSES>
+      <JAVADOC />
+      <SOURCES>
+        <root url="jar://$USER_HOME$/.ivy2/cache/io.netty/netty-transport/srcs/netty-transport-4.0.52.Final-sources.jar!/" />
       </SOURCES>
     </library>
     <library name="SBT: joda-time:joda-time:2.8.1:jar">
@@ -557,6 +663,60 @@
       </CLASSES>
       <JAVADOC />
       <SOURCES />
+    </library>
+    <library name="SBT: org.asynchttpclient:async-http-client-netty-utils:2.0.37:jar">
+      <CLASSES>
+        <root url="jar://$USER_HOME$/.ivy2/cache/org.asynchttpclient/async-http-client-netty-utils/jars/async-http-client-netty-utils-2.0.37.jar!/" />
+      </CLASSES>
+      <JAVADOC />
+      <SOURCES>
+        <root url="jar://$USER_HOME$/.ivy2/cache/org.asynchttpclient/async-http-client-netty-utils/srcs/async-http-client-netty-utils-2.0.37-sources.jar!/" />
+      </SOURCES>
+    </library>
+    <library name="SBT: org.asynchttpclient:async-http-client:2.0.37:jar">
+      <CLASSES>
+        <root url="jar://$USER_HOME$/.ivy2/cache/org.asynchttpclient/async-http-client/jars/async-http-client-2.0.37.jar!/" />
+      </CLASSES>
+      <JAVADOC />
+      <SOURCES>
+        <root url="jar://$USER_HOME$/.ivy2/cache/org.asynchttpclient/async-http-client/srcs/async-http-client-2.0.37-sources.jar!/" />
+      </SOURCES>
+    </library>
+    <library name="SBT: org.asynchttpclient:netty-codec-dns:2.0.37:jar">
+      <CLASSES>
+        <root url="jar://$USER_HOME$/.ivy2/cache/org.asynchttpclient/netty-codec-dns/jars/netty-codec-dns-2.0.37.jar!/" />
+      </CLASSES>
+      <JAVADOC />
+      <SOURCES>
+        <root url="jar://$USER_HOME$/.ivy2/cache/org.asynchttpclient/netty-codec-dns/srcs/netty-codec-dns-2.0.37-sources.jar!/" />
+      </SOURCES>
+    </library>
+    <library name="SBT: org.asynchttpclient:netty-resolver-dns:2.0.37:jar">
+      <CLASSES>
+        <root url="jar://$USER_HOME$/.ivy2/cache/org.asynchttpclient/netty-resolver-dns/jars/netty-resolver-dns-2.0.37.jar!/" />
+      </CLASSES>
+      <JAVADOC />
+      <SOURCES>
+        <root url="jar://$USER_HOME$/.ivy2/cache/org.asynchttpclient/netty-resolver-dns/srcs/netty-resolver-dns-2.0.37-sources.jar!/" />
+      </SOURCES>
+    </library>
+    <library name="SBT: org.asynchttpclient:netty-resolver:2.0.37:jar">
+      <CLASSES>
+        <root url="jar://$USER_HOME$/.ivy2/cache/org.asynchttpclient/netty-resolver/jars/netty-resolver-2.0.37.jar!/" />
+      </CLASSES>
+      <JAVADOC />
+      <SOURCES>
+        <root url="jar://$USER_HOME$/.ivy2/cache/org.asynchttpclient/netty-resolver/srcs/netty-resolver-2.0.37-sources.jar!/" />
+      </SOURCES>
+    </library>
+    <library name="SBT: org.mockito:mockito-all:2.0.2-beta:jar">
+      <CLASSES>
+        <root url="jar://$USER_HOME$/.ivy2/cache/org.mockito/mockito-all/jars/mockito-all-2.0.2-beta.jar!/" />
+      </CLASSES>
+      <JAVADOC />
+      <SOURCES>
+        <root url="jar://$USER_HOME$/.ivy2/cache/org.mockito/mockito-all/srcs/mockito-all-2.0.2-beta-sources.jar!/" />
+      </SOURCES>
     </library>
     <library name="SBT: org.reactivestreams:reactive-streams:1.0.0:jar">
       <CLASSES>

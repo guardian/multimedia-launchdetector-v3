@@ -11,6 +11,8 @@ import com.gu.contentapi.firehose.kinesis.KinesisStreamReaderConfig
 import com.typesafe.config._
 import sun.misc.Signal
 
+import scala.util.Try
+
 object MainClass extends Logging {
   def main(args:Array[String]):Unit = {
     logger.info("Starting up")
@@ -27,11 +29,15 @@ object MainClass extends Logging {
         }
       }
 
-    val bindingFuture = Http().bindAndHandle(route, "localhost", 9000)
-
-    logger.info(s"Healthcheck online at http://localhost:9000/")
-
     val config = ConfigFactory.defaultApplication()
+
+    val bindIpAddress = Try {
+      config.getString("bind_ip_address")
+    }.getOrElse("0.0.0.0")
+
+    val bindingFuture = Http().bindAndHandle(route, bindIpAddress, 9000)
+
+    logger.info(s"Healthcheck online at http://$bindIpAddress:9000/")
 
     logger.info(s"Connecting to ${config.getString("capi_stream_name")} with role ${config.getString("capi_role_name")}")
 
@@ -65,7 +71,8 @@ object MainClass extends Logging {
     Signal.handle(new Signal("INT"), shutdownHandler)
     Signal.handle(new Signal("TERM"), shutdownHandler)
 
-    contentApiFirehoseConsumer.start()
+    val thread = contentApiFirehoseConsumer.start()
+    thread.join() //block while contentApiFirehoseConsumer is running
 
     logger.info("Removing healthcheck handler")
     bindingFuture

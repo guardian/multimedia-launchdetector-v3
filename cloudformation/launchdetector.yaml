@@ -7,6 +7,9 @@ Parameters:
   CapiStreamName:
     Type: String
     Description: Name of the Crier kinesis stream to attach to
+  CapiRole:
+    Type: String
+    Description: ARN of the role to assume to read from the kinesis stream
   Mode:
     Type: String
     AllowedValues:
@@ -118,6 +121,14 @@ Resources:
             Resource:
             - arn:aws:s3:::gnm-multimedia-rr-deployables
             - arn:aws:s3:::gnm-multimedia-rr-deployables/*
+      - PolicyName: RoleAccess
+        PolicyDocument:
+          Version: 2012-10-17
+          Statement:
+            Effect: Allow
+            Action:
+            - sts:AssumeRole
+            Resource: !Ref CapiRole
   InstanceProfile:
     Type: AWS::IAM::InstanceProfile
     Properties:
@@ -150,20 +161,44 @@ Resources:
         "Fn::Sub": |
           #!/bin/bash -e
 
-          sudo apt-get install awscli
-          aws s3 cp s3://gnm-multimedia-deployables/${Stack}/${Stage}/${App}/launchdetector.deb /tmp
-          dpkg -i /tmp/launchdetector.deb
+          apt-get -y update
+          apt-get -y install awscli openjdk-8-jre-headless
+
+          mkdir -p /tmp/install
+          aws s3 sync s3://gnm-multimedia-rr-deployables/${Stack}/${Stage}/${App} /tmp/install
+
+          MOST_RECENT_PACKAGE=`ls -Frt /tmp/install/*.deb | grep "[^/]$" | tail -n 1`
+          dpkg -i "$MOST_RECENT_PACAKAGE"
+
+          mkdir -p /usr/share/multimedia-launchdetector-v3/conf
+          cat > /usr/share/multimedia-launchdetector-v3/conf/application.conf << EOF
+          capi_stream_name = "${CapiStreamName}"
+          capi_role_name = "${CapiRole}"
+          capi_mode = "${Mode}"
+
+          app_name = "${App}"
+          app_stack = "${Stack}"
+          app_stage = "${Stage}"
+
+          region = "${AWS::Region}"
+          EOF
+
+          cat > /etc/default/multimedia-launchdetector-v3 << EOF
+          JAVA_OPTS="-Dconfig.file=/usr/share/multimedia-launchdetector-v3/conf/application.conf"
+          EOF
+
+          systemctl start multimedia-launchdetector-v3
   AutoScaleGroup:
     Type: AWS::AutoScaling::AutoScalingGroup
     Properties:
-      DesiredCapacity: "2"
+      DesiredCapacity: "1"
       HealthCheckGracePeriod: 300
       HealthCheckType: ELB
       LaunchConfigurationName: !Ref LaunchConfig
       LoadBalancerNames:
       - !Ref LoadBalancer
       MaxSize: "8"
-      MinSize: "2"
+      MinSize: "1"
       Tags:
       - Key: App
         Value: !Ref App
