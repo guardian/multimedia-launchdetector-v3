@@ -37,7 +37,7 @@ object UpdateXmlGenerator {
       {fieldOption("gnm_master_youtube_category", mediaContent.metadata.flatMap(_.categoryId)).getOrElse("")}
       <field><name>gnm_master_youtube_allowcomments</name> <value>{mediaContent.metadata.flatMap(_.commentsEnabled.map(if(_) "allow_comments" else "")).getOrElse("")}</value></field>
       <field><name>gnm_master_youtube_uploadstatus</name> <value>Upload Succeeded</value></field>
-      {fieldOption("gnm_master_youtube_remove",mediaContent.metadata.flatMap(_.expiryDate).map(asIsoTimeString(_))).getOrElse()}
+      {fieldOption("gnm_master_youtube_remove",mediaContent.metadata.flatMap(_.expiryDate).map({time=>asIsoTimeString(time/1000)})).getOrElse()}
       <field><name>gnm_master_youtube_holdingimage_16x9</name> <value/></field>
       {fieldOption("gnm_master_youtube_channelid",mediaContent.metadata.flatMap(_.channelId)).getOrElse("")}
       {fieldOption("gnm_master_youtube_license",mediaContent.metadata.flatMap(_.license)).getOrElse("")}
@@ -64,7 +64,7 @@ object UpdateXmlGenerator {
   return a string to go into the upload log
    */
   def makeUploadLog(details: ContentChangeDetails) = {
-    val lastModifiedTime = details.lastModified.map({pubTime=>asIsoTimeString(pubTime.date)})
+    val lastModifiedTime = details.lastModified.map({pubTime=>asIsoTimeString(pubTime.date/1000)})
 
     s"$lastModifiedTime: Updated by ${details.lastModified.flatMap(_.user).map(_.email)}"
   }
@@ -86,8 +86,7 @@ object UpdateXmlGenerator {
           {fieldOption("gnm_master_generic_source",mediaContent.source).getOrElse("")}
           {fieldOption("gnm_master_website_standfirst",mediaContent.description).getOrElse("")}
           {fieldOptionIterable("gnm_asset_keywords",mediaContent.keywords).getOrElse("")}
-          {youtubePortion(atom.data.asInstanceOf[AtomData.Media],currentTime).map(_ \ "field").getOrElse(NodeSeq)}
-          {fieldOption("gnm_master_publication_time", atom.contentChangeDetails.published.map({pubTime=>asIsoTimeString(pubTime.date)})).getOrElse("")}
+          {fieldOption("gnm_master_publication_time", atom.contentChangeDetails.published.map({pubTime=>asIsoTimeString(pubTime.date/1000)})).getOrElse("")}
           <field><name>gnm_master_website_uploadstatus</name><value>Upload Succeeded</value></field>
           <field><name>gnm_master_website_item_published</name><value>true</value></field>
           <field mode="add"><name>gnm_master_website_uploadlog</name><value>{makeUploadLog(atom.contentChangeDetails)}</value></field>

@@ -43,7 +43,7 @@ class TestUpdateXmlGenerator extends FunSuite with MustMatchers with PrivateMeth
       commentsEnabled = Some(false),
       channelId = Some("xxxChannelIdxxx"),
       privacyStatus = Some(PrivacyStatus.Public),
-      expiryDate = Some(1508252652),
+      expiryDate = Some(1508252652000L),
       pluto = Some(PlutoData(commissionId = Some("VX-123"), projectId = Some("VX-456"), masterId = Some("VX-789")))
     )
 
