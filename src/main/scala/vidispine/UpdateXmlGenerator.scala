@@ -3,7 +3,7 @@ package vidispine
 import java.time.{Instant, LocalDateTime, ZoneOffset, ZonedDateTime}
 
 import com.gu.contentatom.thrift.atom.media.{Asset, Platform}
-import com.gu.contentatom.thrift.{Atom, AtomData}
+import com.gu.contentatom.thrift.{Atom, AtomData, ContentChangeDetails}
 
 import scala.xml.{Elem, NodeSeq}
 
@@ -50,7 +50,7 @@ object UpdateXmlGenerator {
   }
 
   /* For reference: fields
-    mediaContent.posterImage.map(_.master.map(_.file))
+     mediaContent.posterImage.map(_.master.map(_.file))
     mediaContent.posterUrl  //deprecated
     mediaContent.byline
     mediaContent.category
@@ -60,6 +60,14 @@ object UpdateXmlGenerator {
     mediaContent.metadata.flatMap(_.license)
     mediaContent.metadata.flatMap(_.privacyStatus)
    */
+  /*
+  return a string to go into the upload log
+   */
+  def makeUploadLog(details: ContentChangeDetails) = {
+    val lastModifiedTime = details.lastModified.map({pubTime=>asIsoTimeString(pubTime.date)})
+
+    s"$lastModifiedTime: Updated by ${details.lastModified.flatMap(_.user).map(_.email)}"
+  }
 
   def makeContentXml(atom:Atom, currentTime: LocalDateTime):Elem = {
     val mediaContent = atom.data.asInstanceOf[AtomData.Media].media
@@ -78,7 +86,13 @@ object UpdateXmlGenerator {
           {fieldOption("gnm_master_generic_source",mediaContent.source).getOrElse("")}
           {fieldOption("gnm_master_website_standfirst",mediaContent.description).getOrElse("")}
           {fieldOptionIterable("gnm_asset_keywords",mediaContent.keywords).getOrElse("")}
-
+          {youtubePortion(atom.data.asInstanceOf[AtomData.Media],currentTime).map(_ \ "field").getOrElse(NodeSeq)}
+          {fieldOption("gnm_master_publication_time", atom.contentChangeDetails.published.map({pubTime=>asIsoTimeString(pubTime.date)})).getOrElse("")}
+          <field><name>gnm_master_website_uploadstatus</name><value>Upload Succeeded</value></field>
+          <field><name>gnm_master_website_item_published</name><value>true</value></field>
+          <field mode="add"><name>gnm_master_website_uploadlog</name><value>{makeUploadLog(atom.contentChangeDetails)}</value></field>
+          <field><name>gnm_master_generic_status</name><value>Published</value></field>
+          <field><name>gnm_master_generic_intendeduploadplatforms</name><value>Website</value><value>Youtube</value></field>
           {youtubePortion(atom.data.asInstanceOf[AtomData.Media],currentTime).map(_ \ "field").getOrElse(NodeSeq)}
       </timespan>
     </MetadataDocument>

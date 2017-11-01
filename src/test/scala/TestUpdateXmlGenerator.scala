@@ -33,33 +33,11 @@ class TestUpdateXmlGenerator extends FunSuite with MustMatchers with PrivateMeth
       changeDetails, title = Some("atom title"))
 
     val xml = scala.xml.Utility.trim(UpdateXmlGenerator.makeContentXml(testAtom, LocalDateTime.now()))
-    xml must be(scala.xml.Utility.trim(<MetadataDocument xmlns="http://xml.vidispine.com/schema/vidispine">
-      <group>Asset</group>
-      <timespan start="-INF" end="+INF">
-        <field>
-          <name>title</name> <value>atom title</value>
-        </field>
-        <field>
-          <name>gnm_master_website_headline</name> <value>media title</value>
-        </field>
-        <field>
-          <name>gnm_master_generic_source</name> <value>my fridge</value>
-        </field>
-        <field>
-          <name>gnm_master_website_standfirst</name> <value>this is a test</value>
-        </field>
-        <field>
-          <name>gnm_asset_keywords</name> <value>this</value> <value>that</value> <value>other</value>
-        </field>
-        <field>
-          <name>gnm_master_youtube_status</name> <value>Unpublished</value>
-        </field>
-      </timespan>
-    </MetadataDocument>))
+    xml must be(scala.xml.Utility.trim(<MetadataDocument xmlns="http://xml.vidispine.com/schema/vidispine"><group>Asset</group><timespan start="-INF" end="+INF"><field><name>title</name><value>atom title</value></field><field><name>gnm_master_website_headline</name><value>media title</value></field><field><name>gnm_master_generic_source</name><value>my fridge</value></field><field><name>gnm_master_website_standfirst</name><value>this is a test</value></field><field><name>gnm_asset_keywords</name><value>this</value><value>that</value><value>other</value></field><field><name>gnm_master_website_uploadstatus</name><value>Upload Succeeded</value></field><field><name>gnm_master_website_item_published</name><value>true</value></field><field mode="add"><name>gnm_master_website_uploadlog</name><value>None: Updated by None</value></field><field><name>gnm_master_generic_status</name><value>Published</value></field><field><name>gnm_master_generic_intendeduploadplatforms</name><value>Website</value><value>Youtube</value></field><field><name>gnm_master_youtube_status</name><value>Unpublished</value></field></timespan></MetadataDocument>))
   }
 
-  test("makeContentXml should generate an XML document from an atom with youtube data"){
-    val atomMetadata: Metadata = Metadata(tags = Some(Seq("tom","dick","harry")),
+  test("makeContentXml should generate an XML document from an atom with youtube data") {
+    val atomMetadata: Metadata = Metadata(tags = Some(Seq("tom", "dick", "harry")),
       categoryId = Some("xxxCategoryIdxxxx"),
       license = Some("Ridiculously restrictive"),
       commentsEnabled = Some(false),
@@ -86,9 +64,9 @@ class TestUpdateXmlGenerator extends FunSuite with MustMatchers with PrivateMeth
     val testAtom = Atom("fakeAtomId", AtomType.Media, Seq("no-label"), "<p>default html</p>", ad,
       changeDetails, title = Some("atom title"))
 
-    val xml=scala.xml.Utility.trim(UpdateXmlGenerator.makeContentXml(testAtom, currentTime))
+    val xml = scala.xml.Utility.trim(UpdateXmlGenerator.makeContentXml(testAtom, currentTime))
 
-    val shouldXml = <MetadataDocument xmlns="http://xml.vidispine.com/schema/vidispine"><group>Asset</group><timespan start="-INF" end="+INF"><field><name>title</name><value>atom title</value></field><field><name>gnm_master_website_headline</name><value>media title</value></field><field><name>gnm_master_generic_source</name><value>my fridge</value></field><field><name>gnm_master_website_standfirst</name><value>this is a test</value></field><field><name>gnm_asset_keywords</name><value>this</value><value>that</value><value>other</value></field><field><name>gnm_master_youtube_title</name><value>media title</value></field><field><name>gnm_master_youtube_description</name><value>this is a test</value></field><field><name>gnm_master_youtube_keywords</name><value>tom</value><value>dick</value><value>harry</value></field><field><name>gnm_master_youtube_category</name><value>xxxCategoryIdxxxx</value></field><field><name>gnm_master_youtube_allowcomments</name><value></value></field><field><name>gnm_master_youtube_uploadstatus</name><value>Upload Succeeded</value></field><field><name>gnm_master_youtube_remove</name><value>2017-10-17T15:04:12Z</value></field><field><name>gnm_master_youtube_holdingimage_16x9</name><value/></field><field><name>gnm_master_youtube_channelid</name><value>xxxChannelIdxxx</value></field><field><name>gnm_master_youtube_license</name><value>Ridiculously restrictive</value></field><field><name>gnm_master_youtube_status</name><value>Published</value></field><field><name>gnm_master_youtube_holdingimage</name><value/></field><field><name>gnm_master_youtube_youtubeurl</name><value>https://www.youtube.com/watch?v=abcdefg12345</value></field><field><name>gnm_master_youtube_publish</name><value>{currentTime.toString}</value></field></timespan></MetadataDocument>
+    val shouldXml = <MetadataDocument xmlns="http://xml.vidispine.com/schema/vidispine"><group>Asset</group><timespan start="-INF" end="+INF"><field><name>title</name><value>atom title</value></field><field><name>gnm_master_website_headline</name><value>media title</value></field><field><name>gnm_master_generic_source</name><value>my fridge</value></field><field><name>gnm_master_website_standfirst</name><value>this is a test</value></field><field><name>gnm_asset_keywords</name><value>this</value><value>that</value><value>other</value></field><field><name>gnm_master_website_uploadstatus</name><value>Upload Succeeded</value></field><field><name>gnm_master_website_item_published</name><value>true</value></field><field mode="add"><name>gnm_master_website_uploadlog</name><value>None: Updated by None</value></field><field><name>gnm_master_generic_status</name><value>Published</value></field><field><name>gnm_master_generic_intendeduploadplatforms</name><value>Website</value><value>Youtube</value></field><field><name>gnm_master_youtube_title</name><value>media title</value></field><field><name>gnm_master_youtube_description</name><value>this is a test</value></field><field><name>gnm_master_youtube_keywords</name><value>tom</value><value>dick</value><value>harry</value></field><field><name>gnm_master_youtube_category</name><value>xxxCategoryIdxxxx</value></field><field><name>gnm_master_youtube_allowcomments</name><value></value></field><field><name>gnm_master_youtube_uploadstatus</name><value>Upload Succeeded</value></field><field><name>gnm_master_youtube_remove</name><value>2017-10-17T15:04:12Z</value></field><field><name>gnm_master_youtube_holdingimage_16x9</name><value/></field><field><name>gnm_master_youtube_channelid</name><value>xxxChannelIdxxx</value></field><field><name>gnm_master_youtube_license</name><value>Ridiculously restrictive</value></field><field><name>gnm_master_youtube_status</name><value>Published</value></field><field><name>gnm_master_youtube_holdingimage</name><value/></field><field><name>gnm_master_youtube_youtubeurl</name><value>https://www.youtube.com/watch?v=abcdefg12345</value></field><field><name>gnm_master_youtube_publish</name><value>{currentTime.toString}</value></field></timespan></MetadataDocument>
 
     xml.toString() must be(shouldXml.toString())
   }
