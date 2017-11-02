@@ -64,9 +64,9 @@ object UpdateXmlGenerator {
   return a string to go into the upload log
    */
   def makeUploadLog(details: ContentChangeDetails) = {
-    val lastModifiedTime = details.lastModified.map({pubTime=>asIsoTimeString(pubTime.date/1000)})
+    val lastModifiedTime = details.lastModified.map({pubTime=>asIsoTimeString(pubTime.date/1000)}).getOrElse("unknown time")
 
-    s"$lastModifiedTime: Updated by ${details.lastModified.flatMap(_.user).map(_.email)}"
+    s"$lastModifiedTime: Updated by ${details.lastModified.flatMap(_.user).map(_.email).getOrElse("unknown user")}"
   }
 
   def makeContentXml(atom:Atom, currentTime: LocalDateTime):Elem = {
@@ -91,8 +91,8 @@ object UpdateXmlGenerator {
           <field><name>gnm_master_website_item_published</name><value>true</value></field>
           <field mode="add"><name>gnm_master_website_uploadlog</name><value>{makeUploadLog(atom.contentChangeDetails)}</value></field>
           <field><name>gnm_master_generic_status</name><value>Published</value></field>
-          <field><name>gnm_master_generic_intendeduploadplatforms</name><value>Website</value><value>Youtube</value></field>
           {youtubePortion(atom.data.asInstanceOf[AtomData.Media],currentTime).map(_ \ "field").getOrElse(NodeSeq)}
+          <field><name>gnm_master_generic_intendeduploadplatforms</name><value>Website</value><value>YouTube</value></field>
       </timespan>
     </MetadataDocument>
   }
