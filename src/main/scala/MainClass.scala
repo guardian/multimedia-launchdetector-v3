@@ -1,5 +1,5 @@
 import org.apache.logging.log4j.scala.Logging
-import akka.actor.ActorSystem
+import akka.actor.{ActorSystem, Props}
 import akka.http.scaladsl.Http
 import akka.http.scaladsl.model._
 import akka.http.scaladsl.server.Directives._
@@ -8,6 +8,7 @@ import com.amazonaws.auth.{AWSCredentialsProviderChain, InstanceProfileCredentia
 import com.amazonaws.auth.profile.ProfileCredentialsProvider
 import com.gu.contentapi.firehose.ContentApiFirehoseConsumer
 import com.gu.contentapi.firehose.kinesis.KinesisStreamReaderConfig
+import com.softwaremill.sttp.akkahttp.AkkaHttpBackend
 import com.typesafe.config._
 import sun.misc.Signal
 
@@ -15,30 +16,16 @@ import scala.util.Try
 
 object MainClass extends Logging {
   def main(args:Array[String]):Unit = {
-    logger.info("Starting up")
-
     implicit val system = ActorSystem("my-system")
     implicit val materializer = ActorMaterializer()
     // needed for the future flatMap/onComplete in the end
     implicit val executionContext = system.dispatcher
 
-    val route =
-      path("is-online") {
-        get {
-          complete(HttpEntity(ContentTypes.`text/html(UTF-8)`, "<h1>Say hello to akka-http</h1>"))
-        }
-      }
+    logger.info("Starting up")
+
 
     val config = ConfigFactory.defaultApplication()
-
-    val bindIpAddress = Try {
-      config.getString("bind_ip_address")
-    }.getOrElse("0.0.0.0")
-
-    val bindingFuture = Http().bindAndHandle(route, bindIpAddress, 9000)
-
-    logger.info(s"Healthcheck online at http://$bindIpAddress:9000/")
-
+    val bindingFuture = Healthcheck.setup(config)
     logger.info(s"Connecting to ${config.getString("capi_stream_name")} with role ${config.getString("capi_role_name")}")
 
     val kinesisCredsProvider = new AWSCredentialsProviderChain(
@@ -62,7 +49,10 @@ object MainClass extends Logging {
       awsRegion = config.getString("region")
     )
 
-    val listener = new LaunchdetectorStreamListener
+    val updater = system.actorOf(Props(new PlutoUpdaterActor(config)))
+
+    val listener = new LaunchdetectorStreamListener(updater)
+
     val contentApiFirehoseConsumer: ContentApiFirehoseConsumer = new ContentApiFirehoseConsumer(
       kinesisStreamReaderConfig, listener
     )
@@ -74,10 +64,8 @@ object MainClass extends Logging {
     val thread = contentApiFirehoseConsumer.start()
     thread.join() //block while contentApiFirehoseConsumer is running
 
-    logger.info("Removing healthcheck handler")
-    bindingFuture
-      .flatMap(_.unbind()) // trigger unbinding from the port
-      .onComplete(_ => system.terminate()) // and shutdown when done
+    Healthcheck.remove(bindingFuture)(_ => system.terminate())
+
   }
 
 }

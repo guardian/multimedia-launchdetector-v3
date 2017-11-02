@@ -6,6 +6,12 @@ version := "3.0"
 
 scalaVersion := "2.12.3"
 
+
+// https://mvnrepository.com/artifact/com.typesafe.akka/akka-testkit_2.11
+libraryDependencies += "com.typesafe.akka" %% "akka-testkit" % "2.5.6" % "test"
+libraryDependencies += "com.typesafe.akka" %% "akka-actor" % "2.5.6"
+libraryDependencies += "com.typesafe.akka" %% "akka-stream" % "2.5.6"
+libraryDependencies += "com.typesafe.akka" %% "akka-slf4j" % "2.5.6"
 // https://mvnrepository.com/artifact/com.typesafe.akka/akka-http_2.12
 libraryDependencies += "com.typesafe.akka" %% "akka-http" % "10.0.10"
 
@@ -21,7 +27,8 @@ libraryDependencies ++= Seq(
   "org.apache.logging.log4j" % "log4j-core" % "2.9.1",
   "org.apache.logging.log4j" %% "log4j-api-scala" % "11.0",
   "com.fasterxml.jackson.dataformat" % "jackson-dataformat-yaml" % "2.7.3",
-  "com.fasterxml.jackson.core" % "jackson-databind" % "2.5.4"
+  "com.fasterxml.jackson.core" % "jackson-databind" % "2.5.4",
+  "org.apache.logging.log4j" % "log4j-slf4j-impl" % "2.9.1"
 )
 
 // https://mvnrepository.com/artifact/org.scalatest/scalatest_2.12

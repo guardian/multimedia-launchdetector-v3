@@ -31,7 +31,7 @@ project/plugins/project/
 .idea/**/sqlDataSources.xml
 .idea/**/dynamic.xml
 .idea/**/uiDesigner.xml
-
+.idea/
 # Gradle:
 .idea/**/gradle.xml
 .idea/**/libraries
@@ -66,3 +66,4 @@ crashlytics-build.properties
 fabric.properties
 /project/target/
 /cloudformation/testdeploy.sh
+/captured_data/

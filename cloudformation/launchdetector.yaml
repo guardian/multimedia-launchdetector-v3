@@ -16,6 +16,20 @@ Parameters:
       - preview
       - live
     Description: Which CAPI mode to listen to
+  PlutoHost:
+    Type: String
+    Description: Host or loadbalancer where pluto can be reached
+  PlutoVidispinePort:
+    Type: Number
+    Description: Port on which Vidispine can be reached for Pluto
+    Default: 8080
+  PlutoUser:
+    Type: String
+    Description: Username to use to communicate
+  PlutoPass:
+    Type: String
+    Description: Password to communicate
+    NoEcho: true
   App:
     Type: String
     Description: Application identifier for RiffRaff
@@ -161,14 +175,12 @@ Resources:
         "Fn::Sub": |
           #!/bin/bash -e
 
-          apt-get -y update
-          apt-get -y install awscli openjdk-8-jre-headless
-
           mkdir -p /tmp/install
           aws s3 sync s3://gnm-multimedia-rr-deployables/${Stack}/${Stage}/${App} /tmp/install
 
-          MOST_RECENT_PACKAGE=`ls -Frt /tmp/install/*.deb | grep "[^/]$" | tail -n 1`
-          dpkg -i "$MOST_RECENT_PACAKAGE"
+          declare -x MOST_RECENT_PACKAGE=`ls -Frt /tmp/install/*.deb | grep "[^/]$" | tail -n 1`
+          echo Going to install $MOST_RECENT_PACKAGE
+          dpkg --install "${!MOST_RECENT_PACKAGE}"
 
           mkdir -p /usr/share/multimedia-launchdetector-v3/conf
           cat > /usr/share/multimedia-launchdetector-v3/conf/application.conf << EOF
@@ -181,6 +193,18 @@ Resources:
           app_stage = "${Stage}"
 
           region = "${AWS::Region}"
+
+          pluto_host = "${PlutoHost}"
+          pluto_port = ${PlutoVidispinePort}
+          pluto_user = ${PlutoUser}
+          pluto_pass = ${PlutoPass}
+
+          akka {
+            http.client.connecting-timeout="1 second"
+            log-dead-letters=0
+            log-dead-letters-during-shutdown=off
+          }
+
           EOF
 
           cat > /etc/default/multimedia-launchdetector-v3 << EOF
