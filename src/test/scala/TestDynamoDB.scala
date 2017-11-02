@@ -21,8 +21,8 @@ trait TestDynamoDB {
 
   def createTestTable(client:AmazonDynamoDB, tableName:String):Unit = {
     val rq = new CreateTableRequest()
-      .withKeySchema(new KeySchemaElement("atomID","HASH"))
-      .withAttributeDefinitions(new AttributeDefinition("atomID","S"))
+      .withKeySchema(new KeySchemaElement("AtomID","HASH"))
+      .withAttributeDefinitions(new AttributeDefinition("AtomID","S"))
       .withProvisionedThroughput(new ProvisionedThroughput().withReadCapacityUnits(1L).withWriteCapacityUnits(1L))
       .withTableName(tableName)
 
@@ -49,7 +49,8 @@ trait TestDynamoDB {
   protected def getClient(region:String):AmazonDynamoDB = {
     val chain = new AWSCredentialsProviderChain(
       new EnvironmentVariableCredentialsProvider(),
-      new ProfileCredentialsProvider("multimedia"),
+      new ProfileCredentialsProvider("multimedia"), //try named profile first, default if it does not work
+      new ProfileCredentialsProvider(),
       new InstanceProfileCredentialsProvider()
     )
 

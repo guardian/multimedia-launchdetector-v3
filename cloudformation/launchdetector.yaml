@@ -127,6 +127,19 @@ Resources:
             Effect: Allow
             Action: "dynamodb:*"
             Resource: !Sub arn:aws:dynamodb:${AWS::Region}:${AWS::AccountId}:table/${CapiStreamName}_${App}-${Mode}-${Stage}
+      - PolicyName: DataAccess
+        PolicyDocument:
+           Version: 2012-10-17
+           Statement:
+             Effect: Allow
+             Action:
+             - dynamodb:DescribeTable
+             - dynamodb:GetItem
+             - dynamodb:GetRecords
+             - dynamodb:PutItem
+             - dynamodb:Query
+             - dynamodb:UpdateItem
+             Resource: !GetAtt UnattachedAtomsTable.Arn
       - PolicyName: DeployablesAccess
         PolicyDocument:
           Version: 2012-10-17

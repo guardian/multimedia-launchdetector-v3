@@ -66,6 +66,7 @@ class UnattachedAtomActor(config:Config) extends Actor {
     val chain = new AWSCredentialsProviderChain(
       new EnvironmentVariableCredentialsProvider(),
       new ProfileCredentialsProvider("multimedia"),
+      new ProfileCredentialsProvider(),
       new InstanceProfileCredentialsProvider()
     )
 
