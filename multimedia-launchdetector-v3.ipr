@@ -190,13 +190,13 @@
         <root url="jar://$USER_HOME$/.ivy2/cache/com.amazonaws/aws-java-sdk-core/srcs/aws-java-sdk-core-1.11.208-sources.jar!/" />
       </SOURCES>
     </library>
-    <library name="SBT: com.amazonaws:aws-java-sdk-dynamodb:1.11.198:jar">
+    <library name="SBT: com.amazonaws:aws-java-sdk-dynamodb:1.11.208:jar">
       <CLASSES>
-        <root url="jar://$USER_HOME$/.ivy2/cache/com.amazonaws/aws-java-sdk-dynamodb/jars/aws-java-sdk-dynamodb-1.11.198.jar!/" />
+        <root url="jar://$USER_HOME$/.ivy2/cache/com.amazonaws/aws-java-sdk-dynamodb/jars/aws-java-sdk-dynamodb-1.11.208.jar!/" />
       </CLASSES>
       <JAVADOC />
       <SOURCES>
-        <root url="jar://$USER_HOME$/.ivy2/cache/com.amazonaws/aws-java-sdk-dynamodb/srcs/aws-java-sdk-dynamodb-1.11.198-sources.jar!/" />
+        <root url="jar://$USER_HOME$/.ivy2/cache/com.amazonaws/aws-java-sdk-dynamodb/srcs/aws-java-sdk-dynamodb-1.11.208-sources.jar!/" />
       </SOURCES>
     </library>
     <library name="SBT: com.amazonaws:aws-java-sdk-kinesis:1.11.198:jar">
@@ -208,22 +208,22 @@
         <root url="jar://$USER_HOME$/.ivy2/cache/com.amazonaws/aws-java-sdk-kinesis/srcs/aws-java-sdk-kinesis-1.11.198-sources.jar!/" />
       </SOURCES>
     </library>
-    <library name="SBT: com.amazonaws:aws-java-sdk-kms:1.11.198:jar">
+    <library name="SBT: com.amazonaws:aws-java-sdk-kms:1.11.208:jar">
       <CLASSES>
-        <root url="jar://$USER_HOME$/.ivy2/cache/com.amazonaws/aws-java-sdk-kms/jars/aws-java-sdk-kms-1.11.198.jar!/" />
+        <root url="jar://$USER_HOME$/.ivy2/cache/com.amazonaws/aws-java-sdk-kms/jars/aws-java-sdk-kms-1.11.208.jar!/" />
       </CLASSES>
       <JAVADOC />
       <SOURCES>
-        <root url="jar://$USER_HOME$/.ivy2/cache/com.amazonaws/aws-java-sdk-kms/srcs/aws-java-sdk-kms-1.11.198-sources.jar!/" />
+        <root url="jar://$USER_HOME$/.ivy2/cache/com.amazonaws/aws-java-sdk-kms/srcs/aws-java-sdk-kms-1.11.208-sources.jar!/" />
       </SOURCES>
     </library>
-    <library name="SBT: com.amazonaws:aws-java-sdk-s3:1.11.198:jar">
+    <library name="SBT: com.amazonaws:aws-java-sdk-s3:1.11.208:jar">
       <CLASSES>
-        <root url="jar://$USER_HOME$/.ivy2/cache/com.amazonaws/aws-java-sdk-s3/jars/aws-java-sdk-s3-1.11.198.jar!/" />
+        <root url="jar://$USER_HOME$/.ivy2/cache/com.amazonaws/aws-java-sdk-s3/jars/aws-java-sdk-s3-1.11.208.jar!/" />
       </CLASSES>
       <JAVADOC />
       <SOURCES>
-        <root url="jar://$USER_HOME$/.ivy2/cache/com.amazonaws/aws-java-sdk-s3/srcs/aws-java-sdk-s3-1.11.198-sources.jar!/" />
+        <root url="jar://$USER_HOME$/.ivy2/cache/com.amazonaws/aws-java-sdk-s3/srcs/aws-java-sdk-s3-1.11.208-sources.jar!/" />
       </SOURCES>
     </library>
     <library name="SBT: com.amazonaws:aws-java-sdk-sts:1.11.208:jar">
@@ -242,6 +242,15 @@
       <JAVADOC />
       <SOURCES>
         <root url="jar://$USER_HOME$/.ivy2/cache/com.amazonaws/jmespath-java/srcs/jmespath-java-1.11.208-sources.jar!/" />
+      </SOURCES>
+    </library>
+    <library name="SBT: com.chuusai:shapeless_2.12:2.3.2:jar">
+      <CLASSES>
+        <root url="jar://$USER_HOME$/.ivy2/cache/com.chuusai/shapeless_2.12/bundles/shapeless_2.12-2.3.2.jar!/" />
+      </CLASSES>
+      <JAVADOC />
+      <SOURCES>
+        <root url="jar://$USER_HOME$/.ivy2/cache/com.chuusai/shapeless_2.12/srcs/shapeless_2.12-2.3.2-sources.jar!/" />
       </SOURCES>
     </library>
     <library name="SBT: com.fasterxml.jackson.core:jackson-annotations:2.6.0:jar">
@@ -287,6 +296,15 @@
       <JAVADOC />
       <SOURCES>
         <root url="jar://$USER_HOME$/.ivy2/cache/com.fasterxml.jackson.dataformat/jackson-dataformat-yaml/srcs/jackson-dataformat-yaml-2.7.3-sources.jar!/" />
+      </SOURCES>
+    </library>
+    <library name="SBT: com.github.mpilquist:simulacrum_2.12:0.11.0:jar">
+      <CLASSES>
+        <root url="jar://$USER_HOME$/.ivy2/cache/com.github.mpilquist/simulacrum_2.12/jars/simulacrum_2.12-0.11.0.jar!/" />
+      </CLASSES>
+      <JAVADOC />
+      <SOURCES>
+        <root url="jar://$USER_HOME$/.ivy2/cache/com.github.mpilquist/simulacrum_2.12/srcs/simulacrum_2.12-0.11.0-sources.jar!/" />
       </SOURCES>
     </library>
     <library name="SBT: com.google.guava:guava:18.0:jar">
@@ -347,6 +365,24 @@
       </CLASSES>
       <JAVADOC />
       <SOURCES />
+    </library>
+    <library name="SBT: com.gu:scanamo-formats_2.12:1.0.0-M2:jar">
+      <CLASSES>
+        <root url="jar://$USER_HOME$/.ivy2/cache/com.gu/scanamo-formats_2.12/jars/scanamo-formats_2.12-1.0.0-M2.jar!/" />
+      </CLASSES>
+      <JAVADOC />
+      <SOURCES>
+        <root url="jar://$USER_HOME$/.ivy2/cache/com.gu/scanamo-formats_2.12/srcs/scanamo-formats_2.12-1.0.0-M2-sources.jar!/" />
+      </SOURCES>
+    </library>
+    <library name="SBT: com.gu:scanamo_2.12:1.0.0-M2:jar">
+      <CLASSES>
+        <root url="jar://$USER_HOME$/.ivy2/cache/com.gu/scanamo_2.12/jars/scanamo_2.12-1.0.0-M2.jar!/" />
+      </CLASSES>
+      <JAVADOC />
+      <SOURCES>
+        <root url="jar://$USER_HOME$/.ivy2/cache/com.gu/scanamo_2.12/srcs/scanamo_2.12-1.0.0-M2-sources.jar!/" />
+      </SOURCES>
     </library>
     <library name="SBT: com.gu:story-model-thrift:1.1:jar">
       <CLASSES>
@@ -834,6 +870,60 @@
       <JAVADOC />
       <SOURCES>
         <root url="jar://$USER_HOME$/.ivy2/cache/org.slf4j/slf4j-api/srcs/slf4j-api-1.7.25-sources.jar!/" />
+      </SOURCES>
+    </library>
+    <library name="SBT: org.typelevel:cats-core_2.12:1.0.0-MF:jar">
+      <CLASSES>
+        <root url="jar://$USER_HOME$/.ivy2/cache/org.typelevel/cats-core_2.12/jars/cats-core_2.12-1.0.0-MF.jar!/" />
+      </CLASSES>
+      <JAVADOC />
+      <SOURCES>
+        <root url="jar://$USER_HOME$/.ivy2/cache/org.typelevel/cats-core_2.12/srcs/cats-core_2.12-1.0.0-MF-sources.jar!/" />
+      </SOURCES>
+    </library>
+    <library name="SBT: org.typelevel:cats-free_2.12:1.0.0-MF:jar">
+      <CLASSES>
+        <root url="jar://$USER_HOME$/.ivy2/cache/org.typelevel/cats-free_2.12/jars/cats-free_2.12-1.0.0-MF.jar!/" />
+      </CLASSES>
+      <JAVADOC />
+      <SOURCES>
+        <root url="jar://$USER_HOME$/.ivy2/cache/org.typelevel/cats-free_2.12/srcs/cats-free_2.12-1.0.0-MF-sources.jar!/" />
+      </SOURCES>
+    </library>
+    <library name="SBT: org.typelevel:cats-kernel_2.12:1.0.0-MF:jar">
+      <CLASSES>
+        <root url="jar://$USER_HOME$/.ivy2/cache/org.typelevel/cats-kernel_2.12/jars/cats-kernel_2.12-1.0.0-MF.jar!/" />
+      </CLASSES>
+      <JAVADOC />
+      <SOURCES>
+        <root url="jar://$USER_HOME$/.ivy2/cache/org.typelevel/cats-kernel_2.12/srcs/cats-kernel_2.12-1.0.0-MF-sources.jar!/" />
+      </SOURCES>
+    </library>
+    <library name="SBT: org.typelevel:cats-macros_2.12:1.0.0-MF:jar">
+      <CLASSES>
+        <root url="jar://$USER_HOME$/.ivy2/cache/org.typelevel/cats-macros_2.12/jars/cats-macros_2.12-1.0.0-MF.jar!/" />
+      </CLASSES>
+      <JAVADOC />
+      <SOURCES>
+        <root url="jar://$USER_HOME$/.ivy2/cache/org.typelevel/cats-macros_2.12/srcs/cats-macros_2.12-1.0.0-MF-sources.jar!/" />
+      </SOURCES>
+    </library>
+    <library name="SBT: org.typelevel:machinist_2.12:0.6.1:jar">
+      <CLASSES>
+        <root url="jar://$USER_HOME$/.ivy2/cache/org.typelevel/machinist_2.12/jars/machinist_2.12-0.6.1.jar!/" />
+      </CLASSES>
+      <JAVADOC />
+      <SOURCES>
+        <root url="jar://$USER_HOME$/.ivy2/cache/org.typelevel/machinist_2.12/srcs/machinist_2.12-0.6.1-sources.jar!/" />
+      </SOURCES>
+    </library>
+    <library name="SBT: org.typelevel:macro-compat_2.12:1.1.1:jar">
+      <CLASSES>
+        <root url="jar://$USER_HOME$/.ivy2/cache/org.typelevel/macro-compat_2.12/jars/macro-compat_2.12-1.1.1.jar!/" />
+      </CLASSES>
+      <JAVADOC />
+      <SOURCES>
+        <root url="jar://$USER_HOME$/.ivy2/cache/org.typelevel/macro-compat_2.12/srcs/macro-compat_2.12-1.1.1-sources.jar!/" />
       </SOURCES>
     </library>
     <library name="SBT: org.yaml:snakeyaml:1.15:jar">

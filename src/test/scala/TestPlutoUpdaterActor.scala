@@ -95,7 +95,7 @@ class TestPlutoUpdaterActor extends WordSpecLike with BeforeAndAfterAll with Mat
       }), "UpdaterNoId")
 
       updateractor tell(DoUpdate(testAtom), sender.ref)
-      mockLookup.expectMsg(LookupPlutoId("fakeAtomId"))
+      mockLookup.expectMsg(LookupPlutoId(testAtom))
     }
   }
 
@@ -116,9 +116,11 @@ class TestPlutoUpdaterActor extends WordSpecLike with BeforeAndAfterAll with Mat
       8097
     )
 
+    val testAtom = Atom("xxxx", AtomType.Media, Seq("no-label"), "<p>default html", null, ContentChangeDetails(revision=1))
+
     val sender = TestProbe("ProbeInternalId")
     val updateractor = system.actorOf(Props(new PlutoLookupActor(tempConfig)), "UpdaterLookup")
-    updateractor tell(LookupPlutoId("xxxx"), sender.ref)
+    updateractor tell(LookupPlutoId(testAtom), sender.ref)
 
     sender.expectMsg(30 seconds, GotPlutoId("KP-2788261"))
   }
@@ -137,10 +139,18 @@ class TestPlutoUpdaterActor extends WordSpecLike with BeforeAndAfterAll with Mat
       8098
     )
 
-    val sender = TestProbe("ProbeInternalIdNoResult")
-    val updateractor = system.actorOf(Props(new PlutoLookupActor(tempConfig)), "UpdaterLookupNoResult")
-    updateractor tell(LookupPlutoId("xxxx"), sender.ref)
+    val testAtom = Atom("xxxx", AtomType.Media, Seq("no-label"), "<p>default html", null, ContentChangeDetails(revision=1))
 
+    val sender = TestProbe("ProbeInternalIdNoResult")
+    val logUnattachedProbe = TestProbe("ProbeLogUnattached")
+
+    val updateractor = system.actorOf(Props(new PlutoLookupActor(tempConfig){
+      override protected val logUnattachedActor=logUnattachedProbe.ref
+    }), "UpdaterLookupNoResult")
+
+    updateractor tell(LookupPlutoId(testAtom), sender.ref)
+
+    logUnattachedProbe.expectMsg(30 seconds, MasterNotFound("xxxx", None, None, 1))
     sender.expectMsg(30 seconds, ErrorSend("No items found for atom ID xxxx"))
   }
 }
