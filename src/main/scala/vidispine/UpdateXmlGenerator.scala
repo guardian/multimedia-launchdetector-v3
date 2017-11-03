@@ -1,7 +1,9 @@
+package vidispine
+
 import java.time.{Instant, LocalDateTime, ZoneOffset, ZonedDateTime}
 
-import com.gu.contentatom.thrift.{Atom, AtomData}
 import com.gu.contentatom.thrift.atom.media.{Asset, Platform}
+import com.gu.contentatom.thrift.{Atom, AtomData}
 
 import scala.xml.{Elem, NodeSeq}
 
@@ -82,4 +84,12 @@ object UpdateXmlGenerator {
     </MetadataDocument>
   }
 
+  def makeSearchXml(atomId:String):Elem = {
+    <ItemSearchDocument xmlns="http://xml.vidispine.com/schema/vidispine">
+      <field>
+        <name>gnm_master_mediaatom_atomid</name>
+        <value>{atomId}</value>
+      </field>
+    </ItemSearchDocument>
+  }
 }

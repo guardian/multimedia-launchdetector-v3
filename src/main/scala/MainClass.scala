@@ -1,3 +1,4 @@
+import actors.PlutoUpdaterActor
 import org.apache.logging.log4j.scala.Logging
 import akka.actor.{ActorSystem, Props}
 import akka.http.scaladsl.Http

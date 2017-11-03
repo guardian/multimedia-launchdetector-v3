@@ -6,6 +6,7 @@ import com.gu.contentatom.thrift.atom.media._
 import com.gu.contentatom.thrift._
 import com.typesafe.config.{Config, ConfigFactory}
 import org.scalatest.{FunSuite, MustMatchers, PrivateMethodTester}
+import vidispine.{UpdateXmlGenerator, VsXml}
 import scala.concurrent.ExecutionContext.Implicits.global
 
 class TestUpdateXmlGenerator extends FunSuite with MustMatchers with PrivateMethodTester with VsXml {

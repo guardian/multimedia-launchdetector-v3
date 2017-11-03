@@ -1,6 +1,13 @@
+package vidispine
 import scala.util.Try
 import scala.xml._
 import akka.event._
+
+class VSError(errorMessage:String) extends Throwable {
+  override def getMessage: String = errorMessage
+
+  override def toString: String = getMessage
+}
 
 object VSError {
   def fromXml(xmlText: String)(implicit logger: DiagnosticLoggingAdapter):Either[String,VSError] = {
@@ -22,13 +29,6 @@ object VSError {
       Left(xmlElem.toString())
     }
   }
-}
-
-
-class VSError(errorMessage:String) extends Throwable {
-  override def getMessage: String = errorMessage
-
-  override def toString: String = getMessage
 }
 
 case class VSErrorNotFound(exceptType: String, entityType: String, entityId: String) extends VSError(exceptType){
