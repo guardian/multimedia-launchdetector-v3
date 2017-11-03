@@ -92,5 +92,5 @@ class TestUpdateXmlGenerator extends FunSuite with MustMatchers with PrivateMeth
 
     xml.toString() must be(shouldXml.toString())
   }
-  
+
 }

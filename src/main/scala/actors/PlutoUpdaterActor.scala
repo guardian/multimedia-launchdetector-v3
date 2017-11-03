@@ -48,8 +48,6 @@ class PlutoUpdaterActor(config:Config) extends Actor with VSCommunicator{
     case _=>logger.error(s"Received an unknown message")
   }
 
-  def getMasterId(atom:Atom):Option[String] = atom.data.asInstanceOf[AtomData.Media].media.metadata.flatMap(_.pluto.flatMap(_.masterId))
-
   def doUpdate(atom:Atom):Future[String] = {
     val xmlDoc = UpdateXmlGenerator.makeContentXml(atom,LocalDateTime.now())
     val mediaContent = atom.data.asInstanceOf[AtomData.Media].media
