@@ -7,5 +7,5 @@ deployments:
     app: launchdetector
     parameters:
       bucket: gnm-multimedia-rr-deployables
-      healthcheckGrace: 20
+      healthcheckGrace: 25
       secondsToWait: 300

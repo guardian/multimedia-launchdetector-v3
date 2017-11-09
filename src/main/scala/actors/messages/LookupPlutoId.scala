@@ -1,3 +1,3 @@
 package actors.messages
 
-case class LookupPlutoId(atomId:String)
+case class LookupPlutoId(atomId:String) extends ActorMessage
