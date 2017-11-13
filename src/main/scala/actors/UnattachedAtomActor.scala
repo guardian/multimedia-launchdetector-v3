@@ -43,7 +43,7 @@ class UnattachedAtomActor(config:Config) extends Actor {
               logger.error(s"Unable to record missing item: $error")
               if(attempt>=maxRetries){
                 logger.error(s"Not able to record after $maxRetries attempts, giving up.")
-                sender ! ErrorSend(s"Not able to record after $maxRetries attempts, giving up.")
+                origSender ! ErrorSend(s"Not able to record after $maxRetries attempts, giving up.")
               } else {
                 //retry after a short delay
                 Thread.sleep(2000)
