@@ -29,15 +29,20 @@ object MainClass extends Logging {
     val bindingFuture = Healthcheck.setup(config)
     logger.info(s"Connecting to ${config.getString("capi_stream_name")} with role ${config.getString("capi_role_name")}")
 
+    val stsProvider = new STSAssumeRoleSessionCredentialsProvider
+          .Builder(config.getString("capi_role_name"), "multimedia-launchdetector-capi")
+        .build()
+
     val kinesisCredsProvider = new AWSCredentialsProviderChain(
       new ProfileCredentialsProvider("capi"),
-      new STSAssumeRoleSessionCredentialsProvider(config.getString("capi_role_name"), "capi")
+      stsProvider,
+      //new STSAssumeRoleSessionCredentialsProvider(config.getString("capi_role_name"), "capi")
     )
 
     val dynamoCredsProvider = new AWSCredentialsProviderChain(
       new ProfileCredentialsProvider("multimedia"),
       new ProfileCredentialsProvider(), //also try default profile if explicit one does not work
-      new InstanceProfileCredentialsProvider()
+      InstanceProfileCredentialsProvider.getInstance()
     )
 
     val kinesisStreamReaderConfig = KinesisStreamReaderConfig(
