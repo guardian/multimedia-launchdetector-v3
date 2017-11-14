@@ -1,3 +1,5 @@
 package actors.messages
 
-case class LookupPlutoId(atomId:String) extends ActorMessage
+import com.gu.contentatom.thrift.Atom
+
+case class LookupPlutoId(atom:Atom) extends ActorMessage

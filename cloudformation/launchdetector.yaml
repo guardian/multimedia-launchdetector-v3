@@ -127,6 +127,19 @@ Resources:
             Effect: Allow
             Action: "dynamodb:*"
             Resource: !Sub arn:aws:dynamodb:${AWS::Region}:${AWS::AccountId}:table/${CapiStreamName}_${App}-${Mode}-${Stage}
+      - PolicyName: DataAccess
+        PolicyDocument:
+           Version: 2012-10-17
+           Statement:
+             Effect: Allow
+             Action:
+             - dynamodb:DescribeTable
+             - dynamodb:GetItem
+             - dynamodb:GetRecords
+             - dynamodb:PutItem
+             - dynamodb:Query
+             - dynamodb:UpdateItem
+             Resource: !GetAtt UnattachedAtomsTable.Arn
       - PolicyName: DeployablesAccess
         PolicyDocument:
           Version: 2012-10-17
@@ -167,6 +180,26 @@ Resources:
           FromPort: 22
           ToPort: 22
           IpProtocol: tcp
+  UnattachedAtomsTable:
+    Type: AWS::DynamoDB::Table
+    Properties:
+      AttributeDefinitions:
+        - AttributeName: AtomID
+          AttributeType: S
+      KeySchema:
+        - AttributeName: AtomID
+          KeyType: HASH
+      ProvisionedThroughput:
+        WriteCapacityUnits: 1
+        ReadCapacityUnits: 10
+      TableName: !Sub LaunchDetectorUnattachedAtoms-${Stage}
+      Tags:
+        - Key: App
+          Value: !Sub ${App}
+        - Key: Stack
+          Value: !Sub ${Stack}
+        - Key: Stage
+          Value: !Sub ${Stage}
   LaunchConfig:
     Type: AWS::AutoScaling::LaunchConfiguration
     Properties:
@@ -224,6 +257,8 @@ Resources:
           pluto_port = ${PlutoVidispinePort}
           pluto_user = ${PlutoUser}
           pluto_pass = ${PlutoPass}
+
+          unattached_atoms_table = ${UnattachedAtomsTable}
 
           akka {
             http.client.connecting-timeout="1 second"

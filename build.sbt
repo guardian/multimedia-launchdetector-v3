@@ -1,3 +1,5 @@
+import sbt.Keys.libraryDependencies
+
 enablePlugins(RiffRaffArtifact, UniversalPlugin, JDebPackaging, DebianPlugin, JavaServerAppPackaging, SystemdPlugin)
 
 name := "multimedia-launchdetector-v3"
@@ -18,7 +20,9 @@ libraryDependencies += "com.typesafe.akka" %% "akka-http" % "10.0.10"
 //AWS
 libraryDependencies ++= Seq(
   "com.amazonaws" % "aws-java-sdk-sts" % "1.11.208",
-  "com.amazonaws" % "amazon-kinesis-client" % "1.8.5"
+  "com.amazonaws" % "aws-java-sdk-dynamodb" % "1.11.208",
+  "com.amazonaws" % "amazon-kinesis-client" % "1.8.5",
+  "com.gu" %% "scanamo" % "1.0.0-M2"
 )
 
 //logging

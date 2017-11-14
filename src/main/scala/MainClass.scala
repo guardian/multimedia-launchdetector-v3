@@ -36,6 +36,7 @@ object MainClass extends Logging {
 
     val dynamoCredsProvider = new AWSCredentialsProviderChain(
       new ProfileCredentialsProvider("multimedia"),
+      new ProfileCredentialsProvider(), //also try default profile if explicit one does not work
       new InstanceProfileCredentialsProvider()
     )
 
