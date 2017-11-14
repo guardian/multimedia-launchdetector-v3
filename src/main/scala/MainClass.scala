@@ -36,7 +36,6 @@ object MainClass extends Logging {
     val kinesisCredsProvider = new AWSCredentialsProviderChain(
       new ProfileCredentialsProvider("capi"),
       stsProvider,
-      //new STSAssumeRoleSessionCredentialsProvider(config.getString("capi_role_name"), "capi")
     )
 
     val dynamoCredsProvider = new AWSCredentialsProviderChain(
