@@ -191,7 +191,7 @@ Resources:
           KeyType: HASH
       ProvisionedThroughput:
         WriteCapacityUnits: 1
-        ReadCapacityUnits: 10
+        ReadCapacityUnits: 1
       TableName: !Sub LaunchDetectorUnattachedAtoms-${Stage}
       Tags:
         - Key: App
