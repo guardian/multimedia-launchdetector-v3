@@ -47,7 +47,7 @@ class UnattachedAtomActor(config:Config) extends Actor {
               } else {
                 //retry after a short delay
                 Thread.sleep(2000)
-                self ! MasterNotFound(atomId, createdChange, updatedChange, attempt + 1)
+                self.tell(MasterNotFound(atomId, createdChange, updatedChange, attempt + 1), origSender)
               }
             case Right(successReply)=>
               logger.info(s"Saved item to table: ${successReply.toString}")
@@ -67,7 +67,7 @@ class UnattachedAtomActor(config:Config) extends Actor {
       new EnvironmentVariableCredentialsProvider(),
       new ProfileCredentialsProvider("multimedia"),
       new ProfileCredentialsProvider(),
-      new InstanceProfileCredentialsProvider()
+      InstanceProfileCredentialsProvider.getInstance()
     )
 
     AmazonDynamoDBClientBuilder.standard()
