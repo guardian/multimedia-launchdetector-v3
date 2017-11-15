@@ -40,7 +40,7 @@ client = Aws::DynamoDB::Client.new(:region=>opts.region)
 table_name = "LaunchDetectorUnattachedAtoms-#{opts.environment.upcase}"
 table = Aws::DynamoDB::Table.new(table_name, :client=>client)
 
-result = table.scan()
+result = table.scan
 
 item_list = result.items.map{ |item|
   new_hash = Hash(item)
