@@ -89,19 +89,5 @@ class LaunchdetectorStreamListener(updater:ActorRef) extends StreamListener with
       case _=>  //just ignore anything else
     }
 
-    logger.info(s"${atomUpdateInfo(atom)}, writing to $filepath")
-    DebugFileWriter.writeToFile(filepath, atom) match {
-      case Failure(except)=>
-        val newFilePath = s"/tmp/${atom.id}"
-        logger.error(s"Could not write to $filepath, trying $newFilePath. (${except.getMessage}")
-        DebugFileWriter.writeToFile(newFilePath, atom) match {
-          case Failure(newExcept)=>
-            logger.error(s"Still could not write to $newFilePath: ${newExcept.getMessage}")
-          case Success(result)=>Success(result)
-        }
-      case Success(result)=>
-        Success(result)
-    }
-
   }
 }
