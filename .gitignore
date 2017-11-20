@@ -67,3 +67,6 @@ fabric.properties
 /project/target/
 /cloudformation/testdeploy.sh
 /captured_data/
+
+*.csv
+*.ods
