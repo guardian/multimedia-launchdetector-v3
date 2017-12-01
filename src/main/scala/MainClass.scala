@@ -1,7 +1,8 @@
-import actors.PlutoUpdaterActor
-import akka.actor.{ActorSystem, Props}
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
+import actors.{ForceUpdateActor, PlutoUpdaterActor}
+import akka.actor.{ActorRef, ActorSystem, Props}
+
 import akka.stream.ActorMaterializer
 import com.amazonaws.auth.{AWSCredentialsProviderChain, InstanceProfileCredentialsProvider, STSAssumeRoleSessionCredentialsProvider}
 import com.amazonaws.auth.profile.ProfileCredentialsProvider
@@ -25,9 +26,12 @@ object MainClass {
 
     logger.info("Starting up")
 
-
+    val forceUpdateActor:ActorRef = system.actorOf(Props(new ForceUpdateActor))
     val config = ConfigFactory.defaultApplication()
-    val bindingFuture = Healthcheck.setup(config)
+
+    val httpServer = new HttpServer(forceUpdateActor)
+    val bindingFuture = httpServer.setup(config)
+
     logger.info(s"Connecting to ${config.getString("capi_stream_name")} with role ${config.getString("capi_role_name")}")
 
     val stsProvider = new STSAssumeRoleSessionCredentialsProvider
@@ -71,7 +75,7 @@ object MainClass {
     val thread = contentApiFirehoseConsumer.start()
     thread.join() //block while contentApiFirehoseConsumer is running
 
-    Healthcheck.remove(bindingFuture)(_ => system.terminate())
+    httpServer.remove(bindingFuture)(_ => system.terminate())
 
   }
 

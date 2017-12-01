@@ -1,23 +1,44 @@
 import akka.actor.ActorSystem
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
+import akka.actor.{ActorRef, ActorSystem}
 import akka.http.scaladsl.Http
 import akka.http.scaladsl.model._
 import akka.http.scaladsl.server.Directives._
 import akka.stream.ActorMaterializer
 import com.typesafe.config.{Config, ConfigFactory}
+import akka.pattern.ask
 
 import scala.concurrent.{ExecutionContext, Future}
 import scala.util.Try
+import actors.messages.{ActorMessage, ErrorSend, LookupAtomId, SuccessfulSend}
+import akka.event.{DiagnosticLoggingAdapter, Logging}
 
-object Healthcheck  {
-  private final val logger:Logger = LoggerFactory.getLogger(Healthcheck.getClass)
+import scala.concurrent.duration._
 
+class HttpServer(forceActorUpdater: ActorRef) {
+  private final val logger:Logger = LoggerFactory.getLogger(this.getClass)
+
+  //see https://groups.google.com/forum/#!topic/akka-dev/ei-0OzzgKd0
   def setup(config:Config)(implicit system:ActorSystem, mat:ActorMaterializer):Future[Http.ServerBinding] = {
+    implicit val timeout:akka.util.Timeout = 10.seconds
+
     val route =
-      path("is-online") {
-        get {
+      get {
+        path("is-online") {
           complete(HttpEntity(ContentTypes.`text/html(UTF-8)`, "<pre>online</pre>"))
+        }
+      } ~
+      put {
+        pathPrefix("update" / Segment) {
+          docId=>
+            onSuccess((forceActorUpdater ? LookupAtomId(docId)).mapTo[Either[ErrorSend,SuccessfulSend]]) {
+              case Left(message: ErrorSend)=>
+                complete(HttpEntity(ContentTypes.`text/html(UTF-8)`, s"<pre>Unable to process $docId: ${message.getMessage}</pre>"))
+              case Right(message: SuccessfulSend)=>
+                complete(HttpEntity(ContentTypes.`text/html(UTF-8)`, s"<pre>$docId updated ok</pre>"))
+            }
+            //complete(HttpEntity(ContentTypes.`text/html(UTF-8)`, s"<pre>You entered $docId</pre>"))
         }
       }
 

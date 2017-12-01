@@ -38,7 +38,9 @@ libraryDependencies ++= Seq(
 // https://mvnrepository.com/artifact/org.scalatest/scalatest_2.12
 libraryDependencies += "org.scalatest" %% "scalatest" % "3.0.4" % "test"
 
+//content api
 libraryDependencies += "com.gu" %% "content-api-firehose-client" % "0.10"
+libraryDependencies += "com.gu" %% "content-api-client" % "11.43"
 
 libraryDependencies += "com.typesafe" % "config" % "1.3.1"
 
