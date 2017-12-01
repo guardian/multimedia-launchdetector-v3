@@ -41,8 +41,10 @@ class PlutoUpdaterActor(config:Config) extends Actor with VSCommunicator{
       doUpdate(atom).onComplete({
         case Success(serverResponse)=>
           logger.info(s"Successfully updated vidispine: $serverResponse")
-          origSender ! SuccessfulSend
-        case Failure(error)=>logger.error(s"Unable to update vidispine: $error")
+          origSender ! Right(SuccessfulSend)
+        case Failure(error)=>
+          logger.error(s"Unable to update vidispine: $error")
+          origSender ! Left(error)
       })
     case _=>logger.error(s"Received an unknown message")
   }
@@ -51,12 +53,13 @@ class PlutoUpdaterActor(config:Config) extends Actor with VSCommunicator{
     val xmlDoc = UpdateXmlGenerator.makeContentXml(atom,LocalDateTime.now())
     val mediaContent = atom.data.asInstanceOf[AtomData.Media].media
 
+    println(xmlDoc)
     val maybeItemId = mediaContent.metadata.flatMap(_.pluto.flatMap(_.masterId))
     maybeItemId match {
       case Some(itemId)=> //the record already has an item id, so we don't need to look up
         request(uri"$proto://$plutoHost:$plutoPort/API/item/$itemId/metadata",xmlDoc.toString(),Map())
       case None=> //the record does not have an item id, so we must perform a search in the asset management to find it.
-        implicit val timeout:akka.util.Timeout = 60 seconds
+        implicit val timeout:akka.util.Timeout = 15 seconds
         val itemIdFuture:Future[ActorMessage] = (lookupActor ? LookupPlutoId(atom)).mapTo[ActorMessage]
         itemIdFuture.flatMap({
           case GotPlutoId(itemId)=>

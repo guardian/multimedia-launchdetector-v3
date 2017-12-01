@@ -21,7 +21,7 @@ class HttpServer(forceActorUpdater: ActorRef) {
 
   //see https://groups.google.com/forum/#!topic/akka-dev/ei-0OzzgKd0
   def setup(config:Config)(implicit system:ActorSystem, mat:ActorMaterializer):Future[Http.ServerBinding] = {
-    implicit val timeout:akka.util.Timeout = 10.seconds
+    implicit val timeout:akka.util.Timeout = 30.seconds
 
     val route =
       get {
@@ -32,13 +32,12 @@ class HttpServer(forceActorUpdater: ActorRef) {
       put {
         pathPrefix("update" / Segment) {
           docId=>
-            onSuccess((forceActorUpdater ? LookupAtomId(docId)).mapTo[Either[ErrorSend,SuccessfulSend]]) {
-              case Left(message: ErrorSend)=>
-                complete(HttpEntity(ContentTypes.`text/html(UTF-8)`, s"<pre>Unable to process $docId: ${message.getMessage}</pre>"))
+            onSuccess((forceActorUpdater ? LookupAtomId(docId)).mapTo[Either[Exception,SuccessfulSend]]) {
+              case Left(error: Exception)=>
+                complete(HttpEntity(ContentTypes.`text/html(UTF-8)`, s"<pre>Unable to process $docId: ${error.getMessage}</pre>"))
               case Right(message: SuccessfulSend)=>
                 complete(HttpEntity(ContentTypes.`text/html(UTF-8)`, s"<pre>$docId updated ok</pre>"))
             }
-            //complete(HttpEntity(ContentTypes.`text/html(UTF-8)`, s"<pre>You entered $docId</pre>"))
         }
       }
 

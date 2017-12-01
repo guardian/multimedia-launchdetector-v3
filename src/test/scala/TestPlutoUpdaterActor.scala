@@ -57,7 +57,7 @@ class TestPlutoUpdaterActor extends WordSpecLike with BeforeAndAfterAll with Mat
       val updateractor = system.actorOf(Props(new PlutoUpdaterActor(config)), "UpdaterWithId")
       updateractor ! DoUpdate(testAtom)
 
-      sender.expectMsg(30 seconds, SuccessfulSend)
+      sender.expectMsg(30 seconds, Right(SuccessfulSend))
     }
 
     "ask for the item ID from the atom ID if there is no ID in the data" in {

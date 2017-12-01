@@ -26,8 +26,9 @@ object MainClass {
 
     logger.info("Starting up")
 
-    val forceUpdateActor:ActorRef = system.actorOf(Props(new ForceUpdateActor))
     val config = ConfigFactory.defaultApplication()
+
+    val forceUpdateActor:ActorRef = system.actorOf(Props(new ForceUpdateActor(config)))
 
     val httpServer = new HttpServer(forceUpdateActor)
     val bindingFuture = httpServer.setup(config)
@@ -72,10 +73,11 @@ object MainClass {
     Signal.handle(new Signal("INT"), shutdownHandler)
     Signal.handle(new Signal("TERM"), shutdownHandler)
 
-    val thread = contentApiFirehoseConsumer.start()
-    thread.join() //block while contentApiFirehoseConsumer is running
+//    val thread = contentApiFirehoseConsumer.start()
+//    thread.join() //block while contentApiFirehoseConsumer is running
 
-    httpServer.remove(bindingFuture)(_ => system.terminate())
+
+    //httpServer.remove(bindingFuture)(_ => system.terminate())
 
   }
 
