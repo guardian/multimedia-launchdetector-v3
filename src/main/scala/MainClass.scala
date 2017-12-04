@@ -59,7 +59,7 @@ object MainClass extends Logging {
 
     val listener = new LaunchdetectorStreamListener(updater)
 
-    val contentApiFirehoseConsumer: ContentApiFirehoseConsumer = new ContentApiFirehoseConsumer(
+    val contentApiFirehoseConsumer: ContentApiFirehoseConsumer = new MyApiFirehoseConsumer(
       kinesisStreamReaderConfig, listener
     )
 
