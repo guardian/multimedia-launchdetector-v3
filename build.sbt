@@ -21,7 +21,7 @@ libraryDependencies += "com.typesafe.akka" %% "akka-http" % "10.0.10"
 libraryDependencies ++= Seq(
   "com.amazonaws" % "aws-java-sdk-sts" % "1.11.208" exclude("commons-logging","commons-logging"),
   "com.amazonaws" % "aws-java-sdk-dynamodb" % "1.11.208" exclude("commons-logging","commons-logging"),
-  "com.amazonaws" % "amazon-kinesis-client" % "1.8.5" exclude("commons-logging","commons-logging"),
+  "com.amazonaws" % "amazon-kinesis-client" % "1.6.4" exclude("commons-logging","commons-logging"),
   "com.gu" %% "scanamo" % "1.0.0-M2" exclude("commons-logging","commons-logging")
 )
 
