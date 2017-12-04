@@ -1,9 +1,7 @@
 import actors.PlutoUpdaterActor
-import org.apache.logging.log4j.scala.Logging
 import akka.actor.{ActorSystem, Props}
-import akka.http.scaladsl.Http
-import akka.http.scaladsl.model._
-import akka.http.scaladsl.server.Directives._
+import org.slf4j.Logger
+import org.slf4j.LoggerFactory
 import akka.stream.ActorMaterializer
 import com.amazonaws.auth.{AWSCredentialsProviderChain, InstanceProfileCredentialsProvider, STSAssumeRoleSessionCredentialsProvider}
 import com.amazonaws.auth.profile.ProfileCredentialsProvider
@@ -15,7 +13,10 @@ import sun.misc.Signal
 
 import scala.util.Try
 
-object MainClass extends Logging {
+object MainClass {
+
+  private final val logger:Logger = LoggerFactory.getLogger(MainClass.getClass)
+
   def main(args:Array[String]):Unit = {
     implicit val system = ActorSystem("my-system")
     implicit val materializer = ActorMaterializer()

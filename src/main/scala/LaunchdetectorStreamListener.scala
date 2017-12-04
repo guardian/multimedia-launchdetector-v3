@@ -4,11 +4,14 @@ import com.gu.contentapi.client.model.v1.Content
 import com.gu.contentapi.firehose.client.StreamListener
 import com.gu.contentatom.thrift.{Atom, AtomData, AtomType}
 import com.gu.crier.model.event.v1.RetrievableContent
-import org.apache.logging.log4j.scala.Logging
+import org.slf4j.Logger
+import org.slf4j.LoggerFactory
 
 import scala.util.{Failure, Success}
 
-class LaunchdetectorStreamListener(updater:ActorRef) extends StreamListener with Logging {
+class LaunchdetectorStreamListener(updater:ActorRef) extends StreamListener {
+  private final val logger:Logger = LoggerFactory.getLogger(this.getClass)
+
   /**
     * When content is updated or created on the Guardian an `update` event will be sent to the events stream. This
     * update event contains the entire payload.

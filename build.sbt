@@ -19,20 +19,21 @@ libraryDependencies += "com.typesafe.akka" %% "akka-http" % "10.0.10"
 
 //AWS
 libraryDependencies ++= Seq(
-  "com.amazonaws" % "aws-java-sdk-sts" % "1.11.208",
-  "com.amazonaws" % "aws-java-sdk-dynamodb" % "1.11.208",
-  "com.amazonaws" % "amazon-kinesis-client" % "1.6.4",
-  "com.gu" %% "scanamo" % "1.0.0-M2"
+  "com.amazonaws" % "aws-java-sdk-sts" % "1.11.208" exclude("commons-logging","commons-logging"),
+  "com.amazonaws" % "aws-java-sdk-dynamodb" % "1.11.208" exclude("commons-logging","commons-logging"),
+  "com.amazonaws" % "amazon-kinesis-client" % "1.8.5" exclude("commons-logging","commons-logging"),
+  "com.gu" %% "scanamo" % "1.0.0-M2" exclude("commons-logging","commons-logging")
 )
 
 //logging
 libraryDependencies ++= Seq(
-  "org.apache.logging.log4j" % "log4j-api" % "2.9.1",
-  "org.apache.logging.log4j" % "log4j-core" % "2.9.1",
-  "org.apache.logging.log4j" %% "log4j-api-scala" % "11.0",
-  "com.fasterxml.jackson.dataformat" % "jackson-dataformat-yaml" % "2.7.3",
-  "com.fasterxml.jackson.core" % "jackson-databind" % "2.5.4",
-  "org.apache.logging.log4j" % "log4j-slf4j-impl" % "2.9.1"
+  // https://mvnrepository.com/artifact/ch.qos.logback/logback-classic
+  "ch.qos.logback" % "logback-classic" % "1.2.3",
+  "ch.qos.logback" % "logback-classic" % "1.2.3" % Test,
+  // https://mvnrepository.com/artifact/ch.qos.logback/logback-core
+  "ch.qos.logback" % "logback-core" % "1.2.3",
+  "org.slf4j" % "jcl-over-slf4j" % "1.7.25"
+
 )
 
 // https://mvnrepository.com/artifact/org.scalatest/scalatest_2.12
