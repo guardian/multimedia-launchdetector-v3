@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration>
+
+    <appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
+        <encoder>
+            <Pattern>%d{HH:mm:ss.SSS} [%thread] %-5level %logger{36} - %msg%n</Pattern>
+        </encoder>
+    </appender>
+
+    <appender name="logfile" class="ch.qos.logback.core.FileAppender">
+        <file>/var/log/multimedia-launchdetector-v3/launchdetector.log</file>
+        <encoder>
+            <Pattern>%d{HH:mm:ss.SSS} [%thread] %-5level %logger{36} - %msg%n</Pattern>
+        </encoder>
+    </appender>
+
+    <!-- our loggers -->
+    <logger name="MainClass$" level="DEBUG"/>
+    <logger name="Healthcheck$" level="DEBUG"/>
+    <logger name="ShutdownHandler" level="DEBUG"/>
+
+
+    <!-- library loggers -->
+    <logger name="akka.event.EventStream" level="INFO"/>
+    <logger name="com.amazonaws.metrics.AwsSdkMetrics" level="INFO"/>
+    <logger name="akka.io.TcpListener" level="DEBUG"/>
+    <logger name="c.a.s.k.c.proxies.KinesisProxy" level="INFO"/>
+    <logger name="c.a.s.k.leases.impl.LeaseCoordinator" level="INFO"/>
+    <logger name="c.a.s.k.c.lib.worker.Worker" level="DEBUG"/>
+    <logger name="c.a.s.k.leases.impl.LeaseCoordinator" level="INFO"/>
+
+    <root level="INFO">
+        <appender-ref ref="logfile"/>
+    </root>
+</configuration>

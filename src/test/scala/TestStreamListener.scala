@@ -3,7 +3,6 @@ import com.gu.contentatom.thrift.atom.media.{Category, MediaAtom}
 import com.gu.contentatom.thrift._
 import com.gu.contentatom.thrift.atom.media.MediaAtom
 import com.typesafe.config.Config
-import org.apache.logging.log4j.scala.Logging
 import org.scalatest.{FunSuite, MustMatchers}
 
 class TestStreamListener extends FunSuite with MustMatchers {

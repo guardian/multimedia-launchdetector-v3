@@ -1,15 +1,17 @@
 import akka.actor.ActorSystem
+import org.slf4j.Logger
+import org.slf4j.LoggerFactory
 import akka.http.scaladsl.Http
 import akka.http.scaladsl.model._
 import akka.http.scaladsl.server.Directives._
 import akka.stream.ActorMaterializer
 import com.typesafe.config.{Config, ConfigFactory}
-import org.apache.logging.log4j.scala.Logging
 
 import scala.concurrent.{ExecutionContext, Future}
 import scala.util.Try
 
-object Healthcheck extends Logging {
+object Healthcheck  {
+  private final val logger:Logger = LoggerFactory.getLogger(Healthcheck.getClass)
 
   def setup(config:Config)(implicit system:ActorSystem, mat:ActorMaterializer):Future[Http.ServerBinding] = {
     val route =
