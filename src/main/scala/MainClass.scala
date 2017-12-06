@@ -73,11 +73,11 @@ object MainClass {
     Signal.handle(new Signal("INT"), shutdownHandler)
     Signal.handle(new Signal("TERM"), shutdownHandler)
 
-//    val thread = contentApiFirehoseConsumer.start()
-//    thread.join() //block while contentApiFirehoseConsumer is running
+    val thread = contentApiFirehoseConsumer.start()
+    thread.join() //block while contentApiFirehoseConsumer is running
 
 
-    //httpServer.remove(bindingFuture)(_ => system.terminate())
+    httpServer.remove(bindingFuture)(_ => system.terminate())
 
   }
 
