@@ -23,7 +23,6 @@ object UpdateXmlGenerator {
 
     val ytAssets=mediaContent.assets.filter(_.platform==Platform.Youtube)
 
-    //logger.debug(s"ytAssets: $ytAssets")
     if(ytAssets.isEmpty) return Some(
       <list><field><name>gnm_master_youtube_status</name> <value>Unpublished</value></field></list>
     )
@@ -49,6 +48,37 @@ object UpdateXmlGenerator {
     )
   }
 
+  private def mainstreamPortion(atomData:AtomData.Media, currentTime: LocalDateTime):Option[Elem] = {
+    val mediaContent = atomData.media
+
+    Some(
+      // the containing <list> is not used by Vidispine, but is used here so that the scala compiler has a single <elem> to return
+      <list>
+        <field><name>gnm_master_mainstreamsyndication_title</name> <value>{mediaContent.title}</value></field>
+        {fieldOption("gnm_master_mainstreamsyndication_description",mediaContent.description).getOrElse("")}
+        {fieldOptionIterable("gnm_master_mainstreamsyndication_keywords",mediaContent.metadata.flatMap(_.tags)).getOrElse("")}
+        {fieldOption("gnm_master_mainstreamsyndication_category", mediaContent.metadata.flatMap(_.categoryId)).getOrElse("")}
+        {fieldOption("gnm_master_mainstreamsyndication_remove",mediaContent.metadata.flatMap(_.expiryDate).map({time=>asIsoTimeString(time/1000)})).getOrElse()}
+        <field><name>gnm_master_mainstreamsyndication_holdingimage</name><value/></field>
+      </list>
+    )
+  }
+
+  private def dailymotionPortion(atomData:AtomData.Media, currentTime: LocalDateTime):Option[Elem] = {
+    val mediaContent = atomData.media
+
+    Some(
+      // the containing <list> is not used by Vidispine, but is used here so that the scala compiler has a single <elem> to return
+      <list>
+        <field><name>gnm_master_dailymotion_title</name> <value>{mediaContent.title}</value></field>
+        {fieldOption("gnm_master_dailymotion_description",mediaContent.description).getOrElse("")}
+        {fieldOptionIterable("gnm_master_dailymotion_keywords",mediaContent.metadata.flatMap(_.tags)).getOrElse("")}
+        {fieldOption("gnm_master_dailymotion_category", mediaContent.metadata.flatMap(_.categoryId)).getOrElse("")}
+        {fieldOption("gnm_master_dailymotion_remove",mediaContent.metadata.flatMap(_.expiryDate).map({time=>asIsoTimeString(time/1000)})).getOrElse()}
+        <field><name>gnm_master_dailymotion_holdingimage_16x9</name><value/></field>
+      </list>
+    )
+  }
   /* For reference: fields
      mediaContent.posterImage.map(_.master.map(_.file))
     mediaContent.posterUrl  //deprecated
@@ -92,6 +122,8 @@ object UpdateXmlGenerator {
           <field mode="add"><name>gnm_master_website_uploadlog</name><value>{makeUploadLog(atom.contentChangeDetails)}</value></field>
           <field><name>gnm_master_generic_status</name><value>Published</value></field>
           {youtubePortion(atom.data.asInstanceOf[AtomData.Media],currentTime).map(_ \ "field").getOrElse(NodeSeq)}
+          {mainstreamPortion(atom.data.asInstanceOf[AtomData.Media],currentTime).map(_ \ "field").getOrElse(NodeSeq)}
+          {dailymotionPortion(atom.data.asInstanceOf[AtomData.Media],currentTime).map(_ \ "field").getOrElse(NodeSeq)}
           <field><name>gnm_master_generic_intendeduploadplatforms</name><value>Website</value><value>YouTube</value></field>
       </timespan>
     </MetadataDocument>
