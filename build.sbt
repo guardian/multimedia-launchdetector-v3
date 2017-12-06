@@ -29,7 +29,6 @@ libraryDependencies ++= Seq(
 libraryDependencies ++= Seq(
   // https://mvnrepository.com/artifact/ch.qos.logback/logback-classic
   "ch.qos.logback" % "logback-classic" % "1.2.3",
-  "ch.qos.logback" % "logback-classic" % "1.2.3" % Test,
   // https://mvnrepository.com/artifact/ch.qos.logback/logback-core
   "ch.qos.logback" % "logback-core" % "1.2.3",
   "org.slf4j" % "jcl-over-slf4j" % "1.7.25"
