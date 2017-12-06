@@ -119,7 +119,6 @@
     <orderEntry type="library" scope="PROVIDED" name="aws-sdk-xray (v1.0.0, RVM: ruby-2.2.7) [gem]" level="application" />
     <orderEntry type="library" scope="PROVIDED" name="aws-sigv2 (v1.0.1, RVM: ruby-2.2.7) [gem]" level="application" />
     <orderEntry type="library" scope="PROVIDED" name="aws-sigv4 (v1.0.2, RVM: ruby-2.2.7) [gem]" level="application" />
-    <orderEntry type="library" scope="PROVIDED" name="bundler (v1.16.0, RVM: ruby-2.2.7) [gem]" level="application" />
     <orderEntry type="library" scope="PROVIDED" name="jmespath (v1.3.1, RVM: ruby-2.2.7) [gem]" level="application" />
     <orderEntry type="library" scope="PROVIDED" name="trollop (v2.1.2, RVM: ruby-2.2.7) [gem]" level="application" />
   </component>
