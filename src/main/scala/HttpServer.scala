@@ -32,11 +32,11 @@ class HttpServer(forceActorUpdater: ActorRef) {
       put {
         pathPrefix("update" / Segment) {
           docId=>
-            onSuccess((forceActorUpdater ? LookupAtomId(docId)).mapTo[Either[Exception,SuccessfulSend]]) {
-              case Left(error: Exception)=>
-                complete(HttpEntity(ContentTypes.`text/html(UTF-8)`, s"<pre>Unable to process $docId: ${error.getMessage}</pre>"))
+            onSuccess((forceActorUpdater ? LookupAtomId(docId)).mapTo[Either[ActorMessage,SuccessfulSend]]) {
+              case Left(error: ActorMessage)=>
+                complete(HttpEntity(ContentTypes.`application/json`, s"""{"status":"error","atomid":"$docId","detail":"Unable to process: ${error.getMessage}"}"""))
               case Right(message: SuccessfulSend)=>
-                complete(HttpEntity(ContentTypes.`text/html(UTF-8)`, s"<pre>$docId updated ok</pre>"))
+                complete(HttpEntity(ContentTypes.`text/html(UTF-8)`, s"""{"status":"ok","atomid":"$docId"}"""))
             }
         }
       }
@@ -47,7 +47,7 @@ class HttpServer(forceActorUpdater: ActorRef) {
 
     val bindingFuture = Http().bindAndHandle(route, bindIpAddress, 9000)
 
-    logger.info(s"Healthcheck online at http://$bindIpAddress:9000/")
+    logger.info(s"Server online at http://$bindIpAddress:9000/")
 
     bindingFuture
   }
