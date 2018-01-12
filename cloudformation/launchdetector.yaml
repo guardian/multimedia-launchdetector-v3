@@ -186,13 +186,29 @@ Resources:
       AttributeDefinitions:
         - AttributeName: AtomID
           AttributeType: S
+        - AttributeName: userEmail
+          AttributeType: S
+        - AttributeName: dateCreated
+          AttributeType: S
       KeySchema:
         - AttributeName: AtomID
           KeyType: HASH
+        - AttributeName: dateCreated
+          KeyType: RANGE
+      GlobalSecondaryIndexes:
+        - IndexName: userIndex
+          KeySchema:
+          - AttributeName: userEmail
+            KeyType: HASH
+          Projection:
+            ProjectionType: KEYS_ONLY
+          ProvisionedThroughput:
+            WriteCapacityUnits: 1
+            ReadCapacityUnits: 1
       ProvisionedThroughput:
         WriteCapacityUnits: 1
         ReadCapacityUnits: 1
-      TableName: !Sub LaunchDetectorUnattachedAtoms-${Stage}
+      TableName: !Sub LaunchDetectorUnattachedAtoms-${Stage}-v2
       Tags:
         - Key: App
           Value: !Sub ${App}
