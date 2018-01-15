@@ -184,31 +184,33 @@ Resources:
     Type: AWS::DynamoDB::Table
     Properties:
       AttributeDefinitions:
-        - AttributeName: AtomID
-          AttributeType: S
         - AttributeName: userEmail
           AttributeType: S
         - AttributeName: dateCreated
           AttributeType: S
+        - AttributeName: dummy
+          AttributeType: S
       KeySchema:
-        - AttributeName: AtomID
+        - AttributeName: userEmail
           KeyType: HASH
         - AttributeName: dateCreated
           KeyType: RANGE
       GlobalSecondaryIndexes:
-        - IndexName: userIndex
+        - IndexName: dateIndex
           KeySchema:
-          - AttributeName: userEmail
+          - AttributeName: dummy
             KeyType: HASH
+          - AttributeName: dateCreated
+            KeyType: RANGE
           Projection:
-            ProjectionType: KEYS_ONLY
+            ProjectionType: ALL
           ProvisionedThroughput:
             WriteCapacityUnits: 1
             ReadCapacityUnits: 1
       ProvisionedThroughput:
         WriteCapacityUnits: 1
         ReadCapacityUnits: 1
-      TableName: !Sub LaunchDetectorUnattachedAtoms-${Stage}-v2
+      TableName: !Sub LaunchDetectorUnattachedAtoms-${Stage}-v7
       Tags:
         - Key: App
           Value: !Sub ${App}

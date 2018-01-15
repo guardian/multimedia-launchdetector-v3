@@ -4,7 +4,9 @@ import java.time.LocalDateTime
 import com.amazonaws.auth.{AWSCredentialsProviderChain, EnvironmentVariableCredentialsProvider, InstanceProfileCredentialsProvider}
 import com.amazonaws.auth.profile.ProfileCredentialsProvider
 import com.amazonaws.services.dynamodbv2.{AmazonDynamoDB, AmazonDynamoDBClientBuilder}
-import com.amazonaws.services.dynamodbv2.model.{AttributeDefinition, CreateTableRequest, KeySchemaElement, ProvisionedThroughput}
+import com.amazonaws.services.dynamodbv2.model._
+
+import collection.JavaConverters._
 
 trait TestDynamoDB {
   def getMyHostname:String = {
@@ -21,8 +23,17 @@ trait TestDynamoDB {
 
   def createTestTable(client:AmazonDynamoDB, tableName:String):Unit = {
     val rq = new CreateTableRequest()
-      .withKeySchema(new KeySchemaElement("AtomID","HASH"))
-      .withAttributeDefinitions(new AttributeDefinition("AtomID","S"))
+      .withKeySchema(Seq(new KeySchemaElement("userEmail","HASH"), new KeySchemaElement("dateCreated", "RANGE")).asJavaCollection)
+      .withGlobalSecondaryIndexes(new GlobalSecondaryIndex()
+        .withIndexName("dateIndex")
+        .withProjection(new Projection().withProjectionType(ProjectionType.ALL))
+        .withProvisionedThroughput(new ProvisionedThroughput().withReadCapacityUnits(1L).withWriteCapacityUnits(1L))
+        .withKeySchema(Seq(new KeySchemaElement("dummy", "HASH"), new KeySchemaElement("dateCreated", "RANGE")).asJavaCollection))
+      .withAttributeDefinitions(Seq(
+        new AttributeDefinition("userEmail","S"),
+        new AttributeDefinition("dateCreated","S"),
+        new AttributeDefinition("dummy","S")
+      ).asJavaCollection)
       .withProvisionedThroughput(new ProvisionedThroughput().withReadCapacityUnits(1L).withWriteCapacityUnits(1L))
       .withTableName(tableName)
 
