@@ -53,7 +53,6 @@ class PlutoUpdaterActor(config:Config) extends Actor with VSCommunicator{
     val xmlDoc = UpdateXmlGenerator.makeContentXml(atom,LocalDateTime.now())
     val mediaContent = atom.data.asInstanceOf[AtomData.Media].media
 
-    println(xmlDoc)
     val maybeItemId = mediaContent.metadata.flatMap(_.pluto.flatMap(_.masterId))
     maybeItemId match {
       case Some(itemId)=> //the record already has an item id, so we don't need to look up

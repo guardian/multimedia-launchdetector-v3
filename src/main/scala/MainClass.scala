@@ -12,7 +12,6 @@ import com.softwaremill.sttp.akkahttp.AkkaHttpBackend
 import com.typesafe.config._
 import sun.misc.Signal
 
-import scala.util.Try
 
 object MainClass {
 

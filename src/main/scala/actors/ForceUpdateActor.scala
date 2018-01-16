@@ -24,7 +24,7 @@ class ForceUpdateActor(config:Config) extends Actor with CapiCommunicator {
 
   protected implicit val logger:DiagnosticLoggingAdapter = Logging.getLogger(this)
 
-  private val updater = context.actorOf(Props(new PlutoUpdaterActor(config)))
+  protected val updater:ActorRef = context.actorOf(Props(new PlutoUpdaterActor(config)))
 
   override def receive: Receive = {
     case LookupAtomId(atomId)=>
@@ -38,8 +38,6 @@ class ForceUpdateActor(config:Config) extends Actor with CapiCommunicator {
         case Success(maybeAtom)=>
           maybeAtom match {
             case Some(atom) =>
-//              atom.data match {
-//                case AtomData.Media(mediaAtom)=>
                   logger.info(s"orignal sender is $originalSender")
                   logger.info(s"Got atom with title ${atom.title}")
 
@@ -48,10 +46,6 @@ class ForceUpdateActor(config:Config) extends Actor with CapiCommunicator {
                       result.fold({error=>originalSender ! Left(error)}, {result=>originalSender ! Right(result)})
                     case Failure(error)=>originalSender ! Left(error)
                   })
-
-//                case _=>
-//                  logger.info("Got some other kind of atom")
-//              }
             case None =>
               logger.error(s"Atom $atomId is valid but not a media atom")
               originalSender ! Left(ErrorSend(s"Atom $atomId is valid but not a media atom"))
@@ -60,5 +54,7 @@ class ForceUpdateActor(config:Config) extends Actor with CapiCommunicator {
           logger.error(s"Atom $atomId could not be loaded: $error")
           originalSender ! Left(ErrorSend(s"Atom $atomId could not be loaded: $error"))
       })
+    case _=>
+      logger.warning("ForceUpdateActor received an unexpected message")
   }
 }
