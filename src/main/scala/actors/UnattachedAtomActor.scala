@@ -95,7 +95,8 @@ class UnattachedAtomActor(config:Config) extends Actor {
     val record = UnattachedAtom(atomId,
       createdUserEmail.getOrElse("unknown user"),
       createdChangeTime.getOrElse(LocalDateTime.now().toString),
-      lastModChangeTime.getOrElse(LocalDateTime.now().toString)
+      lastModChangeTime.getOrElse(LocalDateTime.now().toString),
+      "n"
     )
 
     val op = table.put(record)
