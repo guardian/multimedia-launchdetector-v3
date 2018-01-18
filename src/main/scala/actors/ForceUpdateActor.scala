@@ -1,5 +1,5 @@
 package actors
-import actors.messages.{DoUpdate, ErrorSend, LookupAtomId, SuccessfulSend}
+import actors.messages._
 import akka.actor.{Actor, ActorRef, Props}
 import akka.event.{DiagnosticLoggingAdapter, Logging}
 import akka.stream.ActorMaterializer
@@ -25,6 +25,7 @@ class ForceUpdateActor(config:Config) extends Actor with CapiCommunicator {
   protected implicit val logger:DiagnosticLoggingAdapter = Logging.getLogger(this)
 
   protected val updater:ActorRef = context.actorOf(Props(new PlutoUpdaterActor(config)))
+  protected val unattachedAtomActor:ActorRef = context.actorOf(Props(new UnattachedAtomActor(config)))
 
   override def receive: Receive = {
     case LookupAtomId(atomId)=>
@@ -43,6 +44,7 @@ class ForceUpdateActor(config:Config) extends Actor with CapiCommunicator {
 
                   (updater ? DoUpdate(atom)).onComplete({
                     case Success(result:Either[ErrorSend,SuccessfulSend])=>
+                      unattachedAtomActor ! MasterNowAttached(atom.id)
                       result.fold({error=>originalSender ! Left(error)}, {result=>originalSender ! Right(result)})
                     case Failure(error)=>originalSender ! Left(error)
                   })

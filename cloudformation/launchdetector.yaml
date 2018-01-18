@@ -78,8 +78,8 @@ Resources:
       GroupDescription: Load-balancer security group for launchdetector
       SecurityGroupIngress:
         - CidrIp: !Ref OfficeIpRange
-          FromPort: 9000
-          ToPort: 9000
+          FromPort: 80
+          ToPort: 80
           IpProtocol: tcp
       VpcId: !Ref VPCID
   LoadBalancer:
@@ -184,6 +184,8 @@ Resources:
     Type: AWS::DynamoDB::Table
     Properties:
       AttributeDefinitions:
+        - AttributeName: AtomID
+          AttributeType: S
         - AttributeName: userEmail
           AttributeType: S
         - AttributeName: dateCreated
@@ -191,10 +193,8 @@ Resources:
         - AttributeName: dummy
           AttributeType: S
       KeySchema:
-        - AttributeName: userEmail
+        - AttributeName: AtomID
           KeyType: HASH
-        - AttributeName: dateCreated
-          KeyType: RANGE
       GlobalSecondaryIndexes:
         - IndexName: dateIndex
           KeySchema:
@@ -207,10 +207,21 @@ Resources:
           ProvisionedThroughput:
             WriteCapacityUnits: 1
             ReadCapacityUnits: 1
+        - IndexName: UserIndex
+          KeySchema:
+            - AttributeName: userEmail
+              KeyType: HASH
+            - AttributeName: dateCreated
+              KeyType: RANGE
+          Projection:
+            ProjectionType: ALL
+          ProvisionedThroughput:
+            WriteCapacityUnits: 1
+            ReadCapacityUnits: 1
       ProvisionedThroughput:
         WriteCapacityUnits: 1
         ReadCapacityUnits: 1
-      TableName: !Sub LaunchDetectorUnattachedAtoms-${Stage}-v7
+      TableName: !Sub LaunchDetectorUnattachedAtoms-${Stage}-v9
       Tags:
         - Key: App
           Value: !Sub ${App}

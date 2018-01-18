@@ -58,6 +58,14 @@ class UnattachedAtomActor(config:Config) extends Actor {
           logger.error(s"Could not output to dynamo: ${error.toString}")
           origSender ! ErrorSend(error.toString)
       })
+    case MasterNowAttached(atomId)=>
+      val origSender = sender()
+      removeAtomNowAttached(atomId).onComplete({
+        case Success(deleteItemResult)=>origSender ! SuccessfulSend
+        case Failure(error)=>
+          logger.error(error.toString)
+          origSender ! ErrorSend(error.toString)
+      })
     case _=>
       logger.error("Unrecognised message sent to UnattachedAtomActor")
   }
@@ -101,5 +109,11 @@ class UnattachedAtomActor(config:Config) extends Actor {
 
     val op = table.put(record)
     Scanamo.exec(getClient)(op)
+  }
+
+  def removeAtomNowAttached(atomId: String) = Future {
+    val table = Table[UnattachedAtom](tableName)
+
+    Scanamo.exec(getClient)(table.delete('AtomId->atomId))
   }
 }

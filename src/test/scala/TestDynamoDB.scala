@@ -23,16 +23,24 @@ trait TestDynamoDB {
 
   def createTestTable(client:AmazonDynamoDB, tableName:String):Unit = {
     val rq = new CreateTableRequest()
-      .withKeySchema(Seq(new KeySchemaElement("userEmail","HASH"), new KeySchemaElement("dateCreated", "RANGE")).asJavaCollection)
-      .withGlobalSecondaryIndexes(new GlobalSecondaryIndex()
-        .withIndexName("dateIndex")
-        .withProjection(new Projection().withProjectionType(ProjectionType.ALL))
-        .withProvisionedThroughput(new ProvisionedThroughput().withReadCapacityUnits(1L).withWriteCapacityUnits(1L))
-        .withKeySchema(Seq(new KeySchemaElement("dummy", "HASH"), new KeySchemaElement("dateCreated", "RANGE")).asJavaCollection))
+      .withKeySchema(new KeySchemaElement("AtomID", "HASH"))
+      .withGlobalSecondaryIndexes(Seq(
+        new GlobalSecondaryIndex()
+          .withIndexName("dateIndex")
+          .withProjection(new Projection().withProjectionType(ProjectionType.ALL))
+          .withProvisionedThroughput(new ProvisionedThroughput().withReadCapacityUnits(1L).withWriteCapacityUnits(1L))
+          .withKeySchema(Seq(new KeySchemaElement("dummy", "HASH"), new KeySchemaElement("dateCreated", "RANGE")).asJavaCollection),
+        new GlobalSecondaryIndex()
+          .withIndexName("UserIndex")
+          .withProjection(new Projection().withProjectionType(ProjectionType.ALL))
+          .withProvisionedThroughput(new ProvisionedThroughput().withReadCapacityUnits(1L).withWriteCapacityUnits(1L))
+          .withKeySchema(Seq(new KeySchemaElement("userEmail","HASH"), new KeySchemaElement("dateCreated", "RANGE")).asJavaCollection)
+      ).asJavaCollection)
       .withAttributeDefinitions(Seq(
         new AttributeDefinition("userEmail","S"),
         new AttributeDefinition("dateCreated","S"),
-        new AttributeDefinition("dummy","S")
+        new AttributeDefinition("dummy","S"),
+        new AttributeDefinition("AtomID", "S")
       ).asJavaCollection)
       .withProvisionedThroughput(new ProvisionedThroughput().withReadCapacityUnits(1L).withWriteCapacityUnits(1L))
       .withTableName(tableName)
