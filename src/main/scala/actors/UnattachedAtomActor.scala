@@ -114,6 +114,6 @@ class UnattachedAtomActor(config:Config) extends Actor {
   def removeAtomNowAttached(atomId: String) = Future {
     val table = Table[UnattachedAtom](tableName)
 
-    Scanamo.exec(getClient)(table.delete('AtomId->atomId))
+    Scanamo.exec(getClient)(table.delete('AtomID->atomId))
   }
 }
