@@ -354,6 +354,15 @@
         <root url="jar://$USER_HOME$/.ivy2/cache/com.google.protobuf/protobuf-java/srcs/protobuf-java-2.6.1-sources.jar!/" />
       </SOURCES>
     </library>
+    <library name="SBT: com.gu:content-api-client_2.12:11.43:jar">
+      <CLASSES>
+        <root url="jar://$USER_HOME$/.ivy2/cache/com.gu/content-api-client_2.12/jars/content-api-client_2.12-11.43.jar!/" />
+      </CLASSES>
+      <JAVADOC />
+      <SOURCES>
+        <root url="jar://$USER_HOME$/.ivy2/cache/com.gu/content-api-client_2.12/srcs/content-api-client_2.12-11.43-sources.jar!/" />
+      </SOURCES>
+    </library>
     <library name="SBT: com.gu:content-api-firehose-client_2.12:0.10:jar">
       <CLASSES>
         <root url="jar://$USER_HOME$/.ivy2/cache/com.gu/content-api-firehose-client_2.12/jars/content-api-firehose-client_2.12-0.10.jar!/" />
@@ -363,27 +372,27 @@
         <root url="jar://$USER_HOME$/.ivy2/cache/com.gu/content-api-firehose-client_2.12/srcs/content-api-firehose-client_2.12-0.10-sources.jar!/" />
       </SOURCES>
     </library>
-    <library name="SBT: com.gu:content-api-models-scala_2.12:11.25:jar">
+    <library name="SBT: com.gu:content-api-models-scala_2.12:11.43:jar">
       <CLASSES>
-        <root url="jar://$USER_HOME$/.ivy2/cache/com.gu/content-api-models-scala_2.12/jars/content-api-models-scala_2.12-11.25.jar!/" />
+        <root url="jar://$USER_HOME$/.ivy2/cache/com.gu/content-api-models-scala_2.12/jars/content-api-models-scala_2.12-11.43.jar!/" />
       </CLASSES>
       <JAVADOC />
       <SOURCES>
-        <root url="jar://$USER_HOME$/.ivy2/cache/com.gu/content-api-models-scala_2.12/srcs/content-api-models-scala_2.12-11.25-sources.jar!/" />
+        <root url="jar://$USER_HOME$/.ivy2/cache/com.gu/content-api-models-scala_2.12/srcs/content-api-models-scala_2.12-11.43-sources.jar!/" />
       </SOURCES>
     </library>
-    <library name="SBT: com.gu:content-api-models_2.12:11.25:jar">
+    <library name="SBT: com.gu:content-api-models_2.12:11.43:jar">
       <CLASSES>
-        <root url="jar://$USER_HOME$/.ivy2/cache/com.gu/content-api-models_2.12/jars/content-api-models_2.12-11.25.jar!/" />
+        <root url="jar://$USER_HOME$/.ivy2/cache/com.gu/content-api-models_2.12/jars/content-api-models_2.12-11.43.jar!/" />
       </CLASSES>
       <JAVADOC />
       <SOURCES>
-        <root url="jar://$USER_HOME$/.ivy2/cache/com.gu/content-api-models_2.12/srcs/content-api-models_2.12-11.25-sources.jar!/" />
+        <root url="jar://$USER_HOME$/.ivy2/cache/com.gu/content-api-models_2.12/srcs/content-api-models_2.12-11.43-sources.jar!/" />
       </SOURCES>
     </library>
-    <library name="SBT: com.gu:content-atom-model-thrift:2.4.44:jar">
+    <library name="SBT: com.gu:content-atom-model-thrift:2.4.57:jar">
       <CLASSES>
-        <root url="jar://$USER_HOME$/.ivy2/cache/com.gu/content-atom-model-thrift/jars/content-atom-model-thrift-2.4.44.jar!/" />
+        <root url="jar://$USER_HOME$/.ivy2/cache/com.gu/content-atom-model-thrift/jars/content-atom-model-thrift-2.4.57.jar!/" />
       </CLASSES>
       <JAVADOC />
       <SOURCES />
@@ -461,6 +470,24 @@
       <JAVADOC />
       <SOURCES>
         <root url="jar://$USER_HOME$/.ivy2/cache/com.softwaremill.sttp/core_2.12/srcs/core_2.12-0.0.20-sources.jar!/" />
+      </SOURCES>
+    </library>
+    <library name="SBT: com.squareup.okhttp3:okhttp:3.9.0:jar">
+      <CLASSES>
+        <root url="jar://$USER_HOME$/.ivy2/cache/com.squareup.okhttp3/okhttp/jars/okhttp-3.9.0.jar!/" />
+      </CLASSES>
+      <JAVADOC />
+      <SOURCES>
+        <root url="jar://$USER_HOME$/.ivy2/cache/com.squareup.okhttp3/okhttp/srcs/okhttp-3.9.0-sources.jar!/" />
+      </SOURCES>
+    </library>
+    <library name="SBT: com.squareup.okio:okio:1.13.0:jar">
+      <CLASSES>
+        <root url="jar://$USER_HOME$/.ivy2/cache/com.squareup.okio/okio/jars/okio-1.13.0.jar!/" />
+      </CLASSES>
+      <JAVADOC />
+      <SOURCES>
+        <root url="jar://$USER_HOME$/.ivy2/cache/com.squareup.okio/okio/srcs/okio-1.13.0-sources.jar!/" />
       </SOURCES>
     </library>
     <library name="SBT: com.twitter:scrooge-core_2.12:4.18.0:jar">

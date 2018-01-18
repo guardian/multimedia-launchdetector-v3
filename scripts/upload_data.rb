@@ -16,15 +16,12 @@ opts = Trollop::options do
 end
 
 client = Aws::DynamoDB::Client.new(:region=>opts.region)
-puts "a"
 
 versionpart = if opts.schema>1
   "-v#{opts.schema}"
 else
   ''
 end
-
-puts versionpart
 
 table_name = "LaunchDetectorUnattachedAtoms-#{opts.environment.upcase}" + "#{versionpart}"
 

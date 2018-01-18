@@ -58,7 +58,7 @@ class PlutoLookupActor(config:Config) extends Actor with VSCommunicator{
       if(searchResult.hits>1) logger.warning(s"Multiple results returned for atom ID ${atom.id}: ${searchResult.itemIds}")
 
       if(searchResult.hits==0){
-        val errorString=s"No items found for atom ID ${atom.id}"
+        val errorString=s"No items found for atom ID ${atom.id}. Search was ${xmlDoc.toString()}"
         logUnattachedActor ! MasterNotFound(atom.id,atom.contentChangeDetails.created,atom.contentChangeDetails.lastModified, attempt=1)
         logger.warning(errorString)
         throw new RuntimeException(errorString)

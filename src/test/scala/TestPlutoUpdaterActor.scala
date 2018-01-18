@@ -1,5 +1,4 @@
 import java.time.LocalDateTime
-import java.time.LocalDateTime
 
 import actors._
 import actors.messages._
@@ -57,7 +56,7 @@ class TestPlutoUpdaterActor extends WordSpecLike with BeforeAndAfterAll with Mat
       val updateractor = system.actorOf(Props(new PlutoUpdaterActor(config)), "UpdaterWithId")
       updateractor ! DoUpdate(testAtom)
 
-      sender.expectMsg(30 seconds, SuccessfulSend)
+      sender.expectMsg(30 seconds, Right(SuccessfulSend()))
     }
 
     "ask for the item ID from the atom ID if there is no ID in the data" in {
@@ -151,6 +150,5 @@ class TestPlutoUpdaterActor extends WordSpecLike with BeforeAndAfterAll with Mat
     updateractor tell(LookupPlutoId(testAtom), sender.ref)
 
     logUnattachedProbe.expectMsg(30 seconds, MasterNotFound("xxxx", None, None, 1))
-    sender.expectMsg(30 seconds, ErrorSend("No items found for atom ID xxxx"))
   }
 }
