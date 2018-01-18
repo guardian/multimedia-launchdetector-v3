@@ -58,7 +58,7 @@ class PlutoUpdaterActor(config:Config) extends Actor with VSCommunicator{
       case Some(itemId)=> //the record already has an item id, so we don't need to look up
         request(uri"$proto://$plutoHost:$plutoPort/API/item/$itemId/metadata",xmlDoc.toString(),Map())
       case None=> //the record does not have an item id, so we must perform a search in the asset management to find it.
-        implicit val timeout:akka.util.Timeout = 15 seconds
+        implicit val timeout:akka.util.Timeout = 55.seconds
         val itemIdFuture:Future[ActorMessage] = (lookupActor ? LookupPlutoId(atom)).mapTo[ActorMessage]
         itemIdFuture.flatMap({
           case GotPlutoId(itemId)=>

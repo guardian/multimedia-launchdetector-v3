@@ -73,7 +73,7 @@ if options.secret is None:
 
 
 try:
-    request_atom_resend(options.atomid, options)
+    request_atom_resend(options.atom, options)
 except HttpError as e:
     print str(e)
     print e.content
