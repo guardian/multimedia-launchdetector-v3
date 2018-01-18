@@ -275,7 +275,7 @@ Resources:
           EOF
 
           cat > /etc/default/multimedia-launchdetector-v3 << EOF
-          JAVA_OPTS="-XX:+ExitOnOutOfMemoryError -javaagent:/usr/share/multimedia-launchdetector-v3/newrelic/newrelic.jar -Dconfig.file=/usr/share/multimedia-launchdetector-v3/conf/application.conf"
+          JAVA_OPTS="-XX:+ExitOnOutOfMemoryError -Dconfig.file=/usr/share/multimedia-launchdetector-v3/conf/application.conf"
           EOF
 
           systemctl restart multimedia-launchdetector-v3
