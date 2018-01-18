@@ -21,7 +21,7 @@ class HttpServer(forceActorUpdater: ActorRef) {
 
   //see https://groups.google.com/forum/#!topic/akka-dev/ei-0OzzgKd0
   def setup(config:Config)(implicit system:ActorSystem, mat:ActorMaterializer):Future[Http.ServerBinding] = {
-    implicit val timeout:akka.util.Timeout = 30.seconds
+    implicit val timeout:akka.util.Timeout = 60.seconds
 
     val route =
       get {
