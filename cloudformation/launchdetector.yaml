@@ -134,6 +134,7 @@ Resources:
              Effect: Allow
              Action:
              - dynamodb:DescribeTable
+             - dynamodb:DeleteItem
              - dynamodb:GetItem
              - dynamodb:GetRecords
              - dynamodb:PutItem

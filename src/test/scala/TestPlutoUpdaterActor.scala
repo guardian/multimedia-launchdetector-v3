@@ -150,6 +150,5 @@ class TestPlutoUpdaterActor extends WordSpecLike with BeforeAndAfterAll with Mat
     updateractor tell(LookupPlutoId(testAtom), sender.ref)
 
     logUnattachedProbe.expectMsg(30 seconds, MasterNotFound("xxxx", None, None, 1))
-    sender.expectMsg(30 seconds, ErrorSend("No items found for atom ID xxxx"))
   }
 }
