@@ -10,7 +10,7 @@ import requests
 from time import mktime
 from urlparse import urlparse
 from pprint import pprint
-
+import time
 
 class HttpError(StandardError):
     def __init__(self, uri, code, content, sent_headers, response_headers):

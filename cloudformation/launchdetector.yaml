@@ -68,8 +68,8 @@ Parameters:
   DeploySubnets:
     Description: Subnets to deploy into.  These should be the same as where the database lives.
     Type: List<AWS::EC2::Subnet::Id>
-  NewRelicLicense:
-    Description: License ID for New Relic
+  ElkStack:
+    Description: Name of a deployed ELK6 stack (https://github.com/guardian/elk6) to send logs to
     Type: String
 Resources:
   LoadBalancerSG:
@@ -240,36 +240,20 @@ Resources:
       SecurityGroups:
       - !Ref InstanceSecurityGroup
       UserData: !Base64
-        "Fn::Sub": |
+        "Fn::Sub":
+        - |
           #!/bin/bash -e
 
           mkdir -p /tmp/install
           aws s3 sync s3://gnm-multimedia-rr-deployables/${Stack}/${Stage}/${App} /tmp/install
+          aws s3 cp s3://gnm-multimedia-rr-deployables/filebeat-6.1.2-amd64.deb /tmp/install
+          aws s3 cp s3://gnm-multimedia-rr-deployables/metricbeat-6.1.2-amd64.deb /tmp/install
+          dpkg -i /tmp/install/filebeat-6.1.2-amd64.deb
+          dpkg -i /tmp/install/metricbeat-6.1.2-amd64.deb
 
           declare -x MOST_RECENT_PACKAGE=`ls -Frt /tmp/install/*.deb | grep "[^/]$" | tail -n 1`
           echo Going to install $MOST_RECENT_PACKAGE
           dpkg --install "${!MOST_RECENT_PACKAGE}"
-
-          aws s3 cp s3://gnm-multimedia-deployables/newrelic-java-3.43.0.zip /tmp
-          mkdir -p /usr/share/multimedia-launchdetector-v3/newrelic/logs
-          chown multimedia-launchdetector-v3 /usr/share/multimedia-launchdetector-v3/newrelic/logs
-          cd /usr/share/multimedia-launchdetector-v3
-          unzip /tmp/newrelic-java-3.43.0.zip
-
-          cat > /usr/share/multimedia-launchdetector-v3/newrelic/newrelic.yml << EOF
-          common: &default_settings
-            license_key: '${NewRelicLicense}'
-            agent_enabled: true
-            app_name: Launch Detector (${Stage})
-            log_level: info
-            log_daily: true
-            ssl: true
-
-            labels:
-              Stack: ${Stack}
-              App: ${App}
-              Stage: ${Stage}
-          EOF
 
           mkdir -p /usr/share/multimedia-launchdetector-v3/conf
           cat > /usr/share/multimedia-launchdetector-v3/conf/application.conf << EOF
@@ -299,10 +283,37 @@ Resources:
           EOF
 
           cat > /etc/default/multimedia-launchdetector-v3 << EOF
-          JAVA_OPTS="-XX:+ExitOnOutOfMemoryError -javaagent:/usr/share/multimedia-launchdetector-v3/newrelic/newrelic.jar -Dconfig.file=/usr/share/multimedia-launchdetector-v3/conf/application.conf"
+          JAVA_OPTS="-XX:+ExitOnOutOfMemoryError -Dconfig.file=/usr/share/multimedia-launchdetector-v3/conf/application.conf"
+          EOF
+
+          cat > /etc/filebeat/filebeat.yml << EOF
+          filebeat.prospectors:
+          - type: log
+            enabled: true
+            paths:
+            - /var/log/multimedia-launchdetector-v3/*.log
+            fields:
+              App: ${App}
+              Stack: ${Stack}
+              Stage: ${Stage}
+
+            multiline:
+              pattern: '^\s+'
+              negate: false
+              match: after
+
+          output.logstash:
+            hosts: ["${LogstashEndpoint}"]
           EOF
 
           systemctl restart multimedia-launchdetector-v3
+          systemctl enable multimedia-launchdetector-v3
+          systemctl enable filebeat
+          systemctl start filebeat
+        - LogstashEndpoint:
+            Fn::ImportValue:
+              !Sub "${ElkStack}-LogstashEndpoint"
+
   AutoScaleGroup:
     Type: AWS::AutoScaling::AutoScalingGroup
     Properties:
