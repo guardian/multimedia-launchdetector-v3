@@ -278,6 +278,9 @@ Resources:
             http.client.connecting-timeout="1 second"
             log-dead-letters=0
             log-dead-letters-during-shutdown=off
+            loggers = ["akka.event.slf4j.Slf4jLogger"]
+            loglevel = "DEBUG"
+            logging-filter = "akka.event.slf4j.Slf4jLoggingFilter"
           }
 
           EOF
