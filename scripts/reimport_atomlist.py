@@ -102,26 +102,9 @@ with open(options.atomlist,"r") as f:
             request_atom_resend(atomid, options)
             print "Re-send request successful"
             resync_list.append(atomid)
-            print "testing"
-            break
         except HttpError as e:
             print str(e)
             print e.content
             continue
-
-    while len(resync_list)>0:
-        for atomid in resync_list:
-            try:
-                print "---------------------"
-                print "Requesting re-sync of {0}".format(atomid)
-                request_metadata_resync(atomid,options)
-                resync_list.remove(atomid)
-            except HttpError as e:
-                print str(e)
-                print e.content
-                continue
-        if len(resync_list)>0:
-            print "Waiting 10 seconds before retrying resync"
-            time.sleep(10)
 
     print "All done"
