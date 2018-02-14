@@ -31,7 +31,6 @@ trait VSCommunicator {
       "Content-Type"->"application/xml"
     ) ++ headers
 
-    logger.info(hdr.toString())
     logger.info(s"Got headers, initiating send to $uri")
     sttp
       .put(uri)

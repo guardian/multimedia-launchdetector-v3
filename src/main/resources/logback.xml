@@ -29,7 +29,7 @@
     <logger name="c.a.s.k.c.lib.worker.Worker" level="WARN"/>
     <logger name="c.a.s.k.leases.impl.LeaseCoordinator" level="INFO"/>
 
-    <root level="INFO">
+    <root level="WARN">
         <appender-ref ref="logfile"/>
     </root>
 </configuration>

@@ -20,12 +20,6 @@ object VSSearchResponse {
     val itemIdList = (incomingXml \ "item")
       .map(_.attribute("id"))
       .flatMap(_.map(_.text))
-//    val itemIdList:Seq[String] = for {
-//      xmlNode <- incomingXml \ "item"
-//      idAttribSeq <- xmlNode.attribute("id")
-//      idAttrib <- idAttribSeq
-//      idText <- idAttrib.text
-//    } yield idText
 
     new VSSearchResponse((incomingXml \ "hits").text.toInt, itemIdList)
   }
