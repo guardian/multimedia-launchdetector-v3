@@ -8,7 +8,6 @@ version := "3.0"
 
 scalaVersion := "2.12.3"
 
-
 // https://mvnrepository.com/artifact/com.typesafe.akka/akka-testkit_2.11
 libraryDependencies += "com.typesafe.akka" %% "akka-testkit" % "2.5.6" % "test"
 libraryDependencies += "com.typesafe.akka" %% "akka-actor" % "2.5.6"
@@ -56,6 +55,9 @@ libraryDependencies ++= Seq(
 // testing
 // https://mvnrepository.com/artifact/org.mockito/mockito-all
 libraryDependencies += "org.mockito" % "mockito-all" % "2.0.2-beta" % "test"
+
+// upgrade jackson-databind to remove Deserialization of Untrusted Data vuln
+libraryDependencies += "com.fasterxml.jackson.core" % "jackson-databind" % "2.8.11.1"
 
 debianPackageDependencies := Seq("openjdk-8-jre-headless")
 serverLoading in Debian := Some(ServerLoader.Systemd)
