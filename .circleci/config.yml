@@ -1,0 +1,61 @@
+defaults: &defaults
+  working_directory: ~/guardian/multimedia-plasma-dashboard
+  shell: /bin/bash --login
+  # CircleCI 2.0 does not support environment variables that refer to each other the same way as 1.0 did.
+  # If any of these refer to each other, rewrite them so that they don't or see https://circleci.com/docs/2.0/env-vars/#interpolating-environment-variables-to-set-other-environment-variables .
+  environment:
+    CIRCLE_ARTIFACTS: /tmp/circleci-artifacts
+    CIRCLE_TEST_REPORTS: /tmp/circleci-test-results
+    SBT_OPTS: -Dfile.encoding=UTF8 -Xms512M -Xmx1024M -Xss1M -XX:+CMSClassUnloadingEnabled -XX:+UseCompressedOops
+  docker:
+  - image: andyg42/alpine-scala-build:4
+
+version: 2
+jobs:
+  scala_build_test:
+    <<: *defaults
+    # CircleCI 2.0 does not support environment variables that refer to each other the same way as 1.0 did.
+    # If any of these refer to each other, rewrite them so that they don't or see https://circleci.com/docs/2.0/env-vars/#interpolating-environment-variables-to-set-other-environment-variables .
+    steps:
+    - checkout
+    - run: mkdir -p $CIRCLE_ARTIFACTS $CIRCLE_TEST_REPORTS
+    # Restore the dependency cache
+    - restore_cache:
+        keys:
+        # This branch if available
+        - v1-dep-{{ .Branch }}-scala-
+        # Default branch if not
+        - v1-dep-master-
+        # Any branch if there are none on the default branch - this should be unnecessary if you have your default branch configured correctly
+        - v1-dep-
+    - run: echo exit | sbt test:compile
+    # Save dependency cache
+    - save_cache:
+        key: v1-dep-{{ .Branch }}-scala-{{ epoch }}
+        paths:
+        - ~/.m2
+        - ~/.ivy2
+        - ~/.bundle
+        - ~/.go_workspace
+        - ~/.gradle
+        - ~/.cache/bower
+        # These cache paths were specified in the 1.0 config
+        - ~/.sbt
+        - ~/.ivy2
+        - frontend/node_modules
+        - $HOME/.play
+    - run: echo exit | sbt test
+    - run: echo exit | sbt riffRaffUpload
+    - store_test_results:
+        path: /tmp/circleci-test-results
+    # Save artifacts
+    - store_artifacts:
+        path: /tmp/circleci-artifacts
+    - store_artifacts:
+        path: /tmp/circleci-test-results
+
+workflows:
+  version: 2
+  build_and_test:
+    jobs:
+      - scala_build_test
