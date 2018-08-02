@@ -33,17 +33,8 @@ jobs:
     - save_cache:
         key: v1-dep-{{ .Branch }}-scala-{{ epoch }}
         paths:
-        - ~/.m2
-        - ~/.ivy2
-        - ~/.bundle
-        - ~/.go_workspace
-        - ~/.gradle
-        - ~/.cache/bower
-        # These cache paths were specified in the 1.0 config
         - ~/.sbt
         - ~/.ivy2
-        - frontend/node_modules
-        - $HOME/.play
     - run: echo exit | sbt test
     - run: echo exit | sbt riffRaffUpload
     - store_test_results:

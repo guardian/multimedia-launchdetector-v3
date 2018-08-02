@@ -52,6 +52,7 @@ libraryDependencies ++= Seq(
   "org.scala-lang.modules" %% "scala-xml" % "1.0.5"
 )
 
+
 // testing
 // https://mvnrepository.com/artifact/org.mockito/mockito-all
 libraryDependencies += "org.mockito" % "mockito-all" % "2.0.2-beta" % "test"
