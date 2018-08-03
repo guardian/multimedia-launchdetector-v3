@@ -42,7 +42,7 @@ class PlutoLookupActor(config:Config) extends Actor with VSCommunicator{
         case Failure(error)=>
           logger.error(s"Unable to lookup ${atom.id} in Vidispine: $error")
           logger.error(error.getStackTraceString)
-          origSender ! ErrorSend(error.getMessage)
+          origSender ! ErrorSend(error.getMessage, -1)
       })
     case _=>logger.error(s"Received an unknown message")
   }

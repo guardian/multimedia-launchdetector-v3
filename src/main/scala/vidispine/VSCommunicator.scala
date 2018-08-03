@@ -59,10 +59,10 @@ trait VSCommunicator {
           case Left(unparseableError)=>
             val errMsg = s"Send failed: ${response.code} - $errorString"
             logger.warning(errMsg)
-            throw ErrorSend(errMsg)
+            throw ErrorSend(errMsg, response.code)
           case Right(vsError)=>
             logger.warning(vsError.toString)
-            throw ErrorSend(vsError.toString)
+            throw ErrorSend(vsError.toString, response.code)
         }
     }})
 }
