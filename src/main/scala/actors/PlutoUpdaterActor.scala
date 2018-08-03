@@ -67,14 +67,15 @@ class PlutoUpdaterActor(config:Config) extends Actor with VSCommunicator{
     val mediaContent = atom.data.asInstanceOf[AtomData.Media].media
 
     val maybeItemId = mediaContent.metadata.flatMap(_.pluto.flatMap(_.masterId))
+    logger.debug(s"got item id $maybeItemId")
     maybeItemId match {
       case Some(itemId)=> //the record already has an item id, so we don't need to look up
-        logger.info(s"Looking up from $proto://$plutoHost:$plutoPort/API/item/$itemId/metadata")
-        requestGet(uri"$proto://$plutoHost:$plutoPort/API/item/$itemId/metadata",xmlDoc.toString(),Map())
+        logger.info(s"Directly sending to $proto://$plutoHost:$plutoPort/API/item/$itemId/metadata")
+        request(uri"$proto://$plutoHost:$plutoPort/API/item/$itemId/metadata",xmlDoc.toString,Map())
       case None=> //the record does not have an item id, so we must perform a search in the asset management to find it.
         //the atom ID should be set as an external ID on the item, so we should be able to just make a call to it.
         //if not, this will return a 404
-        request(uri"$proto://$plutoHost:$plutoPort/API/item/${atom.id}/metadata",xmlDoc.toString(),Map())
+        request(uri"$proto://$plutoHost:$plutoPort/API/item/${atom.id}/metadata",xmlDoc.toString, Map())
           .recoverWith({
             //if we got a 404 from the asset management backend then we should fall back to searching
             case ErrorSend(str, code)=>
