@@ -35,7 +35,6 @@ jobs:
         paths:
         - ~/.sbt
         - ~/.ivy2
-    - run: echo exit | sbt test
     - run: echo exit | sbt riffRaffUpload
     - store_test_results:
         path: /tmp/circleci-test-results

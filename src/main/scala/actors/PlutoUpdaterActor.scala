@@ -80,6 +80,7 @@ class PlutoUpdaterActor(config:Config) extends Actor with VSCommunicator{
             //if we got a 404 from the asset management backend then we should fall back to searching
             case ErrorSend(str, code)=>
               if(code==404){
+                logger.debug(str)
                 logger.warning(s"Atom ${atom.id} had no item, or no external ID. Trying via search.")
                 updateViaLookup(atom, xmlDoc)
               } else {
