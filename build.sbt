@@ -57,11 +57,15 @@ libraryDependencies ++= Seq(
 // https://mvnrepository.com/artifact/org.mockito/mockito-all
 libraryDependencies += "org.mockito" % "mockito-all" % "2.0.2-beta" % "test"
 
+val jacksonVersion = "2.9.6"
 //update vulnerable jackson-databind
 // https://mvnrepository.com/artifact/com.fasterxml.jackson.core/jackson-databind
-libraryDependencies += "com.fasterxml.jackson.core" % "jackson-databind" % "2.9.6"
+libraryDependencies += "com.fasterxml.jackson.core" % "jackson-databind" % jacksonVersion
 // https://mvnrepository.com/artifact/com.fasterxml.jackson.core/jackson-core
-libraryDependencies += "com.fasterxml.jackson.core" % "jackson-core" % "2.9.6"
+libraryDependencies += "com.fasterxml.jackson.core" % "jackson-core" % jacksonVersion
+libraryDependencies += "com.fasterxml.jackson.dataformat" % "jackson-dataformat-cbor" % jacksonVersion
+libraryDependencies += "com.fasterxml.jackson.dataformat" % "jackson-dataformat-xml" % jacksonVersion
+
 // https://mvnrepository.com/artifact/com.google.guava/guava
 libraryDependencies += "com.google.guava" % "guava" % "25.1-jre"
 

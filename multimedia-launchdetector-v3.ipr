@@ -187,85 +187,85 @@
         <root url="jar://$USER_HOME$/.ivy2/cache/ch.qos.logback/logback-core/srcs/logback-core-1.2.3-sources.jar!/" />
       </SOURCES>
     </library>
-    <library name="sbt: com.amazonaws:amazon-kinesis-client:1.6.4:jar">
+    <library name="sbt: com.amazonaws:amazon-kinesis-client:1.9.1:jar">
       <CLASSES>
-        <root url="jar://$USER_HOME$/.ivy2/cache/com.amazonaws/amazon-kinesis-client/jars/amazon-kinesis-client-1.6.4.jar!/" />
+        <root url="jar://$USER_HOME$/.ivy2/cache/com.amazonaws/amazon-kinesis-client/jars/amazon-kinesis-client-1.9.1.jar!/" />
       </CLASSES>
       <JAVADOC />
       <SOURCES>
-        <root url="jar://$USER_HOME$/.ivy2/cache/com.amazonaws/amazon-kinesis-client/srcs/amazon-kinesis-client-1.6.4-sources.jar!/" />
+        <root url="jar://$USER_HOME$/.ivy2/cache/com.amazonaws/amazon-kinesis-client/srcs/amazon-kinesis-client-1.9.1-sources.jar!/" />
       </SOURCES>
     </library>
-    <library name="sbt: com.amazonaws:aws-java-sdk-cloudwatch:1.11.14:jar">
+    <library name="sbt: com.amazonaws:aws-java-sdk-cloudwatch:1.11.319:jar">
       <CLASSES>
-        <root url="jar://$USER_HOME$/.ivy2/cache/com.amazonaws/aws-java-sdk-cloudwatch/jars/aws-java-sdk-cloudwatch-1.11.14.jar!/" />
+        <root url="jar://$USER_HOME$/.ivy2/cache/com.amazonaws/aws-java-sdk-cloudwatch/jars/aws-java-sdk-cloudwatch-1.11.319.jar!/" />
       </CLASSES>
       <JAVADOC />
       <SOURCES>
-        <root url="jar://$USER_HOME$/.ivy2/cache/com.amazonaws/aws-java-sdk-cloudwatch/srcs/aws-java-sdk-cloudwatch-1.11.14-sources.jar!/" />
+        <root url="jar://$USER_HOME$/.ivy2/cache/com.amazonaws/aws-java-sdk-cloudwatch/srcs/aws-java-sdk-cloudwatch-1.11.319-sources.jar!/" />
       </SOURCES>
     </library>
-    <library name="sbt: com.amazonaws:aws-java-sdk-core:1.11.208:jar">
+    <library name="sbt: com.amazonaws:aws-java-sdk-core:1.11.378:jar">
       <CLASSES>
-        <root url="jar://$USER_HOME$/.ivy2/cache/com.amazonaws/aws-java-sdk-core/jars/aws-java-sdk-core-1.11.208.jar!/" />
+        <root url="jar://$USER_HOME$/.ivy2/cache/com.amazonaws/aws-java-sdk-core/jars/aws-java-sdk-core-1.11.378.jar!/" />
       </CLASSES>
       <JAVADOC />
       <SOURCES>
-        <root url="jar://$USER_HOME$/.ivy2/cache/com.amazonaws/aws-java-sdk-core/srcs/aws-java-sdk-core-1.11.208-sources.jar!/" />
+        <root url="jar://$USER_HOME$/.ivy2/cache/com.amazonaws/aws-java-sdk-core/srcs/aws-java-sdk-core-1.11.378-sources.jar!/" />
       </SOURCES>
     </library>
-    <library name="sbt: com.amazonaws:aws-java-sdk-dynamodb:1.11.208:jar">
+    <library name="sbt: com.amazonaws:aws-java-sdk-dynamodb:1.11.378:jar">
       <CLASSES>
-        <root url="jar://$USER_HOME$/.ivy2/cache/com.amazonaws/aws-java-sdk-dynamodb/jars/aws-java-sdk-dynamodb-1.11.208.jar!/" />
+        <root url="jar://$USER_HOME$/.ivy2/cache/com.amazonaws/aws-java-sdk-dynamodb/jars/aws-java-sdk-dynamodb-1.11.378.jar!/" />
       </CLASSES>
       <JAVADOC />
       <SOURCES>
-        <root url="jar://$USER_HOME$/.ivy2/cache/com.amazonaws/aws-java-sdk-dynamodb/srcs/aws-java-sdk-dynamodb-1.11.208-sources.jar!/" />
+        <root url="jar://$USER_HOME$/.ivy2/cache/com.amazonaws/aws-java-sdk-dynamodb/srcs/aws-java-sdk-dynamodb-1.11.378-sources.jar!/" />
       </SOURCES>
     </library>
-    <library name="sbt: com.amazonaws:aws-java-sdk-kinesis:1.11.14:jar">
+    <library name="sbt: com.amazonaws:aws-java-sdk-kinesis:1.11.319:jar">
       <CLASSES>
-        <root url="jar://$USER_HOME$/.ivy2/cache/com.amazonaws/aws-java-sdk-kinesis/jars/aws-java-sdk-kinesis-1.11.14.jar!/" />
+        <root url="jar://$USER_HOME$/.ivy2/cache/com.amazonaws/aws-java-sdk-kinesis/jars/aws-java-sdk-kinesis-1.11.319.jar!/" />
       </CLASSES>
       <JAVADOC />
       <SOURCES>
-        <root url="jar://$USER_HOME$/.ivy2/cache/com.amazonaws/aws-java-sdk-kinesis/srcs/aws-java-sdk-kinesis-1.11.14-sources.jar!/" />
+        <root url="jar://$USER_HOME$/.ivy2/cache/com.amazonaws/aws-java-sdk-kinesis/srcs/aws-java-sdk-kinesis-1.11.319-sources.jar!/" />
       </SOURCES>
     </library>
-    <library name="sbt: com.amazonaws:aws-java-sdk-kms:1.11.208:jar">
+    <library name="sbt: com.amazonaws:aws-java-sdk-kms:1.11.378:jar">
       <CLASSES>
-        <root url="jar://$USER_HOME$/.ivy2/cache/com.amazonaws/aws-java-sdk-kms/jars/aws-java-sdk-kms-1.11.208.jar!/" />
+        <root url="jar://$USER_HOME$/.ivy2/cache/com.amazonaws/aws-java-sdk-kms/jars/aws-java-sdk-kms-1.11.378.jar!/" />
       </CLASSES>
       <JAVADOC />
       <SOURCES>
-        <root url="jar://$USER_HOME$/.ivy2/cache/com.amazonaws/aws-java-sdk-kms/srcs/aws-java-sdk-kms-1.11.208-sources.jar!/" />
+        <root url="jar://$USER_HOME$/.ivy2/cache/com.amazonaws/aws-java-sdk-kms/srcs/aws-java-sdk-kms-1.11.378-sources.jar!/" />
       </SOURCES>
     </library>
-    <library name="sbt: com.amazonaws:aws-java-sdk-s3:1.11.208:jar">
+    <library name="sbt: com.amazonaws:aws-java-sdk-s3:1.11.378:jar">
       <CLASSES>
-        <root url="jar://$USER_HOME$/.ivy2/cache/com.amazonaws/aws-java-sdk-s3/jars/aws-java-sdk-s3-1.11.208.jar!/" />
+        <root url="jar://$USER_HOME$/.ivy2/cache/com.amazonaws/aws-java-sdk-s3/jars/aws-java-sdk-s3-1.11.378.jar!/" />
       </CLASSES>
       <JAVADOC />
       <SOURCES>
-        <root url="jar://$USER_HOME$/.ivy2/cache/com.amazonaws/aws-java-sdk-s3/srcs/aws-java-sdk-s3-1.11.208-sources.jar!/" />
+        <root url="jar://$USER_HOME$/.ivy2/cache/com.amazonaws/aws-java-sdk-s3/srcs/aws-java-sdk-s3-1.11.378-sources.jar!/" />
       </SOURCES>
     </library>
-    <library name="sbt: com.amazonaws:aws-java-sdk-sts:1.11.208:jar">
+    <library name="sbt: com.amazonaws:aws-java-sdk-sts:1.11.378:jar">
       <CLASSES>
-        <root url="jar://$USER_HOME$/.ivy2/cache/com.amazonaws/aws-java-sdk-sts/jars/aws-java-sdk-sts-1.11.208.jar!/" />
+        <root url="jar://$USER_HOME$/.ivy2/cache/com.amazonaws/aws-java-sdk-sts/jars/aws-java-sdk-sts-1.11.378.jar!/" />
       </CLASSES>
       <JAVADOC />
       <SOURCES>
-        <root url="jar://$USER_HOME$/.ivy2/cache/com.amazonaws/aws-java-sdk-sts/srcs/aws-java-sdk-sts-1.11.208-sources.jar!/" />
+        <root url="jar://$USER_HOME$/.ivy2/cache/com.amazonaws/aws-java-sdk-sts/srcs/aws-java-sdk-sts-1.11.378-sources.jar!/" />
       </SOURCES>
     </library>
-    <library name="sbt: com.amazonaws:jmespath-java:1.11.208:jar">
+    <library name="sbt: com.amazonaws:jmespath-java:1.11.378:jar">
       <CLASSES>
-        <root url="jar://$USER_HOME$/.ivy2/cache/com.amazonaws/jmespath-java/jars/jmespath-java-1.11.208.jar!/" />
+        <root url="jar://$USER_HOME$/.ivy2/cache/com.amazonaws/jmespath-java/jars/jmespath-java-1.11.378.jar!/" />
       </CLASSES>
       <JAVADOC />
       <SOURCES>
-        <root url="jar://$USER_HOME$/.ivy2/cache/com.amazonaws/jmespath-java/srcs/jmespath-java-1.11.208-sources.jar!/" />
+        <root url="jar://$USER_HOME$/.ivy2/cache/com.amazonaws/jmespath-java/srcs/jmespath-java-1.11.378-sources.jar!/" />
       </SOURCES>
     </library>
     <library name="sbt: com.chuusai:shapeless_2.12:2.3.2:jar">
@@ -629,13 +629,13 @@
         <root url="jar://$USER_HOME$/.ivy2/cache/com.typesafe/ssl-config-core_2.12/srcs/ssl-config-core_2.12-0.2.2-sources.jar!/" />
       </SOURCES>
     </library>
-    <library name="sbt: commons-codec:commons-codec:1.9:jar">
+    <library name="sbt: commons-codec:commons-codec:1.10:jar">
       <CLASSES>
-        <root url="jar://$USER_HOME$/.ivy2/cache/commons-codec/commons-codec/jars/commons-codec-1.9.jar!/" />
+        <root url="jar://$USER_HOME$/.ivy2/cache/commons-codec/commons-codec/jars/commons-codec-1.10.jar!/" />
       </CLASSES>
       <JAVADOC />
       <SOURCES>
-        <root url="jar://$USER_HOME$/.ivy2/cache/commons-codec/commons-codec/srcs/commons-codec-1.9-sources.jar!/" />
+        <root url="jar://$USER_HOME$/.ivy2/cache/commons-codec/commons-codec/srcs/commons-codec-1.10-sources.jar!/" />
       </SOURCES>
     </library>
     <library name="sbt: commons-lang:commons-lang:2.6:jar">
@@ -726,22 +726,22 @@
         <root url="jar://$USER_HOME$/.ivy2/cache/org.apache.commons/commons-lang3/srcs/commons-lang3-3.1-sources.jar!/" />
       </SOURCES>
     </library>
-    <library name="sbt: org.apache.httpcomponents:httpclient:4.5.2:jar">
+    <library name="sbt: org.apache.httpcomponents:httpclient:4.5.5:jar">
       <CLASSES>
-        <root url="jar://$USER_HOME$/.ivy2/cache/org.apache.httpcomponents/httpclient/jars/httpclient-4.5.2.jar!/" />
+        <root url="jar://$USER_HOME$/.ivy2/cache/org.apache.httpcomponents/httpclient/jars/httpclient-4.5.5.jar!/" />
       </CLASSES>
       <JAVADOC />
       <SOURCES>
-        <root url="jar://$USER_HOME$/.ivy2/cache/org.apache.httpcomponents/httpclient/srcs/httpclient-4.5.2-sources.jar!/" />
+        <root url="jar://$USER_HOME$/.ivy2/cache/org.apache.httpcomponents/httpclient/srcs/httpclient-4.5.5-sources.jar!/" />
       </SOURCES>
     </library>
-    <library name="sbt: org.apache.httpcomponents:httpcore:4.4.4:jar">
+    <library name="sbt: org.apache.httpcomponents:httpcore:4.4.9:jar">
       <CLASSES>
-        <root url="jar://$USER_HOME$/.ivy2/cache/org.apache.httpcomponents/httpcore/jars/httpcore-4.4.4.jar!/" />
+        <root url="jar://$USER_HOME$/.ivy2/cache/org.apache.httpcomponents/httpcore/jars/httpcore-4.4.9.jar!/" />
       </CLASSES>
       <JAVADOC />
       <SOURCES>
-        <root url="jar://$USER_HOME$/.ivy2/cache/org.apache.httpcomponents/httpcore/srcs/httpcore-4.4.4-sources.jar!/" />
+        <root url="jar://$USER_HOME$/.ivy2/cache/org.apache.httpcomponents/httpcore/srcs/httpcore-4.4.9-sources.jar!/" />
       </SOURCES>
     </library>
     <library name="sbt: org.apache.thrift:libthrift:0.9.1:jar">
