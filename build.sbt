@@ -8,7 +8,6 @@ version := "3.0"
 
 scalaVersion := "2.12.3"
 
-
 // https://mvnrepository.com/artifact/com.typesafe.akka/akka-testkit_2.11
 libraryDependencies += "com.typesafe.akka" %% "akka-testkit" % "2.5.6" % "test"
 libraryDependencies += "com.typesafe.akka" %% "akka-actor" % "2.5.6"
@@ -19,9 +18,9 @@ libraryDependencies += "com.typesafe.akka" %% "akka-http" % "10.0.10"
 
 //AWS
 libraryDependencies ++= Seq(
-  "com.amazonaws" % "aws-java-sdk-sts" % "1.11.208" exclude("commons-logging","commons-logging"),
-  "com.amazonaws" % "aws-java-sdk-dynamodb" % "1.11.208" exclude("commons-logging","commons-logging"),
-  "com.amazonaws" % "amazon-kinesis-client" % "1.6.4" exclude("commons-logging","commons-logging"),
+  "com.amazonaws" % "aws-java-sdk-sts" % "1.11.378" exclude("commons-logging","commons-logging"),
+  "com.amazonaws" % "aws-java-sdk-dynamodb" % "1.11.378" exclude("commons-logging","commons-logging"),
+  "com.amazonaws" % "amazon-kinesis-client" % "1.9.1" exclude("commons-logging","commons-logging"),
   "com.gu" %% "scanamo" % "1.0.0-M2" exclude("commons-logging","commons-logging")
 )
 
@@ -53,9 +52,22 @@ libraryDependencies ++= Seq(
   "org.scala-lang.modules" %% "scala-xml" % "1.0.5"
 )
 
+
 // testing
 // https://mvnrepository.com/artifact/org.mockito/mockito-all
 libraryDependencies += "org.mockito" % "mockito-all" % "2.0.2-beta" % "test"
+
+val jacksonVersion = "2.9.6"
+//update vulnerable jackson-databind
+// https://mvnrepository.com/artifact/com.fasterxml.jackson.core/jackson-databind
+libraryDependencies += "com.fasterxml.jackson.core" % "jackson-databind" % jacksonVersion
+// https://mvnrepository.com/artifact/com.fasterxml.jackson.core/jackson-core
+libraryDependencies += "com.fasterxml.jackson.core" % "jackson-core" % jacksonVersion
+libraryDependencies += "com.fasterxml.jackson.dataformat" % "jackson-dataformat-cbor" % jacksonVersion
+libraryDependencies += "com.fasterxml.jackson.dataformat" % "jackson-dataformat-xml" % jacksonVersion
+
+// https://mvnrepository.com/artifact/com.google.guava/guava
+libraryDependencies += "com.google.guava" % "guava" % "25.1-jre"
 
 debianPackageDependencies := Seq("openjdk-8-jre-headless")
 serverLoading in Debian := Some(ServerLoader.Systemd)
