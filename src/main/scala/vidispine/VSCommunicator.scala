@@ -40,6 +40,21 @@ trait VSCommunicator {
       .send()
   }
 
+  private def sendGet(uri:Uri, headers:Map[String,String]):Future[Response[Source[ByteString, Any]]] = {
+    val hdr = Map(
+      "Accept"->"application/xml",
+      "Authorization"->s"Basic $authString",
+      "Content-Type"->"application/xml"
+    ) ++ headers
+
+    logger.info(s"Got headers, initiating send to $uri")
+    sttp
+      .get(uri)
+      .headers(hdr)
+      .response(asStream[Source[ByteString, Any]])
+      .send()
+  }
+
   private def consumeSource(source:Source[ByteString,Any])(implicit logger:DiagnosticLoggingAdapter, materializer: akka.stream.Materializer, ec: ExecutionContext):Future[String] = {
     logger.info("Consuming returned body")
     val sink = Sink.reduce((acc:ByteString, unit:ByteString)=>acc.concat(unit))
@@ -59,10 +74,29 @@ trait VSCommunicator {
           case Left(unparseableError)=>
             val errMsg = s"Send failed: ${response.code} - $errorString"
             logger.warning(errMsg)
-            throw ErrorSend(errMsg)
+            throw ErrorSend(errMsg, response.code)
           case Right(vsError)=>
             logger.warning(vsError.toString)
-            throw ErrorSend(vsError.toString)
+            throw ErrorSend(vsError.toString, response.code)
+        }
+    }})
+
+  def requestGet(uri:Uri, headers:Map[String,String])
+                (implicit logger:DiagnosticLoggingAdapter, materializer: akka.stream.Materializer,ec: ExecutionContext):
+  Future[String] = sendGet(uri, headers).flatMap({ response=>
+    response.body match {
+      case Right(source)=>
+        logger.info("Send succeeded")
+        consumeSource(source)
+      case Left(errorString)=>
+        VSError.fromXml(errorString) match {
+          case Left(unparseableError)=>
+            val errMsg = s"Send failed: ${response.code} - $errorString"
+            logger.warning(errMsg)
+            throw ErrorSend(errMsg, response.code)
+          case Right(vsError)=>
+            logger.warning(vsError.toString)
+            throw ErrorSend(vsError.toString, response.code)
         }
     }})
 }

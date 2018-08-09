@@ -9,9 +9,11 @@ import com.gu.contentatom.thrift.atom.media._
 import com.typesafe.config.{ConfigFactory, ConfigValueFactory}
 import org.scalatest.{BeforeAndAfterAll, Matchers, WordSpecLike}
 import akka.http.scaladsl.model._
-import org.scalatest.OneInstancePerTest
+import org.scalatest.{OneInstancePerTest, Sequential}
 
 import scala.concurrent.duration._
+
+import scala.concurrent.ExecutionContext.Implicits.global
 
 class TestPlutoUpdaterActor extends WordSpecLike with BeforeAndAfterAll with Matchers with OneInstancePerTest
 {
@@ -21,7 +23,7 @@ class TestPlutoUpdaterActor extends WordSpecLike with BeforeAndAfterAll with Mat
   override def afterAll(): Unit = TestKit.shutdownActorSystem(system)
 
   "actors.PlutoUpdaterActor" must {
-    "make an update request" in {
+    "make an update request to the atom ID" in {
       val atomMetadata: Metadata = Metadata(tags = Some(Seq("tom","dick","harry")),
         categoryId = Some("xxxCategoryIdxxxx"),
         license = Some("Ridiculously restrictive"),
@@ -29,7 +31,7 @@ class TestPlutoUpdaterActor extends WordSpecLike with BeforeAndAfterAll with Mat
         channelId = Some("xxxChannelIdxxx"),
         privacyStatus = Some(PrivacyStatus.Public),
         expiryDate = Some(1508252652),
-        pluto = Some(PlutoData(commissionId = Some("VX-123"), projectId = Some("VX-456"), masterId = Some("VX-789")))
+        pluto = Some(PlutoData(commissionId = Some("VX-123"), projectId = Some("VX-456"), masterId = None))
       )
 
       val ytAsset: Asset = Asset(assetType = AssetType.Video,
@@ -49,7 +51,7 @@ class TestPlutoUpdaterActor extends WordSpecLike with BeforeAndAfterAll with Mat
       val testAtom = Atom("fakeAtomId", AtomType.Media, Seq("no-label"), "<p>default html</p>", ad,
         changeDetails, title = Some("atom title"))
 
-      MockServer.handleRequest(HttpResponse(StatusCodes.OK),HttpRequest(method = HttpMethods.PUT,uri="http://localhost:8089/API/item/VX-789/metadata"),8089)
+      val mockServer = MockServer.handleRequest(HttpResponse(StatusCodes.OK),HttpRequest(method = HttpMethods.PUT,uri="http://localhost:8089/API/item/fakeAtomId/metadata"),8089)
       val sender = TestProbe("ProbeNoId")
       implicit val senderRef = sender.ref
 
@@ -57,9 +59,10 @@ class TestPlutoUpdaterActor extends WordSpecLike with BeforeAndAfterAll with Mat
       updateractor ! DoUpdate(testAtom)
 
       sender.expectMsg(30 seconds, Right(SuccessfulSend()))
+      mockServer.flatMap(_.unbind())
     }
 
-    "ask for the item ID from the atom ID if there is no ID in the data" in {
+    "ask for the item ID from the atom ID if there is no ID in the data and no external ID is present" in {
       val atomMetadata: Metadata = Metadata(tags = Some(Seq("tom","dick","harry")),
         categoryId = Some("xxxCategoryIdxxxx"),
         license = Some("Ridiculously restrictive"),
@@ -92,6 +95,9 @@ class TestPlutoUpdaterActor extends WordSpecLike with BeforeAndAfterAll with Mat
       val updateractor = system.actorOf(Props(new PlutoUpdaterActor(config){
         override protected val lookupActor:ActorRef=mockLookup.ref
       }), "UpdaterNoId")
+
+
+      MockServer.handleRequest(HttpResponse(StatusCodes.NotFound),HttpRequest(method=HttpMethods.GET,uri="http://localhost:8089/API/item/fakeAtomId/metadata"),8089)
 
       updateractor tell(DoUpdate(testAtom), sender.ref)
       mockLookup.expectMsg(LookupPlutoId(testAtom))

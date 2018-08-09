@@ -55,11 +55,11 @@ class ForceUpdateActor(config:Config) extends Actor with CapiCommunicator {
                   })
             case None =>
               logger.error(s"Atom $atomId is valid but not a media atom")
-              originalSender ! Left(ErrorSend(s"Atom $atomId is valid but not a media atom"))
+              originalSender ! Left(ErrorSend(s"Atom $atomId is valid but not a media atom", -1))
           }
         case Failure(error)=>
           logger.error(s"Atom $atomId could not be loaded: $error")
-          originalSender ! Left(ErrorSend(s"Atom $atomId could not be loaded: $error"))
+          originalSender ! Left(ErrorSend(s"Atom $atomId could not be loaded: $error", -1))
       })
     case _=>
       logger.warning("ForceUpdateActor received an unexpected message")

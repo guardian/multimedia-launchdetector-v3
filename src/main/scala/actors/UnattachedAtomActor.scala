@@ -43,7 +43,7 @@ class UnattachedAtomActor(config:Config) extends Actor {
               logger.error(s"Unable to record missing item: $error")
               if(attempt>=maxRetries){
                 logger.error(s"Not able to record after $maxRetries attempts, giving up.")
-                origSender ! ErrorSend(s"Not able to record after $maxRetries attempts, giving up.")
+                origSender ! ErrorSend(s"Not able to record after $maxRetries attempts, giving up.", -1)
               } else {
                 //retry after a short delay
                 Thread.sleep(2000)
@@ -56,7 +56,7 @@ class UnattachedAtomActor(config:Config) extends Actor {
         }
         case Failure(error)=>
           logger.error(s"Could not output to dynamo: ${error.toString}")
-          origSender ! ErrorSend(error.toString)
+          origSender ! ErrorSend(error.toString, -1)
       })
     case MasterNowAttached(atomId)=>
       val origSender = sender()
@@ -64,7 +64,7 @@ class UnattachedAtomActor(config:Config) extends Actor {
         case Success(deleteItemResult)=>origSender ! SuccessfulSend
         case Failure(error)=>
           logger.error(error.toString)
-          origSender ! ErrorSend(error.toString)
+          origSender ! ErrorSend(error.toString,-1)
       })
     case _=>
       logger.error("Unrecognised message sent to UnattachedAtomActor")

@@ -85,7 +85,7 @@ class TestForceUpdateActor extends WordSpecLike with BeforeAndAfterAll with Matc
 
     fakeUpdater.expectNoMessage(15.seconds)
     val result = Await.result(resultFuture, 15.seconds)
-    result should be (Left(ErrorSend("Atom some-atom-id is valid but not a media atom")))
+    result should be (Left(ErrorSend("Atom some-atom-id is valid but not a media atom", -1)))
   }
 
   "report an error if CAPI returns an error" in {
@@ -103,6 +103,6 @@ class TestForceUpdateActor extends WordSpecLike with BeforeAndAfterAll with Matc
 
     fakeUpdater.expectNoMessage(15.seconds)
     val result = Await.result(resultFuture, 15.seconds)
-    result should be(Left(ErrorSend("Atom some-atom-id could not be loaded: java.lang.Exception: something broke")))
+    result should be(Left(ErrorSend("Atom some-atom-id could not be loaded: java.lang.Exception: something broke", -1)))
   }
 }
