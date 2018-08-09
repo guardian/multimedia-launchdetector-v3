@@ -18,7 +18,7 @@
     <logger name="MainClass$" level="INFO"/>
     <logger name="Healthcheck$" level="INFO"/>
     <logger name="ShutdownHandler" level="INFO"/>
-    <logger name="actors.PlutoUpdaterActor" level="DEBUG"/>
+    <logger name="actors.PlutoUpdaterActor" level="INFO"/>
 
     <!-- library loggers -->
     <logger name="akka.event.EventStream" level="INFO"/>
