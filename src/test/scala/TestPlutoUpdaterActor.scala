@@ -52,7 +52,6 @@ class TestPlutoUpdaterActor extends WordSpecLike with BeforeAndAfterAll with Mat
         changeDetails, title = Some("atom title"))
 
       val mockServer = MockServer.handleRequest(HttpResponse(StatusCodes.OK),HttpRequest(method = HttpMethods.PUT,uri="http://localhost:8089/API/item/fakeAtomId/metadata"),8089)
-      //val mockServer = MockServer.handleRequest(HttpResponse(StatusCodes.OK),HttpRequest(method=HttpMethods.GET,uri="http://localhost:8089/API/item/fakeAtomId/metadata"),8089)
       val sender = TestProbe("ProbeNoId")
       implicit val senderRef = sender.ref
 
