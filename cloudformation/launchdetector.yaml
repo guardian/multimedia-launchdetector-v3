@@ -301,8 +301,8 @@ Resources:
               Stage: ${Stage}
 
             multiline:
-              pattern: '^\s+'
-              negate: false
+              pattern: '^\d+'
+              negate: true
               match: after
 
           output.logstash:
