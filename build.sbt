@@ -31,14 +31,13 @@ libraryDependencies ++= Seq(
   // https://mvnrepository.com/artifact/ch.qos.logback/logback-core
   "ch.qos.logback" % "logback-core" % "1.2.3",
   "org.slf4j" % "jcl-over-slf4j" % "1.7.25"
-
 )
 
 // https://mvnrepository.com/artifact/org.scalatest/scalatest_2.12
 libraryDependencies += "org.scalatest" %% "scalatest" % "3.0.4" % "test"
 
 //content api
-libraryDependencies += "com.gu" %% "content-api-firehose-client" % "0.11"
+libraryDependencies += "com.gu" %% "content-api-firehose-client" % "0.12"
 libraryDependencies += "com.gu" %% "content-api-client" % "11.43"
 
 libraryDependencies += "com.typesafe" % "config" % "1.3.1"
@@ -68,6 +67,8 @@ libraryDependencies += "com.fasterxml.jackson.dataformat" % "jackson-dataformat-
 
 // https://mvnrepository.com/artifact/com.google.guava/guava
 libraryDependencies += "com.google.guava" % "guava" % "25.1-jre"
+
+dependencyOverrides += "org.apache.thrift" % "libthrift" % "0.9.1"
 
 debianPackageDependencies := Seq("openjdk-8-jre-headless")
 serverLoading in Debian := Some(ServerLoader.Systemd)
