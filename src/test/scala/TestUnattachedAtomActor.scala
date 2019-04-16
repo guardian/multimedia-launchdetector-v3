@@ -14,7 +14,7 @@ class TestUnattachedAtomActor extends TestKit(ActorSystem("TestUnattachedAtomAct
     .withValue("region",ConfigValueFactory.fromAnyRef("eu-west-1"))
 
   override def beforeAll(): Unit = {
-    if(sys.env.get("DISABLE_DYNAMOTESTS").isEmpty)
+    if(sys.props.get("DISABLE_DYNAMOTESTS").isEmpty)
       createTestTable(getClient(config.getString("region")), config.getString("unattached_atoms_table"))
   }
 
@@ -26,7 +26,7 @@ class TestUnattachedAtomActor extends TestKit(ActorSystem("TestUnattachedAtomAct
 
   "UnattachedAtomActor" must {
     "log an entry to dynamo" in {
-      if(sys.env.get("DISABLE_DYNAMOTESTS").isEmpty) {
+      if(sys.props.get("DISABLE_DYNAMOTESTS").isEmpty) {
         val actor = system.actorOf(Props(new actors.UnattachedAtomActor(config)), "UnattachedAtomActor")
 
         val createdChange = ChangeRecord(1509631574000L, Some(User(email = "bob@smith.com")))
