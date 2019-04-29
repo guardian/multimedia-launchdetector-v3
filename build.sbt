@@ -68,8 +68,6 @@ libraryDependencies += "com.fasterxml.jackson.dataformat" % "jackson-dataformat-
 // https://mvnrepository.com/artifact/com.google.guava/guava
 libraryDependencies += "com.google.guava" % "guava" % "25.1-jre"
 
-dependencyOverrides += "org.apache.thrift" % "libthrift" % "0.9.1"
-
 debianPackageDependencies := Seq("openjdk-8-jre-headless")
 serverLoading in Debian := Some(ServerLoader.Systemd)
 serviceAutostart in Debian := false
