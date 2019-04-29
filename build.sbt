@@ -6,7 +6,7 @@ name := "multimedia-launchdetector-v3"
 
 version := "3.0"
 
-scalaVersion := "2.12.3"
+scalaVersion := "2.12.8"
 
 // https://mvnrepository.com/artifact/com.typesafe.akka/akka-testkit_2.11
 libraryDependencies += "com.typesafe.akka" %% "akka-testkit" % "2.5.6" % "test"
@@ -37,8 +37,8 @@ libraryDependencies ++= Seq(
 libraryDependencies += "org.scalatest" %% "scalatest" % "3.0.4" % "test"
 
 //content api
-libraryDependencies += "com.gu" %% "content-api-firehose-client" % "0.12"
-libraryDependencies += "com.gu" %% "content-api-client" % "11.43"
+libraryDependencies += "com.gu" %% "content-api-firehose-client" % "0.2.0"
+libraryDependencies += "com.gu" %% "content-api-client-default" % "14.2"
 
 libraryDependencies += "com.typesafe" % "config" % "1.3.1"
 
