@@ -55,7 +55,7 @@ class TestForceUpdateActor extends WordSpecLike with BeforeAndAfterAll with Matc
 
       val forceUpdateActor = system.actorOf(Props(new ForceUpdateActor(config){
         override protected val updater:ActorRef = fakeUpdater.ref
-        override protected def client:GuardianContentClient = null
+        override protected lazy val client:GuardianContentClient = null
 
         override def lookupAtom(atomId: String, atomType: String): Future[Option[Atom]] = Future(Some(testAtom))
       }), "ForceUpdater")
@@ -77,7 +77,7 @@ class TestForceUpdateActor extends WordSpecLike with BeforeAndAfterAll with Matc
 
     val forceUpdateActor = system.actorOf(Props(new ForceUpdateActor(config){
       override protected val updater:ActorRef = fakeUpdater.ref
-      override protected def client:GuardianContentClient = null
+      override protected lazy val client:GuardianContentClient = null
 
       override def lookupAtom(atomId: String, atomType: String): Future[Option[Atom]] = Future(None)
     }), "ForceUpdater")
@@ -96,7 +96,7 @@ class TestForceUpdateActor extends WordSpecLike with BeforeAndAfterAll with Matc
 
     val forceUpdateActor = system.actorOf(Props(new ForceUpdateActor(config){
       override protected val updater:ActorRef = fakeUpdater.ref
-      override protected def client:GuardianContentClient = null
+      override protected lazy val client:GuardianContentClient = null
 
       override def lookupAtom(atomId: String, atomType: String): Future[Option[Atom]] = Future(throw new Exception("something broke"))
     }), "ForceUpdater")
