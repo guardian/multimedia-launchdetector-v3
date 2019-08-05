@@ -71,6 +71,10 @@ Parameters:
   ElkStack:
     Description: Name of a deployed ELK6 stack (https://github.com/guardian/elk6) to send logs to
     Type: String
+  CapiApiKey:
+    Description: API key for Content API. Contact the Content API team to get or update this.
+    Type: String
+    NoEcho: true
 Resources:
   LoadBalancerSG:
     Type: AWS::EC2::SecurityGroup
@@ -245,7 +249,8 @@ Resources:
           #!/bin/bash -e
 
           mkdir -p /tmp/install
-          aws s3 sync s3://gnm-multimedia-rr-deployables/${Stack}/${Stage}/${App} /tmp/install
+
+          aws s3 cp s3://gnm-multimedia-rr-deployables/${Stack}/${Stage}/${App}/multimedia-launchdetector-v3_3.0_all.deb /tmp/install
           aws s3 cp s3://gnm-multimedia-rr-deployables/filebeat-6.1.2-amd64.deb /tmp/install
           aws s3 cp s3://gnm-multimedia-rr-deployables/metricbeat-6.1.2-amd64.deb /tmp/install
           dpkg -i /tmp/install/filebeat-6.1.2-amd64.deb
@@ -260,6 +265,7 @@ Resources:
           capi_stream_name = "${CapiStreamName}"
           capi_role_name = "${CapiRole}"
           capi_mode = "${Mode}"
+          capi_api_key = "${CapiApiKey}"
 
           app_name = "${App}"
           app_stack = "${Stack}"

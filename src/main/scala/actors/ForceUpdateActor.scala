@@ -28,7 +28,7 @@ class ForceUpdateActor(config:Config) extends Actor with CapiCommunicator {
   protected val updater:ActorRef = context.actorOf(Props(new PlutoUpdaterActor(config)))
   protected val unattachedAtomActor:ActorRef = context.actorOf(Props(new UnattachedAtomActor(config)))
 
-  final val client: GuardianContentClient = new GuardianContentClient(config.getString("capi_api_key"))
+  protected def client: GuardianContentClient = new GuardianContentClient(config.getString("capi_api_key"))
 
   override def receive: Receive = {
     case LookupAtomId(atomId)=>
