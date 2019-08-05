@@ -6,6 +6,7 @@ import akka.stream.ActorMaterializer
 import akka.stream.scaladsl.Source
 import akka.util.ByteString
 import akka.pattern.ask
+import com.gu.contentapi.client.GuardianContentClient
 import com.softwaremill.sttp.SttpBackend
 import com.softwaremill.sttp.akkahttp.AkkaHttpBackend
 import capi.CapiCommunicator
@@ -26,6 +27,8 @@ class ForceUpdateActor(config:Config) extends Actor with CapiCommunicator {
 
   protected val updater:ActorRef = context.actorOf(Props(new PlutoUpdaterActor(config)))
   protected val unattachedAtomActor:ActorRef = context.actorOf(Props(new UnattachedAtomActor(config)))
+
+  protected lazy val client: GuardianContentClient = new GuardianContentClient(config.getString("capi_api_key"))
 
   override def receive: Receive = {
     case LookupAtomId(atomId)=>

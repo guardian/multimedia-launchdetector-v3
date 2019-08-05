@@ -2,17 +2,16 @@ import actors._
 import actors.messages._
 import akka.actor.{ActorRef, ActorSystem, Props}
 import akka.pattern.ask
-import akka.testkit.{ImplicitSender, TestActors, TestKit, TestProbe}
+import akka.testkit.{TestKit, TestProbe}
 import com.gu.contentatom.thrift.{Atom, AtomData, AtomType, ContentChangeDetails}
 import com.gu.contentatom.thrift.atom.media._
 import com.typesafe.config.{ConfigFactory, ConfigValueFactory}
 import org.scalatest.{BeforeAndAfterAll, Matchers, OneInstancePerTest, WordSpecLike}
-import akka.http.scaladsl.model._
+import com.gu.contentapi.client.GuardianContentClient
 
 import scala.concurrent.{Await, Future}
 import scala.concurrent.duration._
 import scala.concurrent.ExecutionContext.Implicits.global
-import scala.util.{Failure, Success}
 
 class TestForceUpdateActor extends WordSpecLike with BeforeAndAfterAll with Matchers with OneInstancePerTest {
   private implicit val system:ActorSystem = ActorSystem("TestPlutoUpdaterActor")
@@ -56,6 +55,7 @@ class TestForceUpdateActor extends WordSpecLike with BeforeAndAfterAll with Matc
 
       val forceUpdateActor = system.actorOf(Props(new ForceUpdateActor(config){
         override protected val updater:ActorRef = fakeUpdater.ref
+        override protected lazy val client:GuardianContentClient = null
 
         override def lookupAtom(atomId: String, atomType: String): Future[Option[Atom]] = Future(Some(testAtom))
       }), "ForceUpdater")
@@ -77,6 +77,7 @@ class TestForceUpdateActor extends WordSpecLike with BeforeAndAfterAll with Matc
 
     val forceUpdateActor = system.actorOf(Props(new ForceUpdateActor(config){
       override protected val updater:ActorRef = fakeUpdater.ref
+      override protected lazy val client:GuardianContentClient = null
 
       override def lookupAtom(atomId: String, atomType: String): Future[Option[Atom]] = Future(None)
     }), "ForceUpdater")
@@ -95,6 +96,7 @@ class TestForceUpdateActor extends WordSpecLike with BeforeAndAfterAll with Matc
 
     val forceUpdateActor = system.actorOf(Props(new ForceUpdateActor(config){
       override protected val updater:ActorRef = fakeUpdater.ref
+      override protected lazy val client:GuardianContentClient = null
 
       override def lookupAtom(atomId: String, atomType: String): Future[Option[Atom]] = Future(throw new Exception("something broke"))
     }), "ForceUpdater")
