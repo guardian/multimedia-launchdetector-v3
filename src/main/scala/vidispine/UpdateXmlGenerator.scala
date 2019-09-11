@@ -73,7 +73,7 @@ object UpdateXmlGenerator {
         <field><name>gnm_master_dailymotion_title</name> <value>{mediaContent.title}</value></field>
         {fieldOption("gnm_master_dailymotion_description",mediaContent.description).getOrElse("")}
         {fieldOptionIterable("gnm_master_dailymotion_keywords",mediaContent.metadata.flatMap(_.tags)).getOrElse("")}
-        {fieldOption("gnm_master_dailymotion_dailymotioncategory", mediaContent.metadata.flatMap(_.categoryId)).getOrElse("")}
+        <field><name>gnm_master_dailymotion_dailymotioncategory</name><value>news</value></field>
         {fieldOption("gnm_master_dailymotion_remove",mediaContent.metadata.flatMap(_.expiryDate).map({time=>asIsoTimeString(time/1000)})).getOrElse()}
         <field><name>gnm_master_dailymotion_holdingimage_16x9</name><value/></field>
       </list>
