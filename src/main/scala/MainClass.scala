@@ -2,7 +2,7 @@ import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 import actors.{ForceUpdateActor, PlutoUpdaterActor}
 import akka.actor.{ActorRef, ActorSystem, Props}
-
+import akka.http.scaladsl.{ConnectionContext, Http, HttpsConnectionContext}
 import akka.stream.ActorMaterializer
 import com.amazonaws.auth.{AWSCredentialsProviderChain, InstanceProfileCredentialsProvider, STSAssumeRoleSessionCredentialsProvider}
 import com.amazonaws.auth.profile.ProfileCredentialsProvider
@@ -10,7 +10,10 @@ import com.gu.contentapi.firehose.ContentApiFirehoseConsumer
 import com.gu.contentapi.firehose.kinesis.KinesisStreamReaderConfig
 import com.softwaremill.sttp.akkahttp.AkkaHttpBackend
 import com.typesafe.config._
+import helpers.TrustStoreHelper
 import sun.misc.Signal
+
+import scala.util.{Failure, Success}
 
 
 object MainClass {
@@ -24,6 +27,20 @@ object MainClass {
     implicit val executionContext = system.dispatcher
 
     logger.info("Starting up")
+
+    if(sys.props.contains("launchdetector.extraKeyStores")){
+      val keyStoreName = sys.props.get("launchdetector.extraKeyStores").get
+      logger.info(s"Loading extra certs from $keyStoreName")
+      TrustStoreHelper.setupTS(keyStoreName.split(",")) match {
+        case Success(sslContext)=>
+          val https: HttpsConnectionContext = ConnectionContext.https(sslContext)
+          Http().setDefaultClientHttpsContext(https)
+        case Failure(err)=>
+          logger.error(s"Could not set up https certs: ", err)
+          system.terminate()
+          throw err
+      }
+    }
 
     val config = ConfigFactory.defaultApplication()
 
