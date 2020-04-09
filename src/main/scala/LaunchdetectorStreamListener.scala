@@ -48,7 +48,6 @@ class LaunchdetectorStreamListener(updater:ActorRef) extends StreamListener {
     val typeString = atom.atomType match {
       case AtomType.Media => "Media"
       case AtomType.Timeline => "Timeline"
-      case AtomType.Storyquestions => "Story Questions"
       case AtomType.Review => "Review"
       case AtomType.Recipe => "Recipe"
       case AtomType.Quiz => "Quiz"

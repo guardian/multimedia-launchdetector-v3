@@ -277,6 +277,7 @@ Resources:
           pluto_port = ${PlutoVidispinePort}
           pluto_user = ${PlutoUser}
           pluto_pass = ${PlutoPass}
+          pluto_proto = "https"
 
           unattached_atoms_table = ${UnattachedAtomsTable}
 

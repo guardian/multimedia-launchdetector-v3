@@ -26,7 +26,7 @@ class PlutoLookupActor(config:Config) extends Actor with VSCommunicator{
   private val plutoPort=config.getInt("pluto_port")
   override protected val plutoUser=config.getString("pluto_user")
   override protected val plutoPass=config.getString("pluto_pass")
-  private val proto="http"
+  private val proto=config.getString("pluto_proto")
 
   protected val logUnattachedActor:ActorRef = context.actorOf(Props(new UnattachedAtomActor(config)))
 

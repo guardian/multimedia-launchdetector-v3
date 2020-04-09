@@ -6,22 +6,22 @@ name := "multimedia-launchdetector-v3"
 
 version := "3.0"
 
-scalaVersion := "2.12.8"
+scalaVersion := "2.12.11"
 
 // https://mvnrepository.com/artifact/com.typesafe.akka/akka-testkit_2.11
-libraryDependencies += "com.typesafe.akka" %% "akka-testkit" % "2.5.6" % "test"
-libraryDependencies += "com.typesafe.akka" %% "akka-actor" % "2.5.6"
-libraryDependencies += "com.typesafe.akka" %% "akka-stream" % "2.5.6"
-libraryDependencies += "com.typesafe.akka" %% "akka-slf4j" % "2.5.6"
+libraryDependencies += "com.typesafe.akka" %% "akka-testkit" % "2.5.31" % "test"
+libraryDependencies += "com.typesafe.akka" %% "akka-actor" % "2.5.31"
+libraryDependencies += "com.typesafe.akka" %% "akka-stream" % "2.5.31"
+libraryDependencies += "com.typesafe.akka" %% "akka-slf4j" % "2.5.31"
 // https://mvnrepository.com/artifact/com.typesafe.akka/akka-http_2.12
-libraryDependencies += "com.typesafe.akka" %% "akka-http" % "10.0.10"
+libraryDependencies += "com.typesafe.akka" %% "akka-http" % "10.0.15"
 
 //AWS
 libraryDependencies ++= Seq(
-  "com.amazonaws" % "aws-java-sdk-sts" % "1.11.378" exclude("commons-logging","commons-logging"),
-  "com.amazonaws" % "aws-java-sdk-dynamodb" % "1.11.378" exclude("commons-logging","commons-logging"),
-  "com.amazonaws" % "amazon-kinesis-client" % "1.9.1" exclude("commons-logging","commons-logging"),
-  "com.gu" %% "scanamo" % "1.0.0-M2" exclude("commons-logging","commons-logging")
+  "com.amazonaws" % "aws-java-sdk-sts" % "1.11.761" exclude("commons-logging","commons-logging"),
+  "com.amazonaws" % "aws-java-sdk-dynamodb" % "1.11.761" exclude("commons-logging","commons-logging"),
+  "com.amazonaws" % "amazon-kinesis-client" % "1.10.0" exclude("commons-logging","commons-logging"),
+  "com.gu" %% "scanamo" % "1.0.0-M8" exclude("commons-logging","commons-logging")
 )
 
 //logging
@@ -38,17 +38,17 @@ libraryDependencies += "org.scalatest" %% "scalatest" % "3.0.4" % "test"
 
 //content api
 libraryDependencies += "com.gu" %% "content-api-firehose-client" % "0.2.0"
-libraryDependencies += "com.gu" %% "content-api-client-default" % "14.2"
+libraryDependencies += "com.gu" %% "content-api-client-default" % "17.1"
 
-libraryDependencies += "com.typesafe" % "config" % "1.3.1"
+libraryDependencies += "com.typesafe" % "config" % "1.4.0"
 
 // http
 libraryDependencies ++= Seq(
-  "com.softwaremill.sttp" %% "core" % "0.0.20",
-  "com.softwaremill.sttp" %% "async-http-client-backend-future" % "0.0.20",
+  "com.softwaremill.sttp" %% "core" % "1.7.2",
+  "com.softwaremill.sttp" %% "async-http-client-backend-future" % "1.7.2",
   "org.asynchttpclient" % "async-http-client" % "2.0.37",
-  "com.softwaremill.sttp" %% "akka-http-backend" % "0.0.20",
-  "org.scala-lang.modules" %% "scala-xml" % "1.0.5"
+  "com.softwaremill.sttp" %% "akka-http-backend" % "1.7.2",
+  "org.scala-lang.modules" %% "scala-xml" % "1.3.0"
 )
 
 
@@ -56,7 +56,7 @@ libraryDependencies ++= Seq(
 // https://mvnrepository.com/artifact/org.mockito/mockito-all
 libraryDependencies += "org.mockito" % "mockito-all" % "2.0.2-beta" % "test"
 
-val jacksonVersion = "2.9.6"
+val jacksonVersion = "2.9.10.3"
 //update vulnerable jackson-databind
 // https://mvnrepository.com/artifact/com.fasterxml.jackson.core/jackson-databind
 libraryDependencies += "com.fasterxml.jackson.core" % "jackson-databind" % jacksonVersion
@@ -66,7 +66,7 @@ libraryDependencies += "com.fasterxml.jackson.dataformat" % "jackson-dataformat-
 libraryDependencies += "com.fasterxml.jackson.dataformat" % "jackson-dataformat-xml" % jacksonVersion
 
 // https://mvnrepository.com/artifact/com.google.guava/guava
-libraryDependencies += "com.google.guava" % "guava" % "25.1-jre"
+libraryDependencies += "com.google.guava" % "guava" % "28.2-jre"
 
 debianPackageDependencies := Seq("openjdk-8-jre-headless")
 serverLoading in Debian := Some(ServerLoader.Systemd)
