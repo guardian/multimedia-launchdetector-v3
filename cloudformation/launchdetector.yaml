@@ -134,18 +134,18 @@ Resources:
             Effect: Allow
             Action: "dynamodb:*"
             Resource: !Sub arn:aws:dynamodb:${AWS::Region}:${AWS::AccountId}:table/${CapiStreamName}_${App}-${Mode}-${Stage}
-        - PolicyName: KinesisLogging
-          PolicyDocument:
-            Version: 2012-10-17
-            Statement:
-              Effect: Allow
-              Action:
-                - kinesis:Describe*
-                - kinesis:List*
-                - kinesis:PutRecord
-                - kinesis:PutRecords
-              Resource:
-                - !Sub arn:aws:kinesis:${AWS::Region}:${AWS::AccountId}:stream/${LoggingStreamName}
+      - PolicyName: KinesisLogging
+        PolicyDocument:
+          Version: 2012-10-17
+          Statement:
+            Effect: Allow
+            Action:
+              - kinesis:Describe*
+              - kinesis:List*
+              - kinesis:PutRecord
+              - kinesis:PutRecords
+            Resource:
+              - !Sub arn:aws:kinesis:${AWS::Region}:${AWS::AccountId}:stream/${LoggingStreamName}
       - PolicyName: DataAccess
         PolicyDocument:
            Version: 2012-10-17
@@ -304,7 +304,54 @@ Resources:
           EOF
 
           cat > /etc/default/multimedia-launchdetector-v3 << EOF
-          JAVA_OPTS="-XX:+ExitOnOutOfMemoryError -Dconfig.file=/usr/share/multimedia-launchdetector-v3/conf/application.conf"
+          JAVA_OPTS="-XX:+ExitOnOutOfMemoryError -Dconfig.file=/usr/share/multimedia-launchdetector-v3/conf/application.conf -Dlogback.configurationFile=/usr/share/multimedia-launchdetector-v3/conf/logback.xml"
+          EOF
+
+          echo Deploying production logging config...
+          echo --------------------------------------
+
+          cat > /usr/share/multimedia-launchdetector-v3/conf/logback-deployment.xml << EOF
+          <?xml version="1.0" encoding="UTF-8"?>
+          <configuration>
+
+          <appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
+          <encoder>
+          <Pattern>%d{HH:mm:ss.SSS} [%thread] %-5level %logger{36} - %msg%n</Pattern>
+          </encoder>
+          </appender>
+
+          <appender name="KINESIS" class="com.gu.logback.appender.kinesis.KinesisAppender">
+          <bufferSize>1000</bufferSize>
+          <threadCount>20</threadCount>
+          <region>{region}</region>
+          <maxRetries>3</maxRetries>
+          <shutdownTimeout>30</shutdownTimeout>
+          <streamName>{logging-stream}</streamName>
+          <encoding>UTF-8</encoding>
+          <layout class="ch.qos.logback.classic.PatternLayout">
+          <pattern>%date{"yyyy-MM-dd'T'HH:mm:ss,SSSXXX"} |{app}|{stage}| [%level] from %logger in %thread - %message%n%xException</pattern>
+          </layout>
+          </appender>
+
+          <!-- our loggers -->
+          <logger name="MainClass$" level="INFO"/>
+          <logger name="Healthcheck$" level="INFO"/>
+          <logger name="ShutdownHandler" level="INFO"/>
+          <logger name="actors.PlutoUpdaterActor" level="INFO"/>
+
+          <!-- library loggers -->
+          <logger name="akka.event.EventStream" level="INFO"/>
+          <logger name="com.amazonaws.metrics.AwsSdkMetrics" level="INFO"/>
+          <logger name="akka.io.TcpListener" level="INFO"/>
+          <logger name="c.a.s.k.c.proxies.KinesisProxy" level="WARN"/>
+          <logger name="c.a.s.k.leases.impl.LeaseCoordinator" level="INFO"/>
+          <logger name="c.a.s.k.c.lib.worker.Worker" level="WARN"/>
+          <logger name="c.a.s.k.leases.impl.LeaseCoordinator" level="INFO"/>
+          <root level="WARN">
+            <appender-ref ref="STDOUT"/>
+            <appender-ref ref="KINESIS"/>
+          </root>
+          </configuration>
           EOF
 
           cat /usr/share/multimedia-launchdetector-v3/conf/logback-deployment.xml | sed s/{region}/${AWS::Region}/ > /tmp/logback.xml

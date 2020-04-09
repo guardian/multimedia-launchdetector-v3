@@ -7,13 +7,6 @@
         </encoder>
     </appender>
 
-    <appender name="logfile" class="ch.qos.logback.core.FileAppender">
-        <file>/var/log/multimedia-launchdetector-v3/launchdetector.log</file>
-        <encoder>
-            <Pattern>%d{HH:mm:ss.SSS} [%thread] %-5level %logger{36} - %msg%n</Pattern>
-        </encoder>
-    </appender>
-
     <appender name="KINESIS" class="com.gu.logback.appender.kinesis.KinesisAppender">
         <bufferSize>1000</bufferSize>
         <threadCount>20</threadCount>
