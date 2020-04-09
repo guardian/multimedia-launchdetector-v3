@@ -57,7 +57,7 @@ libraryDependencies ++= Seq(
 // https://mvnrepository.com/artifact/org.mockito/mockito-all
 libraryDependencies += "org.mockito" % "mockito-all" % "2.0.2-beta" % "test"
 
-val jacksonVersion = "2.9.10.3"
+val jacksonVersion = "2.9.10"
 //update vulnerable jackson-databind
 // https://mvnrepository.com/artifact/com.fasterxml.jackson.core/jackson-databind
 libraryDependencies += "com.fasterxml.jackson.core" % "jackson-databind" % jacksonVersion
