@@ -16,6 +16,9 @@ Parameters:
       - preview
       - live
     Description: Which CAPI mode to listen to
+  LoggingStreamName:
+    Description: Name of a Kinesis stream to send logs to
+    Type: String
   PlutoHost:
     Type: String
     Description: Host or loadbalancer where pluto can be reached
@@ -131,6 +134,18 @@ Resources:
             Effect: Allow
             Action: "dynamodb:*"
             Resource: !Sub arn:aws:dynamodb:${AWS::Region}:${AWS::AccountId}:table/${CapiStreamName}_${App}-${Mode}-${Stage}
+        - PolicyName: KinesisLogging
+          PolicyDocument:
+            Version: 2012-10-17
+            Statement:
+              Effect: Allow
+              Action:
+                - kinesis:Describe*
+                - kinesis:List*
+                - kinesis:PutRecord
+                - kinesis:PutRecords
+              Resource:
+                - !Sub arn:aws:kinesis:${AWS::Region}:${AWS::AccountId}:stream/${LoggingStreamName}
       - PolicyName: DataAccess
         PolicyDocument:
            Version: 2012-10-17
@@ -251,10 +266,6 @@ Resources:
           mkdir -p /tmp/install
 
           aws s3 cp s3://gnm-multimedia-rr-deployables/${Stack}/${Stage}/${App}/multimedia-launchdetector-v3_3.0_all.deb /tmp/install
-          aws s3 cp s3://gnm-multimedia-rr-deployables/filebeat-6.1.2-amd64.deb /tmp/install
-          aws s3 cp s3://gnm-multimedia-rr-deployables/metricbeat-6.1.2-amd64.deb /tmp/install
-          dpkg -i /tmp/install/filebeat-6.1.2-amd64.deb
-          dpkg -i /tmp/install/metricbeat-6.1.2-amd64.deb
 
           declare -x MOST_RECENT_PACKAGE=`ls -Frt /tmp/install/*.deb | grep "[^/]$" | tail -n 1`
           echo Going to install $MOST_RECENT_PACKAGE
@@ -296,30 +307,15 @@ Resources:
           JAVA_OPTS="-XX:+ExitOnOutOfMemoryError -Dconfig.file=/usr/share/multimedia-launchdetector-v3/conf/application.conf"
           EOF
 
-          cat > /etc/filebeat/filebeat.yml << EOF
-          filebeat.prospectors:
-          - type: log
-            enabled: true
-            paths:
-            - /var/log/multimedia-launchdetector-v3/*.log
-            fields:
-              App: ${App}
-              Stack: ${Stack}
-              Stage: ${Stage}
-
-            multiline:
-              pattern: '^\d+'
-              negate: true
-              match: after
-
-          output.logstash:
-            hosts: ["${LogstashEndpoint}"]
-          EOF
+          cat /usr/share/multimedia-launchdetector-v3/conf/logback-deployment.xml | sed s/{region}/${AWS::Region}/ > /tmp/logback.xml
+          cat /tmp/logback.xml | sed s/{app}/${App}/ > /tmp/logback.xml.2
+          cat /tmp/logback.xml.2 | sed s/{stack}/${Stack}/ > /tmp/logback.xml.3
+          cat /tmp/logback.xml.3 | sed s/{stage}/${Stage}/ > /tmp/logback.xml.4
+          cat /tmp/logback.xml.4 | sed s/{logging-stream}/${LoggingStreamName}/ > /usr/share/multimedia-launchdetector-v3/conf/logback.xml
 
           systemctl restart multimedia-launchdetector-v3
           systemctl enable multimedia-launchdetector-v3
-          systemctl enable filebeat
-          systemctl start filebeat
+
         - LogstashEndpoint:
             Fn::ImportValue:
               !Sub "${ElkStack}-LogstashEndpoint"

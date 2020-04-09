@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration>
+
+    <appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
+        <encoder>
+            <Pattern>%d{HH:mm:ss.SSS} [%thread] %-5level %logger{36} - %msg%n</Pattern>
+        </encoder>
+    </appender>
+
+    <appender name="logfile" class="ch.qos.logback.core.FileAppender">
+        <file>/var/log/multimedia-launchdetector-v3/launchdetector.log</file>
+        <encoder>
+            <Pattern>%d{HH:mm:ss.SSS} [%thread] %-5level %logger{36} - %msg%n</Pattern>
+        </encoder>
+    </appender>
+
+    <appender name="KINESIS" class="com.gu.logback.appender.kinesis.KinesisAppender">
+        <bufferSize>1000</bufferSize>
+        <threadCount>20</threadCount>
+        <region>{region}</region>
+        <maxRetries>3</maxRetries>
+        <shutdownTimeout>30</shutdownTimeout>
+        <streamName>{logging-stream}</streamName>
+        <encoding>UTF-8</encoding>
+        <layout class="ch.qos.logback.classic.PatternLayout">
+            <pattern>%date{"yyyy-MM-dd'T'HH:mm:ss,SSSXXX"} |{app}|{stage}| [%level] from %logger in %thread - %message%n%xException</pattern>
+        </layout>
+    </appender>
+
+    <!-- our loggers -->
+    <logger name="MainClass$" level="INFO"/>
+    <logger name="Healthcheck$" level="INFO"/>
+    <logger name="ShutdownHandler" level="INFO"/>
+    <logger name="actors.PlutoUpdaterActor" level="INFO"/>
+
+    <!-- library loggers -->
+    <logger name="akka.event.EventStream" level="INFO"/>
+    <logger name="com.amazonaws.metrics.AwsSdkMetrics" level="INFO"/>
+    <logger name="akka.io.TcpListener" level="INFO"/>
+    <logger name="c.a.s.k.c.proxies.KinesisProxy" level="WARN"/>
+    <logger name="c.a.s.k.leases.impl.LeaseCoordinator" level="INFO"/>
+    <logger name="c.a.s.k.c.lib.worker.Worker" level="WARN"/>
+    <logger name="c.a.s.k.leases.impl.LeaseCoordinator" level="INFO"/>
+    <root level="WARN">
+        <appender-ref ref="logfile"/>
+    </root>
+</configuration>
