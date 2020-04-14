@@ -33,6 +33,9 @@ Parameters:
     Type: String
     Description: Password to communicate
     NoEcho: true
+  ExtraDNS:
+    Type: String
+    Description: Allows an extra DNS server address to be inserted into the resolv.conf file
   App:
     Type: String
     Description: Application identifier for RiffRaff
@@ -71,9 +74,6 @@ Parameters:
   DeploySubnets:
     Description: Subnets to deploy into.  These should be the same as where the database lives.
     Type: List<AWS::EC2::Subnet::Id>
-  ElkStack:
-    Description: Name of a deployed ELK6 stack (https://github.com/guardian/elk6) to send logs to
-    Type: String
   CapiApiKey:
     Description: API key for Content API. Contact the Content API team to get or update this.
     Type: String
@@ -259,8 +259,7 @@ Resources:
       SecurityGroups:
       - !Ref InstanceSecurityGroup
       UserData: !Base64
-        "Fn::Sub":
-        - |
+        Fn::Sub: |
           #!/bin/bash -e
 
           mkdir -p /tmp/install
@@ -271,6 +270,18 @@ Resources:
           echo Going to install $MOST_RECENT_PACKAGE
           dpkg --install "${!MOST_RECENT_PACKAGE}"
 
+          echo --------------------------------------
+          echo Updating DNS resolvers...
+          echo --------------------------------------
+          if [ "${ExtraDNS}" != "" ]; then
+            mv /etc/resolv.conf /etc/resolv.conf.old
+            echo "nameserver ${ExtraDNS}" > /etc/resolv.conf
+            cat /etc/resolv.conf.old >> /etc/resolv.conf
+          fi
+
+          echo --------------------------------------
+          echo Deploying production app config...
+          echo --------------------------------------
           mkdir -p /usr/share/multimedia-launchdetector-v3/conf
           cat > /usr/share/multimedia-launchdetector-v3/conf/application.conf << EOF
           capi_stream_name = "${CapiStreamName}"
@@ -309,6 +320,7 @@ Resources:
           JAVA_OPTS="-XX:+ExitOnOutOfMemoryError -Dconfig.file=/usr/share/multimedia-launchdetector-v3/conf/application.conf -Dlogback.configurationFile=/usr/share/multimedia-launchdetector-v3/conf/logback.xml -Dlaunchdetector.extraKeyStores=/usr/share/multimedia-launchdetector-v3/conf/gnm_certs.jks"
           EOF
 
+          echo --------------------------------------
           echo Deploying production logging config...
           echo --------------------------------------
 
@@ -364,10 +376,6 @@ Resources:
 
           systemctl restart multimedia-launchdetector-v3
           systemctl enable multimedia-launchdetector-v3
-
-        - LogstashEndpoint:
-            Fn::ImportValue:
-              !Sub "${ElkStack}-LogstashEndpoint"
 
   AutoScaleGroup:
     Type: AWS::AutoScaling::AutoScalingGroup
