@@ -16,6 +16,9 @@ Parameters:
       - preview
       - live
     Description: Which CAPI mode to listen to
+  LoggingStreamName:
+    Description: Name of a Kinesis stream to send logs to
+    Type: String
   PlutoHost:
     Type: String
     Description: Host or loadbalancer where pluto can be reached
@@ -30,6 +33,9 @@ Parameters:
     Type: String
     Description: Password to communicate
     NoEcho: true
+  ExtraDNS:
+    Type: String
+    Description: Allows an extra DNS server address to be inserted into the resolv.conf file
   App:
     Type: String
     Description: Application identifier for RiffRaff
@@ -68,9 +74,6 @@ Parameters:
   DeploySubnets:
     Description: Subnets to deploy into.  These should be the same as where the database lives.
     Type: List<AWS::EC2::Subnet::Id>
-  ElkStack:
-    Description: Name of a deployed ELK6 stack (https://github.com/guardian/elk6) to send logs to
-    Type: String
   CapiApiKey:
     Description: API key for Content API. Contact the Content API team to get or update this.
     Type: String
@@ -131,6 +134,18 @@ Resources:
             Effect: Allow
             Action: "dynamodb:*"
             Resource: !Sub arn:aws:dynamodb:${AWS::Region}:${AWS::AccountId}:table/${CapiStreamName}_${App}-${Mode}-${Stage}
+      - PolicyName: KinesisLogging
+        PolicyDocument:
+          Version: 2012-10-17
+          Statement:
+            Effect: Allow
+            Action:
+              - kinesis:Describe*
+              - kinesis:List*
+              - kinesis:PutRecord
+              - kinesis:PutRecords
+            Resource:
+              - !Sub arn:aws:kinesis:${AWS::Region}:${AWS::AccountId}:stream/${LoggingStreamName}
       - PolicyName: DataAccess
         PolicyDocument:
            Version: 2012-10-17
@@ -244,22 +259,29 @@ Resources:
       SecurityGroups:
       - !Ref InstanceSecurityGroup
       UserData: !Base64
-        "Fn::Sub":
-        - |
+        Fn::Sub: |
           #!/bin/bash -e
 
           mkdir -p /tmp/install
 
           aws s3 cp s3://gnm-multimedia-rr-deployables/${Stack}/${Stage}/${App}/multimedia-launchdetector-v3_3.0_all.deb /tmp/install
-          aws s3 cp s3://gnm-multimedia-rr-deployables/filebeat-6.1.2-amd64.deb /tmp/install
-          aws s3 cp s3://gnm-multimedia-rr-deployables/metricbeat-6.1.2-amd64.deb /tmp/install
-          dpkg -i /tmp/install/filebeat-6.1.2-amd64.deb
-          dpkg -i /tmp/install/metricbeat-6.1.2-amd64.deb
 
           declare -x MOST_RECENT_PACKAGE=`ls -Frt /tmp/install/*.deb | grep "[^/]$" | tail -n 1`
           echo Going to install $MOST_RECENT_PACKAGE
           dpkg --install "${!MOST_RECENT_PACKAGE}"
 
+          echo --------------------------------------
+          echo Updating DNS resolvers...
+          echo --------------------------------------
+          if [ "${ExtraDNS}" != "" ]; then
+            mv /etc/resolv.conf /etc/resolv.conf.old
+            echo "nameserver ${ExtraDNS}" > /etc/resolv.conf
+            cat /etc/resolv.conf.old >> /etc/resolv.conf
+          fi
+
+          echo --------------------------------------
+          echo Deploying production app config...
+          echo --------------------------------------
           mkdir -p /usr/share/multimedia-launchdetector-v3/conf
           cat > /usr/share/multimedia-launchdetector-v3/conf/application.conf << EOF
           capi_stream_name = "${CapiStreamName}"
@@ -277,6 +299,7 @@ Resources:
           pluto_port = ${PlutoVidispinePort}
           pluto_user = ${PlutoUser}
           pluto_pass = ${PlutoPass}
+          pluto_proto = "https"
 
           unattached_atoms_table = ${UnattachedAtomsTable}
 
@@ -291,37 +314,68 @@ Resources:
 
           EOF
 
+          aws s3 cp s3://gnm-multimedia-rr-deployables/gnm_certs.jks /usr/share/multimedia-launchdetector-v3/conf/gnm_certs.jks
+
           cat > /etc/default/multimedia-launchdetector-v3 << EOF
-          JAVA_OPTS="-XX:+ExitOnOutOfMemoryError -Dconfig.file=/usr/share/multimedia-launchdetector-v3/conf/application.conf"
+          JAVA_OPTS="-XX:+ExitOnOutOfMemoryError -Dconfig.file=/usr/share/multimedia-launchdetector-v3/conf/application.conf -Dlogback.configurationFile=/usr/share/multimedia-launchdetector-v3/conf/logback.xml -Dlaunchdetector.extraKeyStores=/usr/share/multimedia-launchdetector-v3/conf/gnm_certs.jks"
           EOF
 
-          cat > /etc/filebeat/filebeat.yml << EOF
-          filebeat.prospectors:
-          - type: log
-            enabled: true
-            paths:
-            - /var/log/multimedia-launchdetector-v3/*.log
-            fields:
-              App: ${App}
-              Stack: ${Stack}
-              Stage: ${Stage}
+          echo --------------------------------------
+          echo Deploying production logging config...
+          echo --------------------------------------
 
-            multiline:
-              pattern: '^\d+'
-              negate: true
-              match: after
+          cat > /usr/share/multimedia-launchdetector-v3/conf/logback-deployment.xml << EOF
+          <?xml version="1.0" encoding="UTF-8"?>
+          <configuration>
 
-          output.logstash:
-            hosts: ["${LogstashEndpoint}"]
+          <appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
+          <encoder>
+          <Pattern>%d{HH:mm:ss.SSS} [%thread] %-5level %logger{36} - %msg%n</Pattern>
+          </encoder>
+          </appender>
+
+          <appender name="KINESIS" class="com.gu.logback.appender.kinesis.KinesisAppender">
+          <bufferSize>1000</bufferSize>
+          <threadCount>20</threadCount>
+          <region>{region}</region>
+          <maxRetries>3</maxRetries>
+          <shutdownTimeout>30</shutdownTimeout>
+          <streamName>{logging-stream}</streamName>
+          <encoding>UTF-8</encoding>
+          <layout class="ch.qos.logback.classic.PatternLayout">
+          <pattern>%date{"yyyy-MM-dd'T'HH:mm:ss,SSSXXX"} |{app}|{stage}| [%level] from %logger in %thread - %message%n%xException</pattern>
+          </layout>
+          </appender>
+
+          <!-- our loggers -->
+          <logger name="MainClass$" level="INFO"/>
+          <logger name="Healthcheck$" level="INFO"/>
+          <logger name="ShutdownHandler" level="INFO"/>
+          <logger name="actors.PlutoUpdaterActor" level="INFO"/>
+
+          <!-- library loggers -->
+          <logger name="akka.event.EventStream" level="INFO"/>
+          <logger name="com.amazonaws.metrics.AwsSdkMetrics" level="INFO"/>
+          <logger name="akka.io.TcpListener" level="INFO"/>
+          <logger name="c.a.s.k.c.proxies.KinesisProxy" level="WARN"/>
+          <logger name="c.a.s.k.leases.impl.LeaseCoordinator" level="INFO"/>
+          <logger name="c.a.s.k.c.lib.worker.Worker" level="WARN"/>
+          <logger name="c.a.s.k.leases.impl.LeaseCoordinator" level="INFO"/>
+          <root level="WARN">
+            <appender-ref ref="STDOUT"/>
+            <appender-ref ref="KINESIS"/>
+          </root>
+          </configuration>
           EOF
+
+          cat /usr/share/multimedia-launchdetector-v3/conf/logback-deployment.xml | sed s/{region}/${AWS::Region}/ > /tmp/logback.xml
+          cat /tmp/logback.xml | sed s/{app}/${App}/ > /tmp/logback.xml.2
+          cat /tmp/logback.xml.2 | sed s/{stack}/${Stack}/ > /tmp/logback.xml.3
+          cat /tmp/logback.xml.3 | sed s/{stage}/${Stage}/ > /tmp/logback.xml.4
+          cat /tmp/logback.xml.4 | sed s/{logging-stream}/${LoggingStreamName}/ > /usr/share/multimedia-launchdetector-v3/conf/logback.xml
 
           systemctl restart multimedia-launchdetector-v3
           systemctl enable multimedia-launchdetector-v3
-          systemctl enable filebeat
-          systemctl start filebeat
-        - LogstashEndpoint:
-            Fn::ImportValue:
-              !Sub "${ElkStack}-LogstashEndpoint"
 
   AutoScaleGroup:
     Type: AWS::AutoScaling::AutoScalingGroup
