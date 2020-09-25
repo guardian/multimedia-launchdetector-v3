@@ -16,6 +16,7 @@ object UpdateJsonGenerator {
     val msg = UpdateMessage (
       title = mediaContent.title,
       category = mediaContent.category.name,
+      atomId = atom.id,
       duration = mediaContent.duration,
       source = mediaContent.source,
       description = mediaContent.description,

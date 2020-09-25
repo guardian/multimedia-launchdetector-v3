@@ -33,6 +33,7 @@ object InlineChangeRecord {
 case class UpdateMessage(
                         title: String,
                         category: String,
+                        atomId: String,
                         duration: Option[Long],
                         source: Option[String],
                         description: Option[String],
