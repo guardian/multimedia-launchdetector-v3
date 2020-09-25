@@ -8,7 +8,7 @@ import actors.messages._
 import akka.actor.{Actor, ActorRef, Props}
 import akka.event.{DiagnosticLoggingAdapter, Logging}
 import akka.pattern.ask
-import akka.stream.ActorMaterializer
+import akka.stream.{ActorMaterializer, Materializer}
 import akka.stream.scaladsl.{Keep, Sink, Source}
 import akka.util.ByteString
 import com.gu.contentatom.thrift.{Atom, AtomData}
@@ -19,14 +19,13 @@ import com.typesafe.config.Config
 import scala.concurrent.Future
 import scala.concurrent.duration._
 import scala.util.{Failure, Success, Try}
-
 import scala.xml.Elem
 
 class PlutoUpdaterActor(config:Config) extends Actor with DeliverablesCommunicator{
   implicit val sttpBackend:SttpBackend[Future,Source[ByteString, Any]] = AkkaHttpBackend.usingActorSystem(context.system)
   import context.dispatcher
 
-  implicit val materializer = ActorMaterializer()
+  implicit val materializer = Materializer(context.system)
 
   override protected val sharedSecret = config.getString("pluto_shared_secret")
   private val plutoHost=config.getString("pluto_host")
@@ -42,10 +41,10 @@ class PlutoUpdaterActor(config:Config) extends Actor with DeliverablesCommunicat
       doUpdate(atom).onComplete({
         case Success(serverResponse)=>
           logger.info(s"Successfully updated vidispine: $serverResponse")
-          origSender ! Right(SuccessfulSend())
+          origSender ! SuccessfulSend()
         case Failure(error)=>
           logger.error(s"Unable to update vidispine: $error")
-          origSender ! Left(ErrorSend(error.getMessage, -1))
+          origSender ! ErrorSend(error.getMessage, -1)
       })
     case _=>logger.error(s"Received an unknown message")
   }
