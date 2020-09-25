@@ -33,7 +33,6 @@ trait DeliverablesCommunicator {
          |$checksumString
          |$method""".stripMargin
 
-    println(s"stringToSign is $stringToSign")
     val signature = new HmacUtils(HmacAlgorithms.HMAC_SHA_384, sharedSecret).hmacHex(stringToSign)
     localLogger.debug(s"signature is $signature")
 
@@ -50,13 +49,9 @@ trait DeliverablesCommunicator {
 
     localLogger.info("Got xml body")
     val source:Source[ByteString, Any] = Source.single(bs)
-    val hdr = Map(
-      "Accept"->"application/xml",
-      "Content-Type"->"application/json",
+    val hdr = headers ++ makeAuthHeaders(uri, "application/json", xmlString, "POST")
 
-    ) ++ headers
-
-    localLogger.info(s"Got headers, initiating send to $uri")
+    localLogger.info(s"Initiating send to $uri with headers $hdr")
     sttp
       .post(uri)
       .streamBody(source)
