@@ -40,7 +40,7 @@ class PlutoUpdaterActor(config:Config) extends Actor with DeliverablesCommunicat
       val origSender = sender() //need to make a copy of this so when it's called from another thread in map() below it is passed correctly.
       doUpdate(atom).onComplete({
         case Success(serverResponse)=>
-          logger.info(s"Successfully updated vidispine: $serverResponse")
+          logger.info(s"Successfully updated pluto-deliverables: $serverResponse")
           origSender ! SuccessfulSend()
         case Failure(error)=>
           logger.error(s"Unable to update vidispine: $error")

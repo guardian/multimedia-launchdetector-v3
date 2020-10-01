@@ -34,7 +34,7 @@ trait DeliverablesCommunicator {
          |$method""".stripMargin
 
     val signature = new HmacUtils(HmacAlgorithms.HMAC_SHA_384, sharedSecret).hmacHex(stringToSign)
-    localLogger.debug(s"signature is $signature")
+    localLogger.debug(s"stringToSign is $stringToSign, signature is $signature")
 
     Map(
       "Authorization"->s"HMAC $signature",
@@ -59,21 +59,6 @@ trait DeliverablesCommunicator {
       .response(asStream[Source[ByteString, Any]])
       .send()
   }
-
-//  private def sendGet(uri:Uri, headers:Map[String,String]):Future[Response[Source[ByteString, Any]]] = {
-//    val hdr = Map(
-//      "Accept"->"application/xml",
-//      "Authorization"->s"Basic $authString",
-//      "Content-Type"->"application/xml"
-//    ) ++ headers
-//
-//    localLogger.info(s"Got headers, initiating send to $uri")
-//    sttp
-//      .get(uri)
-//      .headers(hdr)
-//      .response(asStream[Source[ByteString, Any]])
-//      .send()
-//  }
 
   private def consumeSource(source:Source[ByteString,Any])(implicit localLogger:DiagnosticLoggingAdapter, materializer: akka.stream.Materializer, ec: ExecutionContext):Future[String] = {
     localLogger.info("Consuming returned body")
