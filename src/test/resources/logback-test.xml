@@ -11,7 +11,7 @@
     <logger name="MainClass$" level="DEBUG"/>
     <logger name="Healthcheck$" level="DEBUG"/>
     <logger name="ShutdownHandler" level="DEBUG"/>
-
+    <logger name="PlutoNextGen" level="DEBUG"/>
     <logger name="actors.PlutoUpdaterActor" level="DEBUG"/>
 
     <!-- library loggers -->

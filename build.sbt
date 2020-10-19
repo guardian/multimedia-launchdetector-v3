@@ -6,21 +6,21 @@ name := "multimedia-launchdetector-v3"
 
 version := "3.0"
 
-scalaVersion := "2.12.11"
+scalaVersion := "2.12.12"
 
-// https://mvnrepository.com/artifact/com.typesafe.akka/akka-testkit_2.11
-libraryDependencies += "com.typesafe.akka" %% "akka-testkit" % "2.5.31" % "test"
-libraryDependencies += "com.typesafe.akka" %% "akka-actor" % "2.5.31"
-libraryDependencies += "com.typesafe.akka" %% "akka-stream" % "2.5.31"
-libraryDependencies += "com.typesafe.akka" %% "akka-slf4j" % "2.5.31"
-// https://mvnrepository.com/artifact/com.typesafe.akka/akka-http_2.12
-libraryDependencies += "com.typesafe.akka" %% "akka-http" % "10.0.15"
+val akkaVersion = "2.6.9"
+libraryDependencies += "com.typesafe.akka" %% "akka-testkit" % akkaVersion % "test"
+libraryDependencies += "com.typesafe.akka" %% "akka-actor" % akkaVersion
+libraryDependencies += "com.typesafe.akka" %% "akka-stream" % akkaVersion
+libraryDependencies += "com.typesafe.akka" %% "akka-slf4j" % akkaVersion
+libraryDependencies += "com.typesafe.akka" %% "akka-http" % "10.2.0"
 
 //AWS
+val awsVersion = "1.11.867"
 libraryDependencies ++= Seq(
-  "com.amazonaws" % "aws-java-sdk-sts" % "1.11.761" exclude("commons-logging","commons-logging"),
-  "com.amazonaws" % "aws-java-sdk-dynamodb" % "1.11.761" exclude("commons-logging","commons-logging"),
-  "com.amazonaws" % "amazon-kinesis-client" % "1.10.0" exclude("commons-logging","commons-logging"),
+  "com.amazonaws" % "aws-java-sdk-sts" % awsVersion exclude("commons-logging","commons-logging"),
+  "com.amazonaws" % "aws-java-sdk-dynamodb" % awsVersion exclude("commons-logging","commons-logging"),
+  "com.amazonaws" % "amazon-kinesis-client" % "1.14.0" exclude("commons-logging","commons-logging"),
   "com.gu" %% "scanamo" % "1.0.0-M8" exclude("commons-logging","commons-logging")
 )
 
@@ -52,6 +52,12 @@ libraryDependencies ++= Seq(
   "org.scala-lang.modules" %% "scala-xml" % "1.3.0"
 )
 
+//json
+val circeVersion = "0.13.0"
+libraryDependencies ++= Seq(
+  "io.circe" %% "circe-core" % circeVersion,
+  "io.circe" %% "circe-generic" % circeVersion,
+)
 
 // testing
 // https://mvnrepository.com/artifact/org.mockito/mockito-all

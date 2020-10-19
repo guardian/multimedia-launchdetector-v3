@@ -22,16 +22,9 @@ Parameters:
   PlutoHost:
     Type: String
     Description: Host or loadbalancer where pluto can be reached
-  PlutoVidispinePort:
-    Type: Number
-    Description: Port on which Vidispine can be reached for Pluto
-    Default: 8080
-  PlutoUser:
+  PlutoSharedSecret:
     Type: String
-    Description: Username to use to communicate
-  PlutoPass:
-    Type: String
-    Description: Password to communicate
+    Description: Shared secret to match the configured one in pluto-deliverables
     NoEcho: true
   ExtraDNS:
     Type: String
@@ -296,9 +289,8 @@ Resources:
           region = "${AWS::Region}"
 
           pluto_host = "${PlutoHost}"
-          pluto_port = ${PlutoVidispinePort}
-          pluto_user = ${PlutoUser}
-          pluto_pass = ${PlutoPass}
+          pluto_port = 443
+          pluto_shared_secret = "${PlutoSharedSecret}"
           pluto_proto = "https"
 
           unattached_atoms_table = ${UnattachedAtomsTable}

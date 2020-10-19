@@ -12,11 +12,12 @@ import com.gu.contentatom.thrift.{ChangeRecord, User}
 import com.gu.scanamo._
 import com.gu.scanamo.syntax._
 import models.UnattachedAtom
-import vidispine.UpdateXmlGenerator
 
 import scala.concurrent.Future
 import scala.util.{Failure, Success}
 import java.time.LocalDateTime
+
+import PlutoNextGen.UpdateJsonGenerator
 
 class UnattachedAtomActor(config:Config) extends Actor {
   import context.dispatcher
@@ -94,11 +95,11 @@ class UnattachedAtomActor(config:Config) extends Actor {
 
     val createdChangeTime = for {
       change <- createdChange
-    } yield UpdateXmlGenerator.asIsoTimeString(change.date/1000)
+    } yield UpdateJsonGenerator.asIsoTimeString(change.date/1000)
 
     val lastModChangeTime = for {
       change <- updatedChange
-    } yield UpdateXmlGenerator.asIsoTimeString(change.date/1000)
+    } yield UpdateJsonGenerator.asIsoTimeString(change.date/1000)
 
     val record = UnattachedAtom(atomId,
       createdUserEmail.getOrElse("unknown user"),
