@@ -63,7 +63,7 @@ class TestForceUpdateActor extends WordSpecLike with BeforeAndAfterAll with Matc
       val resultFuture = forceUpdateActor.ask(LookupAtomId("some-atom-id"))
 
       fakeUpdater.expectMsg(10.seconds, DoUpdate(testAtom))
-      fakeUpdater.reply(Right(SuccessfulSend()))
+      fakeUpdater.reply(SuccessfulSend())
 
       val result = Await.result(resultFuture, 15.seconds)
       result should be(Right(SuccessfulSend()))
