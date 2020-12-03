@@ -42,17 +42,17 @@ class ForceUpdateActor(config:Config) extends Actor with CapiCommunicator {
         case Success(maybeAtom)=>
           maybeAtom match {
             case Some(atom) =>
-                  logger.info(s"orignal sender is $originalSender")
-                  logger.info(s"Got atom with title ${atom.title}")
+              logger.info(s"orignal sender is $originalSender")
+              logger.info(s"Got atom with title ${atom.title}")
 
-                  (updater ? DoUpdate(atom)).onComplete({
-                    case Success(result:SuccessfulSend)=>
-                      unattachedAtomActor ! MasterNowAttached(atom.id)
-                      originalSender ! Right(result)
-                    case Success(result:ErrorSend)=>
-                        originalSender ! Left(result)
-                    case Failure(error)=>originalSender ! Left(error)
-                  })
+              (updater ? DoUpdate(atom)).onComplete({
+                case Success(result:SuccessfulSend)=>
+                  unattachedAtomActor ! MasterNowAttached(atom.id)
+                  originalSender ! Right(result)
+                case Success(result:ErrorSend)=>
+                    originalSender ! Left(result)
+                case Failure(error)=>originalSender ! Left(error)
+              })
             case None =>
               logger.error(s"Atom $atomId is valid but not a media atom")
               originalSender ! Left(ErrorSend(s"Atom $atomId is valid but not a media atom", -1))
@@ -61,6 +61,8 @@ class ForceUpdateActor(config:Config) extends Actor with CapiCommunicator {
           logger.error(s"Atom $atomId could not be loaded: $error")
           originalSender ! Left(ErrorSend(s"Atom $atomId could not be loaded: $error", -1))
       })
+    case SuccessfulSend()=>
+      //just ignore this, it comes through as a side-effect to the DoUpdate completing but it's properly handled in the ask block above
     case msg:Any=>
       logger.warning(s"ForceUpdateActor received an unexpected message: ${msg.getClass.getTypeName} ${msg.getClass.getName} ${msg.getClass.getCanonicalName}")
   }
