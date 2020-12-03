@@ -46,14 +46,11 @@ class ForceUpdateActor(config:Config) extends Actor with CapiCommunicator {
                   logger.info(s"Got atom with title ${atom.title}")
 
                   (updater ? DoUpdate(atom)).onComplete({
-                    case Success(result:Either[ErrorSend,SuccessfulSend])=>
-
-                      result.fold({error=>
-                        originalSender ! Left(error)
-                      }, {result=>
-                        unattachedAtomActor ! MasterNowAttached(atom.id)
-                        originalSender ! Right(result)
-                      })
+                    case Success(result:SuccessfulSend)=>
+                      unattachedAtomActor ! MasterNowAttached(atom.id)
+                      originalSender ! Right(result)
+                    case Success(result:ErrorSend)=>
+                        originalSender ! Left(result)
                     case Failure(error)=>originalSender ! Left(error)
                   })
             case None =>
