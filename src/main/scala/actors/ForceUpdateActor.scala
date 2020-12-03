@@ -61,7 +61,7 @@ class ForceUpdateActor(config:Config) extends Actor with CapiCommunicator {
           logger.error(s"Atom $atomId could not be loaded: $error")
           originalSender ! Left(ErrorSend(s"Atom $atomId could not be loaded: $error", -1))
       })
-    case _=>
-      logger.warning("ForceUpdateActor received an unexpected message")
+    case msg:_=>
+      logger.warning(s"ForceUpdateActor received an unexpected message: ${msg.getClass.getTypeName} ${msg.getClass.getName} ${msg.getClass.getCanonicalName}")
   }
 }
