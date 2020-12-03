@@ -35,7 +35,7 @@ class HttpServer(forceActorUpdater: ActorRef) {
             onSuccess((forceActorUpdater ? LookupAtomId(docId)).mapTo[Either[ActorMessage,SuccessfulSend]]) {
               case Left(error: ActorMessage)=>
                 complete(HttpEntity(ContentTypes.`application/json`, s"""{"status":"error","atomid":"$docId","detail":"Unable to process: ${error.getMessage}"}"""))
-              case Right(message: SuccessfulSend)=>
+              case Right(_: SuccessfulSend)=>
                 complete(HttpEntity(ContentTypes.`text/html(UTF-8)`, s"""{"status":"ok","atomid":"$docId"}"""))
             }
         }
