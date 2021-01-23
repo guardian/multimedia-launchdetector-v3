@@ -16,7 +16,7 @@ libraryDependencies += "com.typesafe.akka" %% "akka-slf4j" % akkaVersion
 libraryDependencies += "com.typesafe.akka" %% "akka-http" % "10.2.0"
 
 //AWS
-val awsVersion = "1.11.942"
+val awsVersion = "1.11.941"
 libraryDependencies ++= Seq(
   "com.amazonaws" % "aws-java-sdk-sts" % awsVersion exclude("commons-logging","commons-logging"),
   "com.amazonaws" % "aws-java-sdk-dynamodb" % awsVersion exclude("commons-logging","commons-logging"),
