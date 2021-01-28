@@ -16,7 +16,7 @@ libraryDependencies += "com.typesafe.akka" %% "akka-slf4j" % akkaVersion
 libraryDependencies += "com.typesafe.akka" %% "akka-http" % "10.2.0"
 
 //AWS
-val awsVersion = "1.11.941"
+val awsVersion = "1.11.943"
 libraryDependencies ++= Seq(
   "com.amazonaws" % "aws-java-sdk-sts" % awsVersion exclude("commons-logging","commons-logging"),
   "com.amazonaws" % "aws-java-sdk-dynamodb" % awsVersion exclude("commons-logging","commons-logging"),
@@ -63,7 +63,7 @@ libraryDependencies ++= Seq(
 // https://mvnrepository.com/artifact/org.mockito/mockito-all
 libraryDependencies += "org.mockito" % "mockito-all" % "2.0.2-beta" % "test"
 
-val jacksonVersion = "2.11.0"
+val jacksonVersion = "2.11.4"
 //update vulnerable jackson-databind
 // https://mvnrepository.com/artifact/com.fasterxml.jackson.core/jackson-databind
 libraryDependencies += "com.fasterxml.jackson.core" % "jackson-databind" % jacksonVersion
@@ -74,6 +74,7 @@ libraryDependencies += "com.fasterxml.jackson.dataformat" % "jackson-dataformat-
 
 // https://mvnrepository.com/artifact/com.google.guava/guava
 libraryDependencies += "com.google.guava" % "guava" % "30.0-jre"
+libraryDependencies += "org.apache.httpcomponents" % "httpclient" % "4.5.13"
 
 debianPackageDependencies := Seq("openjdk-8-jre-headless")
 serverLoading in Debian := Some(ServerLoader.Systemd)
