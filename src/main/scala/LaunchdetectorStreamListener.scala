@@ -87,7 +87,9 @@ class LaunchdetectorStreamListener(updater:ActorRef) extends StreamListener {
     val filepath = Seq(homedir, atom.id).mkString("/")
 
     atom.atomType match {
-      case AtomType.Media=>updater ! DoUpdate(atom)
+      case AtomType.Media=>
+        logger.info(atomUpdateInfo(atom))
+        updater ! DoUpdate(atom)
       case _=>  //just ignore anything else
     }
 
