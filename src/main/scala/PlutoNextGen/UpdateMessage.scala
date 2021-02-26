@@ -30,6 +30,23 @@ object InlineChangeRecord {
     )
   }
 }
+
+case class AssetRef(
+                   maybeMimeType: Option[String],
+                   assetType: String,
+                   platform: String,
+                   platformId: String
+                   )
+
+case class YTMeta(
+                 categoryId: Option[String],
+                 channelId: Option[String],
+                 expiryDate: Option[String],
+                 keywords: Option[Seq[String]],
+                 privacyStatus: Option[String],
+                 license: Option[String]
+                 )
+
 case class UpdateMessage(
                         title: String,
                         category: String,
@@ -46,5 +63,7 @@ case class UpdateMessage(
                         projectId: Option[String],
                         masterId: Option[String],
                         published: Option[InlineChangeRecord],
-                        lastModified: Option[InlineChangeRecord]
-                        )
+                        lastModified: Option[InlineChangeRecord],
+                        assets: Seq[AssetRef],
+                        ytMeta: Option[YTMeta]
+)

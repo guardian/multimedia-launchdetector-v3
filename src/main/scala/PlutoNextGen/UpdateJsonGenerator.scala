@@ -14,9 +14,21 @@ object UpdateJsonGenerator {
     val mediaContent = atom.data.asInstanceOf[AtomData.Media].media
     val contentChangeDetails = atom.contentChangeDetails
 
-    mediaContent.assets.foreach(asset=>{
-      logger.info(s"${atom.id}: Got media asset from platform ${asset.platform} of type ${asset.assetType} with version ${asset.version} and id ${asset.id} with mime type ${asset.mimeType}")
-    })
+    val mappedAssets = mediaContent.assets.map(a=>AssetRef(
+      a.mimeType,
+      a.assetType.toString,
+      a.platform.toString,
+      a.id
+    ))
+
+    val ytMeta = mediaContent.metadata.map(md=>YTMeta(
+      md.channelId,
+      md.channelId,
+      md.expiryDate.map(asIsoTimeString),
+      md.tags,
+      md.privacyStatus.map(_.toString),
+      md.license,
+    ))
 
     val msg = UpdateMessage (
       title = mediaContent.title,
@@ -48,7 +60,9 @@ object UpdateJsonGenerator {
       projectId = mediaContent.metadata.flatMap(_.pluto).flatMap(_.projectId),
       masterId = mediaContent.metadata.flatMap(_.pluto).flatMap(_.masterId),
       published = contentChangeDetails.published.map(InlineChangeRecord.fromChangeRecord),
-      lastModified = contentChangeDetails.lastModified.map(InlineChangeRecord.fromChangeRecord)
+      lastModified = contentChangeDetails.lastModified.map(InlineChangeRecord.fromChangeRecord),
+      assets = mappedAssets,
+      ytMeta = ytMeta
     )
 
     msg.asJson
