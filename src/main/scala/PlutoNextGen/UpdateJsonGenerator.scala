@@ -1,17 +1,22 @@
 package PlutoNextGen
 
 import java.time.{Instant, LocalDateTime, ZoneOffset, ZonedDateTime}
-
 import io.circe.generic.auto._
 import io.circe.syntax._
 import com.gu.contentatom.thrift.{Atom, AtomData}
+import org.slf4j.LoggerFactory
 
 object UpdateJsonGenerator {
+  private val logger = LoggerFactory.getLogger(getClass)
   def asIsoTimeString(epochTime:Long):String = ZonedDateTime.ofInstant(Instant.ofEpochSecond(epochTime),ZoneOffset.UTC).toString
 
   def makeContentJson(atom:Atom, currentTime: LocalDateTime) = {
     val mediaContent = atom.data.asInstanceOf[AtomData.Media].media
     val contentChangeDetails = atom.contentChangeDetails
+
+    mediaContent.assets.foreach(asset=>{
+      logger.info(s"${atom.id}: Got media asset from platform ${asset.platform} of type ${asset.assetType} with version ${asset.version} and id ${asset.id} with mime type ${asset.mimeType}")
+    })
 
     val msg = UpdateMessage (
       title = mediaContent.title,

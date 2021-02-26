@@ -21,6 +21,7 @@
     <logger name="actors.PlutoUpdaterActor" level="INFO"/>
     <logger name="LaunchdetectorStreamListener" level="INFO"/>
     <logger name="PlutoNextGen" level="INFO"/>
+    <logger name="PlutoNextGen.UpdateJsonGenerator" level="DEBUG"/>
 
     <!-- library loggers -->
     <logger name="akka.event.EventStream" level="INFO"/>
