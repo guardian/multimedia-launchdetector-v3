@@ -18,7 +18,8 @@ object UpdateJsonGenerator {
       a.mimeType,
       a.assetType.toString,
       a.platform.toString,
-      a.id
+      a.id,
+      a.version
     ))
 
     val ytMeta = mediaContent.metadata.map(md=>YTMeta(

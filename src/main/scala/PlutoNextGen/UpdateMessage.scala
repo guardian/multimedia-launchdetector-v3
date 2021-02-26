@@ -35,7 +35,8 @@ case class AssetRef(
                    maybeMimeType: Option[String],
                    assetType: String,
                    platform: String,
-                   platformId: String
+                   platformId: String,
+                   version: Long,
                    )
 
 case class YTMeta(
