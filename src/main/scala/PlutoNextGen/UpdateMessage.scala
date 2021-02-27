@@ -45,7 +45,9 @@ case class YTMeta(
                  expiryDate: Option[String],
                  keywords: Option[Seq[String]],
                  privacyStatus: Option[String],
-                 license: Option[String]
+                 license: Option[String],
+                 title: Option[String],
+                 description: Option[String]
                  )
 
 case class UpdateMessage(

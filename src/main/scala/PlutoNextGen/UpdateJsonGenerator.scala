@@ -29,6 +29,8 @@ object UpdateJsonGenerator {
       md.tags,
       md.privacyStatus.map(_.toString),
       md.license,
+      md.youtube.map(_.title),
+      md.youtube.flatMap(_.description)
     ))
 
     val msg = UpdateMessage (
