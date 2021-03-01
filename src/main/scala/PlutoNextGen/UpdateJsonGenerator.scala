@@ -23,7 +23,7 @@ object UpdateJsonGenerator {
     ))
 
     val ytMeta = mediaContent.metadata.map(md=>YTMeta(
-      md.channelId,
+      md.categoryId,
       md.channelId,
       md.expiryDate.map(asIsoTimeString),
       md.tags,
