@@ -24,7 +24,9 @@
     <logger name="MainClass$" level="INFO"/>
     <logger name="Healthcheck$" level="INFO"/>
     <logger name="ShutdownHandler" level="INFO"/>
-    <logger name="actors.PlutoUpdaterActor" level="INFO"/>
+    <logger name="LaunchdetectorStreamListener" level="INFO"/>
+    <logger name="PlutoNextGen" level="INFO"/>
+    <logger name="PlutoNextGen.UpdateJsonGenerator" level="DEBUG"/>
 
     <!-- library loggers -->
     <logger name="akka.event.EventStream" level="INFO"/>

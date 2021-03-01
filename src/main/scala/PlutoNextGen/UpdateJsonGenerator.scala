@@ -1,17 +1,37 @@
 package PlutoNextGen
 
 import java.time.{Instant, LocalDateTime, ZoneOffset, ZonedDateTime}
-
 import io.circe.generic.auto._
 import io.circe.syntax._
 import com.gu.contentatom.thrift.{Atom, AtomData}
+import org.slf4j.LoggerFactory
 
 object UpdateJsonGenerator {
+  private val logger = LoggerFactory.getLogger(getClass)
   def asIsoTimeString(epochTime:Long):String = ZonedDateTime.ofInstant(Instant.ofEpochSecond(epochTime),ZoneOffset.UTC).toString
 
   def makeContentJson(atom:Atom, currentTime: LocalDateTime) = {
     val mediaContent = atom.data.asInstanceOf[AtomData.Media].media
     val contentChangeDetails = atom.contentChangeDetails
+
+    val mappedAssets = mediaContent.assets.map(a=>AssetRef(
+      a.mimeType,
+      a.assetType.toString,
+      a.platform.toString,
+      a.id,
+      a.version
+    ))
+
+    val ytMeta = mediaContent.metadata.map(md=>YTMeta(
+      md.categoryId,
+      md.channelId,
+      md.expiryDate.map(asIsoTimeString),
+      md.tags,
+      md.privacyStatus.map(_.toString),
+      md.license,
+      md.youtube.map(_.title),
+      md.youtube.flatMap(_.description)
+    ))
 
     val msg = UpdateMessage (
       title = mediaContent.title,
@@ -43,7 +63,9 @@ object UpdateJsonGenerator {
       projectId = mediaContent.metadata.flatMap(_.pluto).flatMap(_.projectId),
       masterId = mediaContent.metadata.flatMap(_.pluto).flatMap(_.masterId),
       published = contentChangeDetails.published.map(InlineChangeRecord.fromChangeRecord),
-      lastModified = contentChangeDetails.lastModified.map(InlineChangeRecord.fromChangeRecord)
+      lastModified = contentChangeDetails.lastModified.map(InlineChangeRecord.fromChangeRecord),
+      assets = mappedAssets,
+      ytMeta = ytMeta
     )
 
     msg.asJson
