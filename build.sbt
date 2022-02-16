@@ -76,11 +76,11 @@ libraryDependencies += "com.fasterxml.jackson.dataformat" % "jackson-dataformat-
 libraryDependencies += "com.google.guava" % "guava" % "30.0-jre"
 libraryDependencies += "org.apache.httpcomponents" % "httpclient" % "4.5.13"
 
-debianPackageDependencies := Seq("openjdk-8-jre-headless")
-serverLoading in Debian := Some(ServerLoader.Systemd)
-serviceAutostart in Debian := false
+debianPackageDependencies := Seq("openjdk-11-jre-headless")
+Debian / serverLoading := Some(ServerLoader.Systemd)
+Debian / serviceAutostart := false
 
-name in Debian := "launchdetector"
+Debian / name := "launchdetector"
 
 maintainer := "Andy Gallagher <andy.gallagher@theguardian.com>"
 packageSummary := "Launch Detector that updates asset management with published data from CAPI"
