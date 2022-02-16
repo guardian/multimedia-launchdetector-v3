@@ -311,7 +311,7 @@ Resources:
           aws s3 cp s3://gnm-multimedia-rr-deployables/gnm_certs.jks /usr/share/multimedia-launchdetector-v3/conf/gnm_certs.jks
 
           cat > /etc/default/multimedia-launchdetector-v3 << EOF
-          JAVA_OPTS="-XX:+ExitOnOutOfMemoryError -Dconfig.file=/usr/share/multimedia-launchdetector-v3/conf/application.conf -Dlogback.configurationFile=/usr/share/multimedia-launchdetector-v3/conf/logback.xml -Dlaunchdetector.extraKeyStores=/usr/share/multimedia-launchdetector-v3/conf/gnm_certs.jks"
+          JAVA_OPTS="-XX:+ExitOnOutOfMemoryError -Dconfig.file=/usr/share/multimedia-launchdetector-v3/conf/application.conf -Dsoftware.amazon.awssdk.http.async.service.impl=software.amazon.awssdk.http.urlconnection.UrlConnectionHttpClient -Dlogback.configurationFile=/usr/share/multimedia-launchdetector-v3/conf/logback.xml -Dlaunchdetector.extraKeyStores=/usr/share/multimedia-launchdetector-v3/conf/gnm_certs.jks"
           EOF
 
           echo --------------------------------------
