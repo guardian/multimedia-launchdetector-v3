@@ -2,6 +2,7 @@ import sbt.Keys.libraryDependencies
 
 enablePlugins(RiffRaffArtifact, UniversalPlugin, JDebPackaging, DebianPlugin, JavaServerAppPackaging, SystemdPlugin)
 
+scalacOptions ++= Seq("-deprecation")
 name := "multimedia-launchdetector-v3"
 
 version := "3.0"
@@ -85,7 +86,7 @@ Debian / name := "launchdetector"
 maintainer := "Andy Gallagher <andy.gallagher@theguardian.com>"
 packageSummary := "Launch Detector that updates asset management with published data from CAPI"
 packageDescription := """Launch Detector that updates asset management with published data from CAPI"""
-riffRaffPackageType := (packageBin in Debian).value
+riffRaffPackageType := (Debian / packageBin).value
 riffRaffUploadArtifactBucket := Option("riffraff-artifact")
 riffRaffUploadManifestBucket := Option("riffraff-builds")
 riffRaffPackageName := "launchdetector"
