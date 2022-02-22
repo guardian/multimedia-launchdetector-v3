@@ -12,6 +12,7 @@ deployments:
     dependencies: [ multimedia-ami-update ]
   multimedia-ami-update:
     type: ami-cloudformation-parameter
+    app: launchdetector
     parameters:
       amiParameter: AmiId
       amiTags:
