@@ -9,9 +9,11 @@ deployments:
       bucket: gnm-multimedia-rr-deployables
       healthcheckGrace: 25
       secondsToWait: 300
+    dependencies: [ multimedia-ami-update ]
   multimedia-ami-update:
     type: ami-cloudformation-parameter
-    amiParameter: AmiId
-    amiTags:
-      BuiltBy: amigo
-      Recipe: multimedia-tools-focal-java11
+    parameters:
+      amiParameter: AmiId
+      amiTags:
+        BuiltBy: amigo
+        Recipe: multimedia-tools-focal-java11
