@@ -54,10 +54,10 @@ Parameters:
     Type: String
     Description: What type of instance to launch
     AllowedValues:
-    - t3.nano
-    - t3.micro
-    - t3.small
-    Default: t3.nano
+    - t4g.nano
+    - t4g.micro
+    - t4g.small
+    Default: t4g.nano
   KeyPair:
     Type: AWS::EC2::KeyPair::KeyName
     Description: Root access keypair
