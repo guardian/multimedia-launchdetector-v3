@@ -14,14 +14,14 @@ libraryDependencies += "com.typesafe.akka" %% "akka-testkit" % akkaVersion % "te
 libraryDependencies += "com.typesafe.akka" %% "akka-actor" % akkaVersion
 libraryDependencies += "com.typesafe.akka" %% "akka-stream" % akkaVersion
 libraryDependencies += "com.typesafe.akka" %% "akka-slf4j" % akkaVersion
-libraryDependencies += "com.typesafe.akka" %% "akka-http" % "10.2.7"
+libraryDependencies += "com.typesafe.akka" %% "akka-http" % "10.2.0"
 
 //AWS
 val awsVersion = "1.11.943"
 libraryDependencies ++= Seq(
   "com.amazonaws" % "aws-java-sdk-sts" % awsVersion exclude("commons-logging","commons-logging"),
   "com.amazonaws" % "aws-java-sdk-dynamodb" % awsVersion exclude("commons-logging","commons-logging"),
-  "com.amazonaws" % "amazon-kinesis-client" % "1.14.0" exclude("commons-logging","commons-logging"),
+  "com.amazonaws" % "amazon-kinesis-client" % "1.14.8" exclude("commons-logging","commons-logging"),
   "com.gu" %% "scanamo" % "1.0.0-M8" exclude("commons-logging","commons-logging")
 )
 
