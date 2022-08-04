@@ -42,7 +42,7 @@ libraryDependencies += "org.typelevel" %% "cats-free" % "2.4.0"
 //content api
 libraryDependencies += "com.gu" %% "content-api-firehose-client" % "0.2.0"
 libraryDependencies += "com.gu" %% "content-api-client-default" % "17.24.0"
-libraryDependencies += "org.apache.thrift" % "libthrift" % "0.14.0"
+libraryDependencies += "org.apache.thrift" % "libthrift" % "0.16.0"
 libraryDependencies += "com.typesafe" % "config" % "1.4.0"
 
 // http
