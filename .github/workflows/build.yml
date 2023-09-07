@@ -29,7 +29,7 @@ jobs:
           role-to-assume: ${{ secrets.GU_RIFF_RAFF_ROLE_ARN }}
           aws-region: eu-west-1
 
-      - name: Test and build backend
+      - name: Test and build
         env:
           JAVA_OPTS: -DDISABLE_DYNAMOTESTS -Xmx1024m -XX:ReservedCodeCacheSize=128m
         run: |
