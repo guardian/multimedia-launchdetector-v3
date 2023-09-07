@@ -1,4 +1,4 @@
-addSbtPlugin("com.gu" % "sbt-riffraff-artifact" % "1.1.9")
+addSbtPlugin("com.gu" % "sbt-riffraff-artifact" % "1.1.18")
 
 addSbtPlugin("com.typesafe.sbt" % "sbt-native-packager" % "1.2.2")
 

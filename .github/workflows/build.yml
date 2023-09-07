@@ -1,0 +1,37 @@
+name: Build and upload multimedia-launchdetector-v3
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    permissions:
+      id-token: write
+      contents: read
+      checks: write
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Setup JDK
+        uses: actions/setup-java@v2
+        with:
+          distribution: temurin
+          java-version: 11
+
+      - name: AWS Auth
+        uses: aws-actions/configure-aws-credentials@v2
+        with:
+          role-to-assume: ${{ secrets.GU_RIFF_RAFF_ROLE_ARN }}
+          aws-region: eu-west-1
+
+      - name: Test and build
+        env:
+          JAVA_OPTS: -DDISABLE_DYNAMOTESTS -Xmx1024m -XX:ReservedCodeCacheSize=128m
+        run: |
+          export GITHUB_RUN_NUMBER=$(( $GITHUB_RUN_NUMBER + 220 ))
+          ./ci_scripts/ci
