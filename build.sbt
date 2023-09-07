@@ -75,7 +75,7 @@ libraryDependencies += "com.fasterxml.jackson.dataformat" % "jackson-dataformat-
 libraryDependencies += "com.fasterxml.jackson.dataformat" % "jackson-dataformat-xml" % jacksonVersion
 
 // https://mvnrepository.com/artifact/com.google.guava/guava
-libraryDependencies += "com.google.guava" % "guava" % "32.0-jre"
+libraryDependencies += "com.google.guava" % "guava" % "32.1.2-jre"
 libraryDependencies += "org.apache.httpcomponents" % "httpclient" % "4.5.13"
 
 debianPackageDependencies := Seq("openjdk-11-jre-headless")
