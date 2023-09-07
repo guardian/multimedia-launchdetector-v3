@@ -2,9 +2,11 @@ name: Build and upload multimedia-launchdetector-v3
 
 on:
   push:
-    branches: [ * ]
+    branches:
+      - "**"
   pull_request:
-    branches: [ * ]
+    branches:
+      - "**"
 
 jobs:
   build:
