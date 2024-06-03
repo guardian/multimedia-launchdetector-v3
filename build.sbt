@@ -28,11 +28,11 @@ libraryDependencies ++= Seq(
 //logging
 libraryDependencies ++= Seq(
   // https://mvnrepository.com/artifact/ch.qos.logback/logback-classic
-  "ch.qos.logback" % "logback-classic" % "1.2.13",
+  "ch.qos.logback" % "logback-classic" % "1.2.7",
   // https://mvnrepository.com/artifact/ch.qos.logback/logback-core
-  "ch.qos.logback" % "logback-core" % "1.2.13",
+  "ch.qos.logback" % "logback-core" % "1.2.7",
   "org.slf4j" % "jcl-over-slf4j" % "1.7.25",
-  "com.gu" % "kinesis-logback-appender" % "2.1.3",
+  "com.gu" % "kinesis-logback-appender" % "2.1.0",
 )
 
 // https://mvnrepository.com/artifact/org.scalatest/scalatest_2.12
