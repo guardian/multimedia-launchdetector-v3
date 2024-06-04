@@ -123,8 +123,8 @@ object TrustStoreHelper {
    * @param keyStorePaths sequence of paths to supplementary keystores
    * @return
    */
-  def setupTS(keyStorePaths:Seq[String]) = {
-    val trustManagerOrErrorList = Seq(getDefaultTrustManager) ++ keyStorePaths.map(path=>getCustomTrustManager(path,None))
+  def setupTS(keyStorePaths:Seq[String], keyStorePassword:String) = {
+    val trustManagerOrErrorList = Seq(getDefaultTrustManager) ++ keyStorePaths.map(path=>getCustomTrustManager(path,Some(keyStorePassword)))
 
     val failures = trustManagerOrErrorList.collect({case Failure(err)=>err})
     if(failures.nonEmpty){

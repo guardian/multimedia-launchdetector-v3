@@ -28,10 +28,12 @@ object MainClass {
 
     logger.info("Starting up")
 
+    val config = ConfigFactory.defaultApplication()
+
     if(sys.props.contains("launchdetector.extraKeyStores")){
       val keyStoreName = sys.props.get("launchdetector.extraKeyStores").get
       logger.info(s"Loading extra certs from $keyStoreName")
-      TrustStoreHelper.setupTS(keyStoreName.split(",")) match {
+      TrustStoreHelper.setupTS(keyStoreName.split(","),config.getString("key_store_password")) match {
         case Success(sslContext)=>
           val https: HttpsConnectionContext = ConnectionContext.https(sslContext)
           Http().setDefaultClientHttpsContext(https)
@@ -41,8 +43,6 @@ object MainClass {
           throw err
       }
     }
-
-    val config = ConfigFactory.defaultApplication()
 
     val forceUpdateActor:ActorRef = system.actorOf(Props(new ForceUpdateActor(config)))
 
